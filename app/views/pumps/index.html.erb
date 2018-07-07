@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Pumps</h1>
+<h1>Catalogo Bombas</h1>
 
 <table>
   <thead>
@@ -22,6 +22,7 @@
         <td><%= pump.rodete_min %></td>
         <td><%= link_to 'Show', pump %></td>
         <td><%= link_to 'Edit', edit_pump_path(pump) %></td>
+        <td><%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(pump) %></td>
         <td><%= link_to 'Destroy', pump, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
