@@ -1,4 +1,5 @@
 require 'matrix'
+require 'csv'
 
 module TestsHelper
 
@@ -17,10 +18,20 @@ module TestsHelper
 	# Output: lista con coeficientes
 
 
-
-	# def abrir_archivo archivo
-	# Que entrege listas con los correspondientes caudales,
-	# alturas, eficiencias y potencias.
+	# Falta que lea mas decimales, lee los numeros con 1 decimal
+	def abrir_archivo archivo
+		caud = []
+		altu = []
+		efi = []
+		pot = []
+		CSV.foreach(archivo) do |linea|
+			caud.push(linea[0].to_f)
+			altu.push(linea[1].to_f)
+			efi.push(linea[2].to_f)
+			pot.push(linea[3].to_f)
+		end
+		return caud, altu, efi, pot
+	end
 end
 
 

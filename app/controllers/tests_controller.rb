@@ -14,6 +14,7 @@ class TestsController < ApplicationController
 
 	def analisis
 		@test = @pump.tests.find(params[:pump_id])
+		#@caudales, @alturas, @eficiencias, @potencias = abrir_archivo(params[:file])
 	end
 
 	def new

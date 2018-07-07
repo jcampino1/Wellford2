@@ -16,7 +16,10 @@
     <%= form.text_area :diametro_rodete, id: :test_diametro_rodete %>
   </div>
 
-  
+  <div class="field">
+    <%= form.label :Archivo %>
+    <%= file_field_tag :file %>
+  </div>
 
   <div class="actions">
     <%= form.submit %>
