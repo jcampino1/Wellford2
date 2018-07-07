@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Pumps</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Rpm</th>
+      <th>Rodete max</th>
+      <th>Rodete min</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pumps.each do |pump| %>
+      <tr>
+        <td><%= pump.nombre %></td>
+        <td><%= pump.rpm %></td>
+        <td><%= pump.rodete_max %></td>
+        <td><%= pump.rodete_min %></td>
+        <td><%= link_to 'Show', pump %></td>
+        <td><%= link_to 'Edit', edit_pump_path(pump) %></td>
+        <td><%= link_to 'Destroy', pump, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pump', new_pump_path %>

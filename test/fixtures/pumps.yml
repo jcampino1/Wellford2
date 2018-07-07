@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nombre: MyString
+  rpm: 1.5
+  rodete_max: 1.5
+  rodete_min: 1.5
+
+two:
+  nombre: MyString
+  rpm: 1.5
+  rodete_max: 1.5
+  rodete_min: 1.5

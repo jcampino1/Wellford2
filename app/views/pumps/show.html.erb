@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @pump.nombre %>
+</p>
+
+<p>
+  <strong>Rpm:</strong>
+  <%= @pump.rpm %>
+</p>
+
+<p>
+  <strong>Rodete max:</strong>
+  <%= @pump.rodete_max %>
+</p>
+
+<p>
+  <strong>Rodete min:</strong>
+  <%= @pump.rodete_min %>
+</p>
+
+<%= link_to 'Edit', edit_pump_path(@pump) %> |
+<%= link_to 'Back', pumps_path %>
