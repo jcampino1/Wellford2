@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :pumps do
-  	resources :tests
+  	resources :tests do
+  		get 'analisis', to: 'tests#analisis', as: :analisis
+  	end
   end
 
   root 'pumps#index'

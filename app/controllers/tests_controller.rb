@@ -2,8 +2,18 @@ class TestsController < ApplicationController
 	before_action :set_pump
 
 	def create
-		#1. Aca tenemos que hacer la primera fase de analisis
-		#2. Despues eventualmente crear la prueba definitiva (con el build)
+
+	# Creamos la prueba de bombeo sin nada todavia para ser analizada.	
+	@test = @pump.tests.build(test_params)
+    @test.pump = @pump
+    @test.save
+
+    # Mandamos a fase de analisis.
+	redirect_to pump_test_analisis_path(@pump, @test)
+	end
+
+	def analisis
+		@test = @pump.tests.find(params[:pump_id])
 	end
 
 	def new
