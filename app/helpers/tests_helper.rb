@@ -25,6 +25,7 @@ module TestsHelper
 		efi = []
 		pot = []
 		CSV.foreach(archivo) do |linea|
+			p linea
 			caud.push(linea[0].to_f)
 			altu.push(linea[1].to_f)
 			efi.push(linea[2].to_f)

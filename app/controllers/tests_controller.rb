@@ -7,6 +7,9 @@ class TestsController < ApplicationController
 	@test = @pump.tests.build(test_params)
     @test.pump = @pump
     @test.save
+    @file = file_params
+    @caudales, @alturas, @eficiencias, @potencias = abrir_archivo(params[:file])
+
 
 
     # Mandamos a fase de analisis.
@@ -37,18 +40,26 @@ class TestsController < ApplicationController
 		params.require(:test).permit(:pump_id, :diametro_rodete)
 	end
 
+	def file_params
+		params.require(:test).permit(:file)
+	end
+
 	def abrir_archivo archivo
 		caud = []
 		altu = []
 		efi = []
 		pot = []
-		CSV.foreach(archivo) do |linea|
-			caud.push(linea[0].to_f)
-			altu.push(linea[1].to_f)
-			efi.push(linea[2].to_f)
-			pot.push(linea[3].to_f)
+		if archivo.respond_to?(:read)
+			csv = file.read
+		else
+			CSV.foreach(archivo.path) do |linea|
+				caud.push(linea[0])
+				altu.push(linea[1])
+				efi.push(linea[2])
+				pot.push(linea[3])
+			end
+			return caud, altu, efi, pot
 		end
-		return caud, altu, efi, pot
 	end
 end
 

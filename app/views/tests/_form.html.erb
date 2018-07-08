@@ -18,7 +18,7 @@
 
   <div class="field">
     <%= form.label :Archivo %>
-    <%= file_field_tag :file %>
+    <%= form.file_field :file , multipart: true, header: false %>
   </div>
 
   <div class="actions">
