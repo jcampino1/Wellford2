@@ -3,7 +3,7 @@ class TestsController < ApplicationController
 
 	def create
 
-	# Creamos la prueba de bombeo sin nada todavia para ser analizada.	
+	# Creamos la prueba de bombeo sin nada todavia para ser analizada.
 	@test = @pump.tests.build(test_params)
     @test.pump = @pump
     @test.save
@@ -24,9 +24,6 @@ class TestsController < ApplicationController
 	def new
 		@test = @pump.tests.build
 	end
-
-
-
 
 
 
@@ -61,5 +58,11 @@ class TestsController < ApplicationController
 			return caud, altu, efi, pot
 		end
 	end
+
+	def import
+    Test.import(@pump, params[:file])
+    redirect_to @pump, notice: "Prueba importada"
+  end
+
 end
 
