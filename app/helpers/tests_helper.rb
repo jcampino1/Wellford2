@@ -3,6 +3,10 @@ require 'csv'
 
 module TestsHelper
 
+	def grafico_circular curva_h
+		scatter_chart curva_h
+	end
+
  
 	def regression x, y, degree
 	  x_data = x.map { |xi| (0..degree).map { |pow| (xi**pow).to_r } }

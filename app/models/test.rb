@@ -7,20 +7,18 @@ class Test < ApplicationRecord
 	#CSV.foreach(file.path, headers: :true) do |row|
 	  #pump.tests.create!(row.to_hash)
 		diametro = 0
-		caud = []
-		altu = []
-		efi = []
-		pot = []
+		curva_h = []
+		curva_e = []
+		curva_p = []
 		CSV.foreach(file.path, headers: :true) do |linea|
 			if linea[0] != NIL
 				diametro = linea[0].to_f
 			end
-			caud.push(linea[1].to_f)
-			altu.push(linea[2].to_f)
-			efi.push(linea[3].to_f)
-			pot.push(linea[4].to_f)
+			curva_h.push([linea[1].to_f, linea[2].to_f])
+			curva_e.push([linea[1].to_f, linea[3].to_f])
+			curva_p.push([linea[1].to_f, linea[4].to_f])
 		end
 		#pump.tests.create!({:diametro_rodete => diametro})
-		return diametro, caud, altu, efi, pot
+		return diametro, curva_h.reverse, curva_e, curva_p
 	end
 end

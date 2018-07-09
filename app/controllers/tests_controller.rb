@@ -66,7 +66,7 @@ class TestsController < ApplicationController
 	end
 
 	def import
-	    diametro, @caudales, @alturas, @eficiencias, @potencias = Test.import(@pump, params[:file])
+	    diametro, @curva_h, @curva_e, @curva_p = Test.import(@pump, params[:file])
 	    @test = @pump.tests.build({:diametro_rodete => diametro})
 	    @test.pump = @pump
 	    @test.save
