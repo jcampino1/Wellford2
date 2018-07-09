@@ -71,6 +71,5 @@ class TestsController < ApplicationController
 	    @test.pump = @pump
 	    @test.save
 	end
-
 end
 
