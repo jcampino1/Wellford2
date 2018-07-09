@@ -20,5 +20,13 @@
   <%= @pump.rodete_min %>
 </p>
 
+<% if @pump.tests.count > 0 %>
+	<% @pump.tests.each do |test| %>
+		<p>Diametro rodete: <%= test.diametro_rodete %></p>
+	<% end %>
+<% else %>
+	<p>No hay pruebas para esta bomba</p>
+<% end %>
+
 <%= link_to 'Edit', edit_pump_path(@pump) %> |
 <%= link_to 'Back', pumps_path %>
