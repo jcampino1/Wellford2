@@ -60,6 +60,10 @@ class TestsController < ApplicationController
 	end
 
 	def import
+		"""
+		Llama al metodo import del modelo y redirecciona
+		a la bomba que se le esta agregando la prueba
+		"""
     Test.import(@pump, params[:file])
     redirect_to @pump, notice: "Prueba importada"
   end
