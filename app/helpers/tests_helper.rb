@@ -4,7 +4,63 @@ require 'csv'
 module TestsHelper
 
 	def grafico_circular curva_h
-		scatter_chart curva_h
+		scatter_chart curva_h, regression: true, regressionSettings: {type: 'polynomial'}, height: '500px', width: '500px',	series: [{
+	      name: "Rodete 214",
+	      regression: true,
+	      regressionSettings: {
+	        type: 'polynomial',
+	        color: 'rgba(223, 183, 83, .9)',
+	        dashStyle: 'dash'
+	      },
+	      data: curva_h
+	    }],
+
+		library: {
+			title: {
+		      text: 'Evaluacion de puntos'
+		    },
+		    subtitle: {
+		      text: 'Elije los puntos que quieras sacar'
+		    },
+		    xAxis: {
+		      title: {
+		        enabled: true,
+		        text: 'Caudal (m3)'
+		      },
+		      startOnTick: true,
+		      endOnTick: true,
+		      showLastLabel: true
+		    },
+		    yAxis: {
+		      title: {
+		        text: 'Altura (m)'
+		      }
+		    },
+		    plotOptions: {
+		      scatter: {
+		        marker: {
+		          radius: 5,
+		          states: {
+		            hover: {
+		              enabled: true,
+		              lineColor: 'rgb(100,100,100)'
+		            }
+		          }
+		        },
+		        states: {
+		          hover: {
+		            marker: {
+		              enabled: false
+		            }
+		          }
+		        },
+		        tooltip: {
+		          headerFormat: '<b>{series.name}</b><br>',
+		          pointFormat: '{point.x} cm, {point.y} kg'
+		        }
+		      }
+		    }
+		}
 	end
 
  
@@ -38,5 +94,3 @@ module TestsHelper
 		return caud, altu, efi, pot
 	end
 end
-
-
