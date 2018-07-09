@@ -19,6 +19,6 @@ class Test < ApplicationRecord
 			curva_p.push([linea[1].to_f, linea[4].to_f])
 		end
 		#pump.tests.create!({:diametro_rodete => diametro})
-		return diametro, curva_h.reverse, curva_e, curva_p
+		return diametro, curva_h.reverse, curva_e.reverse, curva_p.reverse
 	end
 end
