@@ -19,6 +19,10 @@ class TestsController < ApplicationController
 	def analisis
 		@test = @pump.tests.find(params[:pump_id])
 		#@caudales, @alturas, @eficiencias, @potencias = abrir_archivo(params[:file])
+		@caudales = caud
+		@alturas = altu
+		@eficiencias = efi
+		@potencias = pot
 	end
 
 	def new
@@ -26,6 +30,8 @@ class TestsController < ApplicationController
 	end
 
 
+
+	
 
 	# Funciones auxiliares
 
@@ -60,13 +66,10 @@ class TestsController < ApplicationController
 	end
 
 	def import
-		"""
-		Llama al metodo import del modelo y redirecciona
-		a la bomba que se le esta agregando la prueba
-		"""
-    Test.import(@pump, params[:file])
-    redirect_to @pump, notice: "Prueba importada"
-  end
-
+	    diametro, @caudales, @alturas, @eficiencias, @potencias = Test.import(@pump, params[:file])
+	    @test = @pump.tests.build({:diametro_rodete => diametro})
+	    @test.pump = @pump
+	    @test.save
+	end
 end
 

@@ -54,3 +54,4 @@ group :development do
 end
 
 gem 'chartkick'
+gem "highcharts-rails"
