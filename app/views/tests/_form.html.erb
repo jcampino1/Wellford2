@@ -1,4 +1,3 @@
-<h1>Ingresar Prueba</h1>
 <%= form_for([@pump, test]) do |form| %>
   <% if test.errors.any? %>
     <div id="error_explanation">
@@ -11,15 +10,6 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :Diametro_rodete %>
-    <%= form.text_area :diametro_rodete, id: :test_diametro_rodete %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
 <% end %>
 
 <h1>Importar Prueba</h1>
