@@ -70,6 +70,7 @@ class TestsController < ApplicationController
 	    @test = @pump.tests.build({:diametro_rodete => diametro})
 	    @test.pump = @pump
 	    @test.save
+	    @curva_h2 = @curva_h[0..-6]
 	end
 end
 

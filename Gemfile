@@ -55,3 +55,4 @@ end
 
 gem 'chartkick'
 gem "highcharts-rails"
+gem 'jquery-rails'
