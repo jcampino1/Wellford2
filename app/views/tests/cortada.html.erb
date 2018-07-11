@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Analisis informacion ingresada</h1>
+
+<p>
+	Aca hay que mostrar los graficos para ver que puntos sacar. 
+	Ojo que en la lectura del csv lee solo un decimal, entonces todas las eficiencias son 0
+</p>
+
+<h3>Grafico 1</h3>
+<%= content_tag "div", id: "products", data: {} do %>
+	<%= grafico_circular @test.curva_h[0..@i] %>
+<% end %>
+
+
+<h2>Editar curva actual</h2>
+
+<p>Seleccionar que puntos se quieren sacar...</p>
+
+<%= @test.curva_h %>
+
+<%= form_for([@pump, @test]) do |f| %>
+	<%= f.label :Número %>
+	<%= f.text_area :curva_h, multiple: true, default: @test.curva_h %>
+	<br>
+	<%= f.submit 'Ingresar' %>
+<% end %>
+
+<br>
+
+
+<br>

@@ -5,9 +5,28 @@
 	Ojo que en la lectura del csv lee solo un decimal, entonces todas las eficiencias son 0
 </p>
 
-<%= grafico_circular @curva_h %>
+<h3>Grafico 1</h3>
+<%= grafico_circular @test.curva_h %>
 
-<%= @curva_h %>
+<h3>Grafico 2</h3>
+<%= grafico_circular @test.curva_h[0..-2] %>
+
+<h3>Grafico 3</h3>
+<%= grafico_circular @test.curva_h[0..-3] %>
+
+<h3>Grafico 4</h3>
+<%= grafico_circular @test.curva_h[0..-4] %>
+
+<h3>Grafico 5</h3>
+<%= grafico_circular @test.curva_h[0..-5] %>
+
+<h3>Grafico 6</h3>
+<%= grafico_circular @test.curva_h[0..-6] %>
+
+
+<h2>Editar curva actual</h2>
+
+<p>Seleccionar que puntos se quieren sacar...</p>
 
 
 

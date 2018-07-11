@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   	resources :tests do
   		get 'analisis', to: 'tests#analisis', as: :analisis
       collection { post :import }
+      collection { post :cortada }
+
   	end
   end
 
