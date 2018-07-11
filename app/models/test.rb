@@ -21,4 +21,13 @@ class Test < ApplicationRecord
 		#pump.tests.create!({:diametro_rodete => diametro})
 		return diametro, curva_h.reverse, curva_e.reverse, curva_p.reverse
 	end
+
+	def self.pasar_a_numero lista
+		nueva_lista = []
+		lista.each do |punto|
+			nueva_lista.push([punto[0].to_f, punto[1].to_f])
+		end
+		return nueva_lista
+	end
+
 end

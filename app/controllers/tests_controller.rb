@@ -42,6 +42,11 @@ class TestsController < ApplicationController
 			a.delete! "[" "]"
 			@test.curva_h = a.split(", ").each_slice(2).to_a
 		end
+		if @test.current_h.length > 2
+			@puntos = Test.pasar_a_numero(@test.current_h)
+		else
+			@puntos = Test.pasar_a_numero(@test.curva_h[0..@test.curva_h.length])
+		end
 	end
 
 	def edit
@@ -63,11 +68,15 @@ class TestsController < ApplicationController
 
 	def cortada
 		@test = @pump.tests.find(params[:test_id])
-		if @test.current_h == @test.curva_h[0..@test.curva_h.length - params[:n].to_i]
-			@test.current_h = @test.current_h[0..@test.current_h.length - 1]
-		else
-			@test.current_h = @test.curva_h[0..@test.curva_h.length - params[:n].to_i]
-		end
+		#if @test.current_h == @test.curva_h[0..@test.curva_h.length - params[:n].to_i]
+		#	@test.current_h = @test.current_h[0..@test.current_h.length - 2]
+		#	@puntos = Test.pasar_a_numero(@curva_h)[0..@test.curva_h.length - params[:n].to_i - 1]
+		#else
+		#	@test.current_h = @test.curva_h[0..@test.curva_h.length - params[:n].to_i - 1]
+		#	@puntos = Test.pasar_a_numero(@test.curva_h)[0..@test.curva_h.length - params[:n].to_i]
+		#end
+		@test.current_h = @test.curva_h[0..@test.curva_h.length - params[:n].to_i - 1]
+		@puntos = Test.pasar_a_numero(@test.curva_h)[0..@test.curva_h.length - params[:n].to_i - 1]
 		@test.save
 	end
 

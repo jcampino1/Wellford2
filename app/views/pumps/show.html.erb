@@ -1,5 +1,11 @@
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="//rawgithub.com/phpepe/highcharts-regression/master/highcharts-regression.js?8"></script>
+
 <p id="notice"><%= notice %></p>
 
+
+<h1> Detalles bomba y pruebas de bombeo</h1>
 <p>
   <strong>Nombre:</strong>
   <%= @pump.nombre %>
@@ -20,9 +26,13 @@
   <%= @pump.rodete_min %>
 </p>
 
+<div id="container" style="width: 500px; height: 500px; margin: 0 auto"></div>
+
 <% if @pump.tests.count > 0 %>
 	<% @pump.tests.each do |test| %>
 		<p>Diametro rodete: <%= test.diametro_rodete %></p>
+    <p> Curva hidraulica: </p>
+    <%= test.current_h %>
 	<% end %>
 <% else %>
 	<p>No hay pruebas para esta bomba</p>
@@ -30,3 +40,100 @@
 
 <%= link_to 'Edit', edit_pump_path(@pump) %> |
 <%= link_to 'Back', pumps_path %>
+
+
+<script type="text/javascript">
+ Highcharts.chart('container', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Curvas hidraulicas'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Altura (m)'
+      }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'left',
+      verticalAlign: 'top',
+      x: 100,
+      y: 70,
+      floating: true,
+      backgroundColor: '#FFFFFF',
+      borderWidth: 1
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} m3, {point.y} m'
+        }
+      }
+    },
+    series: [{
+      regression: true,
+      regressionSettings: {
+        type: 'polynomial',
+        color: 'rgba(223, 183, 83, .9)',
+        dashStyle: 'solid',
+        hideinlegend: false
+      },
+      name: 'Lista 1',
+      color: 'rgba(223, 83, 83, .5)',
+      data: [                
+        <% @lista1.each do |d|%>
+          <%=raw d %>,
+        <%end%>                   
+    ]
+    },
+    {
+      regression: true,
+      regressionSettings: {
+        type: 'polynomial',
+        color: 'rgba(223, 183, 83, .9)',
+        dashStyle: 'solid',
+        hideinlegend: false
+      },
+      name: 'Lista 2',
+      color: 'rgba(223, 83, 83, .5)',
+      data: [                
+        <% @lista2.each do |d|%>
+          <%=raw d %>,
+        <%end%>                   
+    ]
+    }]
+  });
+
+</script>

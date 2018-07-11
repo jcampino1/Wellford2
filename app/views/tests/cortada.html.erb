@@ -1,33 +1,119 @@
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="//rawgithub.com/phpepe/highcharts-regression/master/highcharts-regression.js?8"></script>
+
+
 <p id="notice"><%= notice %></p>
 
 <h1>Analisis informacion ingresada</h1>
 
-<p>
-	Aca hay que mostrar los graficos para ver que puntos sacar. 
-	Ojo que en la lectura del csv lee solo un decimal, entonces todas las eficiencias son 0
-</p>
 
-<h3>Grafico 1</h3>
-<%= content_tag "div", id: "products", data: {} do %>
-	<%= grafico_circular @test.current_h %>
-<% end %>
+<div id="container" style="width: 500px; height: 500px; margin: 0 auto"></div>
+
+<script type="text/javascript">
+ Highcharts.chart('container', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Evaluacion de puntos'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Altura (m)'
+      }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'left',
+      verticalAlign: 'top',
+      x: 100,
+      y: 70,
+      floating: true,
+      backgroundColor: '#FFFFFF',
+      borderWidth: 1
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} m3, {point.y} m'
+        }
+      }
+    },
+    series: [{
+      regression: true,
+      regressionSettings: {
+        type: 'polynomial',
+        color: 'rgba(223, 183, 83, .9)',
+        dashStyle: 'solid',
+        hideinlegend: false
+      },
+      name: 'Rodete 214',
+      color: 'rgba(223, 83, 83, .5)',
+      data: [                
+      	<% @puntos.each do |d|%>
+      		<%=raw d %>,
+      	<%end%>                   
+ 	  ]
+    }]
+  });
+
+</script>
+
 
 
 <h2>Editar curva actual</h2>
 
 <% b = params[:n].to_i %>
 
+<p> Puntos removidos hasta ahora: <%= b %></p>
+
 <br>
 <% if b < @test.curva_h.length %>
-	<%= link_to 'Sacar Puntos', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b+1) %> | 
+	<strong><%= link_to 'Sacar Punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b+1) %></strong> | 
 <% else %>
 	<p>No se pueden sacar más puntos | </p>
 <% end %>
-<% if b > 1 %>
-	<%= link_to 'Devolver Puntos', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b-1) %>
+
+<% if b >= 1 %>
+	<strong><%= link_to 'Devolver Punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b-1) %></strong>
 <% else %>
 	<p>No se pueden devolver más puntos</p>
 <% end %>
 
 
 <br>
+
+<h2> Guardar curva </h2>
+
+<strong><%= link_to 'Guardar', pumps_path %></strong>
