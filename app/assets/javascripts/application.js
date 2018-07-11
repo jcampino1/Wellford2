@@ -16,3 +16,4 @@
 //= require chartkick
 //= require highcharts
 //= require jquery
+

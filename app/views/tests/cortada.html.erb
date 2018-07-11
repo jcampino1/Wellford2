@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Analisis informacion ingresada</h1>
+
+<p>
+	Aca hay que mostrar los graficos para ver que puntos sacar. 
+	Ojo que en la lectura del csv lee solo un decimal, entonces todas las eficiencias son 0
+</p>
+
+<h3>Grafico 1</h3>
+<%= content_tag "div", id: "products", data: {} do %>
+	<%= grafico_circular @test.current_h %>
+<% end %>
+
+
+<h2>Editar curva actual</h2>
+
+<% b = params[:n].to_i %>
+
+<br>
+<% if b < @test.curva_h.length %>
+	<%= link_to 'Sacar Puntos', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b+1) %> | 
+<% else %>
+	<p>No se pueden sacar más puntos | </p>
+<% end %>
+<% if b > 1 %>
+	<%= link_to 'Devolver Puntos', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b-1) %>
+<% else %>
+	<p>No se pueden devolver más puntos</p>
+<% end %>
+
+
+<br>
