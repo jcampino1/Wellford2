@@ -3,8 +3,9 @@ Rails.application.routes.draw do
     collection { post :import }
   	resources :tests do
   		get 'analisis', to: 'tests#analisis', as: :analisis
+      get 'cortada/:n', to: 'tests#cortada', as: :cortada
+      # patch 'cortada/:n', to: 'tests#cortada', as: :cortada
       collection { post :import }
-      collection { post :cortada }
 
   	end
   end

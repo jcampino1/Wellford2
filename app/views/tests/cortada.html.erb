@@ -9,24 +9,25 @@
 
 <h3>Grafico 1</h3>
 <%= content_tag "div", id: "products", data: {} do %>
-	<%= grafico_circular @test.curva_h[0..@i] %>
+	<%= grafico_circular @test.current_h %>
 <% end %>
 
 
 <h2>Editar curva actual</h2>
 
-<p>Seleccionar que puntos se quieren sacar...</p>
-
-<%= @test.curva_h %>
-
-<%= form_for([@pump, @test]) do |f| %>
-	<%= f.label :Número %>
-	<%= f.text_area :curva_h, multiple: true, default: @test.curva_h %>
-	<br>
-	<%= f.submit 'Ingresar' %>
-<% end %>
+<% b = params[:n].to_i %>
 
 <br>
+<% if b < @test.curva_h.length %>
+	<%= link_to 'Sacar Puntos', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b+1) %> | 
+<% else %>
+	<p>No se pueden sacar más puntos | </p>
+<% end %>
+<% if b > 1 %>
+	<%= link_to 'Devolver Puntos', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b-1) %>
+<% else %>
+	<p>No se pueden devolver más puntos</p>
+<% end %>
 
 
 <br>

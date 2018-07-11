@@ -9,7 +9,11 @@
 
 <h3>Grafico 1</h3>
 <%= content_tag "div", id: "products", data: {} do %>
-	<%= grafico_circular @test.curva_h[0..@test.curva_h.length] %>
+	<% if @test.current_h.length > 2 %>
+		<%= grafico_circular @test.current_h %>
+	<% else %>
+		<%= grafico_circular @test.curva_h[0..@test.curva_h.length] %>
+	<% end %>	
 <% end %>
 
 
@@ -17,7 +21,7 @@
 
 <p>Seleccionar que puntos se quieren sacar...</p>
 
-<%= @test.curva_h %>
+<%= @test.current_h %>
 
 <%= form_for([@pump, @test]) do |f| %>
 	<%= f.label :Número %>
@@ -30,7 +34,6 @@
 
 <p id="prueba"></p>
 
-<%= button_to 'Sacar Punto', {controller: "tests", action: :cortada,
-		id: @test.id, pump_id: @pump.id, n: 1}, method: :get %>
+<%= link_to 'Sacar Puntos', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: 1) %>
 
 <br>

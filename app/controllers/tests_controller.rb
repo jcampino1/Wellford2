@@ -36,7 +36,6 @@ class TestsController < ApplicationController
 
 	def show
 		@test = @pump.tests.find(params[:id])
-		@i = @test.curva_h.length
 		if @test.curva_h[0].is_a?(String)
 			a = @test.curva_h[0]
 			a.gsub!(/["\""]/, '')
@@ -63,10 +62,13 @@ class TestsController < ApplicationController
 	end
 
 	def cortada
-		@test = @pump.tests.find(params[:id])
-		@nuevo = @test.curva_h[0..@test.curva_h.length - params[:n]]
-
-		redirect_to pump_tests_cortada_path(@pump, @test)
+		@test = @pump.tests.find(params[:test_id])
+		if @test.current_h == @test.curva_h[0..@test.curva_h.length - params[:n].to_i]
+			@test.current_h = @test.current_h[0..@test.current_h.length - 1]
+		else
+			@test.current_h = @test.curva_h[0..@test.curva_h.length - params[:n].to_i]
+		end
+		@test.save
 	end
 
 
