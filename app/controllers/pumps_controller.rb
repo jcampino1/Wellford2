@@ -10,8 +10,12 @@ class PumpsController < ApplicationController
   # GET /pumps/1
   # GET /pumps/1.json
   def show
-    @lista1 = [[12, 5], [1.19, 6]]
-    @lista2 = [[15.6, 7], [65, 87]]
+    if @pump.tests.count > 0
+      @tests = @pump.tests
+      @puntos = Test.pasar_a_numero(@tests.first.current_h)
+    else
+      @puntos = [[12, 5], [1.19, 6]]
+    end
   end
 
   # GET /pumps/new

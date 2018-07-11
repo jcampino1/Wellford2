@@ -12,7 +12,6 @@
   <% end %>
 <% end %>
 
-<h1>Importar Prueba</h1>
 <%= form_tag import_pump_tests_path(@pump), multipart: true do %>
   <%= file_field_tag :file %>
   <%= submit_tag "Importar" %>

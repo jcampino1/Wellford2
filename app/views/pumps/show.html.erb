@@ -26,21 +26,30 @@
   <%= @pump.rodete_min %>
 </p>
 
-<div id="container" style="width: 500px; height: 500px; margin: 0 auto"></div>
+<%= @curvas %>
 
+
+<div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+
+
+<div>
+  <%= link_to 'Editar detalles bomba', edit_pump_path(@pump) %> |
+  <strong><%= link_to 'Volver', pumps_path %></strong>
+</div>
+
+<h2> Pruebas de Bombeo ingresadas </h2>
 <% if @pump.tests.count > 0 %>
 	<% @pump.tests.each do |test| %>
-		<p>Diametro rodete: <%= test.diametro_rodete %></p>
-    <p> Curva hidraulica: </p>
-    <%= test.current_h %>
+    <div>
+      <p> Prueba de bombeo numero: <%=test.id%></p>
+  		<strong><p>Diametro rodete: <%= test.diametro_rodete %></p></strong>
+      <p> Curva hidraulica: <%= test.current_h.length %> puntos</p>
+
+    </div>
 	<% end %>
 <% else %>
 	<p>No hay pruebas para esta bomba</p>
 <% end %>
-
-<%= link_to 'Edit', edit_pump_path(@pump) %> |
-<%= link_to 'Back', pumps_path %>
-
 
 <script type="text/javascript">
  Highcharts.chart('container', {
@@ -74,7 +83,7 @@
       verticalAlign: 'top',
       x: 100,
       y: 70,
-      floating: true,
+      floating: false,
       backgroundColor: '#FFFFFF',
       borderWidth: 1
     },
@@ -110,26 +119,10 @@
         dashStyle: 'solid',
         hideinlegend: false
       },
-      name: 'Lista 1',
+      name: 'Rodete 214',
       color: 'rgba(223, 83, 83, .5)',
       data: [                
-        <% @lista1.each do |d|%>
-          <%=raw d %>,
-        <%end%>                   
-    ]
-    },
-    {
-      regression: true,
-      regressionSettings: {
-        type: 'polynomial',
-        color: 'rgba(223, 183, 83, .9)',
-        dashStyle: 'solid',
-        hideinlegend: false
-      },
-      name: 'Lista 2',
-      color: 'rgba(223, 83, 83, .5)',
-      data: [                
-        <% @lista2.each do |d|%>
+        <% @puntos.each do |d|%>
           <%=raw d %>,
         <%end%>                   
     ]
