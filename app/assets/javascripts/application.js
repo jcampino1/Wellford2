@@ -15,9 +15,5 @@
 //= require_tree .
 //= require chartkick
 //= require highcharts
+//= require jquery
 
-function sacarPunto() {
-	
-	var p = document.getElementById('prueba');
-	p.innerHTML = "<%= A %>"
-}

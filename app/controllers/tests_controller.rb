@@ -119,10 +119,5 @@ class TestsController < ApplicationController
 	  redirect_to pump_test_path(@pump, @test)
 	end
 
-	private
-
-	def h_param
-		eval(param[:curva_h])
-	end
 end
 
