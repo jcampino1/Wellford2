@@ -36,17 +36,20 @@ class TestsController < ApplicationController
 
 	def show
 		@test = @pump.tests.find(params[:id])
-		if @test.curva_h[0].is_a?(String)
-			a = @test.curva_h[0]
-			a.gsub!(/["\""]/, '')
-			a.delete! "[" "]"
-			@test.curva_h = a.split(", ").each_slice(2).to_a
-		end
-		if @test.current_h.length > 2
-			@puntos = Test.pasar_a_numero(@test.current_h)
-		else
-			@puntos = Test.pasar_a_numero(@test.curva_h[0..@test.curva_h.length])
-		end
+		#if @test.curva_h[0].is_a?(String)
+		#	a = @test.curva_h[0]
+		#	a.gsub!(/["\""]/, '')
+		#	a.delete! "[" "]"
+		#	@test.curva_h = a.split(", ").each_slice(2).to_a
+		#end
+		#if @test.current_h.length > 2
+		#	@puntos = Test.pasar_a_numero(@test.current_h)
+		#else
+		#	@puntos = Test.pasar_a_numero(@test.curva_h[0..@test.curva_h.length])
+		#end
+		@puntos = Test.pasar_a_numero(@test.curva_h)
+		@test.current_h = @test.curva_h
+		@test.save
 	end
 
 	def edit
