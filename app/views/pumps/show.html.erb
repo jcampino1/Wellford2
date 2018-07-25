@@ -26,7 +26,6 @@
   <%= @pump.rodete_min %>
 </p>
 
-<%= @curvas %>
 
 
 <div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
@@ -37,6 +36,7 @@
   <strong><%= link_to 'Volver', pumps_path %></strong>
 </div>
 
+<% datos = [] %>
 <h2> Pruebas de Bombeo ingresadas </h2>
 <% if @pump.tests.count > 0 %>
 	<% @pump.tests.each do |test| %>
@@ -44,6 +44,7 @@
       <p> Prueba de bombeo numero: <%=test.id%></p>
   		<strong><p>Diametro rodete: <%= test.diametro_rodete %></p></strong>
       <p> Curva hidraulica: <%= test.current_h.length %> puntos</p>
+      <% datos.push(Test.pasar_a_numero(test.current_h)) %>
 
     </div>
 	<% end %>
@@ -51,7 +52,33 @@
 	<p>No hay pruebas para esta bomba</p>
 <% end %>
 
+
+
+
 <script type="text/javascript">
+
+ var new_series = []
+ var new_data = <%= raw datos %>
+
+ for (lista in new_data){
+  var dicc = {
+    regression: true,
+    regressionSettings: {
+      type: 'polynomial',
+      //color: 'rgba(223, 183, 83, .9)',
+      dashStyle: 'solid',
+      hideinlegend: false
+    },
+    name: 'Rodete 500',
+    //color: 'rgba(223, 83, 83, .5)',
+    data: new_data[lista]
+  }
+  new_series.push(dicc)
+ }
+
+ document.write(new_series[1]["data"])
+
+
  Highcharts.chart('container', {
     chart: {
       type: 'scatter',
@@ -111,22 +138,19 @@
         }
       }
     },
-    series: [{
-      regression: true,
-      regressionSettings: {
-        type: 'polynomial',
-        color: 'rgba(223, 183, 83, .9)',
-        dashStyle: 'solid',
-        hideinlegend: false
-      },
-      name: 'Rodete 214',
-      color: 'rgba(223, 83, 83, .5)',
-      data: [                
-        <% @puntos.each do |d|%>
-          <%=raw d %>,
-        <%end%>                   
-    ]
-    }]
+    series: new_series
+    //series: [{
+    //  regression: true,
+    //  regressionSettings: {
+    //    type: 'polynomial',
+    //   color: 'rgba(223, 183, 83, .9)',
+    //    dashStyle: 'solid',
+    //    hideinlegend: false
+    //  },
+    //  name: 'Rodete 214',
+    //  color: 'rgba(223, 83, 83, .5)',
+    //  data: new_data[1]
+    //}]
   });
 
 </script>

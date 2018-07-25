@@ -28,11 +28,13 @@
     <% end %>
   </tbody>
 </table>
+
+<li><%= link_to 'New Pump', new_pump_path %></li>
+
+
 <h2>Importar Bomba</h2>
 <%= form_tag import_pumps_path, multipart: true do %>
   <%= file_field_tag :file %>
   <%= submit_tag "Importar" %>
 <% end %>
 <br>
-
-<%= link_to 'New Pump', new_pump_path %>
