@@ -16,4 +16,4 @@
 //= require chartkick
 //= require highcharts
 //= require jquery
-
+//= require pumps.js

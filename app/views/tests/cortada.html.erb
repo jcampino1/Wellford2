@@ -5,10 +5,15 @@
 
 <p id="notice"><%= notice %></p>
 
-<h1>Analisis informacion ingresada</h1>
+<center><h1>Analisis informacion ingresada</h1></center>
 
 
 <div id="container" style="width: 500px; height: 500px; margin: 0 auto"></div>
+
+<div id="container2" style="width: 600px; height: 500px; margin: 0 auto"></div>
+
+<div id="container3" style="width: 600px; height: 500px; margin: 0 auto"></div>
+
 
 <script type="text/javascript">
  Highcharts.chart('container', {
@@ -17,7 +22,7 @@
       zoomType: 'xy'
     },
     title: {
-      text: 'Evaluacion de puntos'
+      text: 'Curva Hidraulica'
     },
     subtitle: {
       text: ''
@@ -35,16 +40,6 @@
       title: {
         text: 'Altura (m)'
       }
-    },
-    legend: {
-      layout: 'vertical',
-      align: 'left',
-      verticalAlign: 'top',
-      x: 100,
-      y: 70,
-      floating: true,
-      backgroundColor: '#FFFFFF',
-      borderWidth: 1
     },
     plotOptions: {
       scatter: {
@@ -85,6 +80,147 @@
       		<%=raw d %>,
       	<%end%>                   
  	  ]
+    }]
+  });
+
+</script>
+
+<script type="text/javascript">
+ Highcharts.chart('container2', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Curva Eficiencia'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Altura (m)'
+      }
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} m3, {point.y} m'
+        }
+      }
+    },
+    series: [{
+      regression: true,
+      regressionSettings: {
+        type: 'polynomial',
+        color: 'rgba(223, 183, 83, .9)',
+        dashStyle: 'solid',
+        hideinlegend: false
+      },
+      name: 'Eficiencia',
+      color: 'rgba(223, 83, 83, .5)',
+      data: [                
+        <% @puntos2.each do |d|%>
+          <%=raw d %>,
+        <%end%>                   
+    ]
+    }]
+  });
+
+</script>
+
+<script type="text/javascript">
+ Highcharts.chart('container3', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Curva Potencia'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Altura (m)'
+      }
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} m3, {point.y} m'
+        }
+      }
+    },
+    series: [{
+      regression: true,
+      regressionSettings: {
+        type: 'polynomial',
+        order: 3,
+        color: 'rgba(223, 183, 83, .9)',
+        dashStyle: 'solid',
+        hideinlegend: false
+      },
+      name: 'Potencia',
+      color: 'rgba(223, 83, 83, .5)',
+      data: [                
+        <% @puntos3.each do |d|%>
+          <%=raw d %>,
+        <%end%>                   
+    ]
     }]
   });
 
