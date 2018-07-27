@@ -14,6 +14,32 @@
 
 <div id="container3" style="width: 600px; height: 500px; margin: 0 auto"></div>
 
+<h2>Editar curva actual</h2>
+
+<% b = params[:n].to_i %>
+
+<p> Puntos removidos hasta ahora: <%= b %></p>
+
+<br>
+<% if b < @test.curva_h.length %>
+  <strong><%= link_to 'Sacar Punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b+1) %></strong> | 
+<% else %>
+  <p>No se pueden sacar más puntos | </p>
+<% end %>
+
+<% if b >= 1 %>
+  <strong><%= link_to 'Devolver Punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b-1) %></strong>
+<% else %>
+  <p>No se pueden devolver más puntos</p>
+<% end %>
+
+
+<br>
+
+<h2> Guardar curva </h2>
+
+<strong><%= link_to 'Guardar', pump_test_guardar_path(pump_id: @pump.id, test_id: @test.id, n: b) %></strong>
+
 
 <script type="text/javascript">
  Highcharts.chart('container', {
@@ -225,31 +251,3 @@
   });
 
 </script>
-
-
-
-<h2>Editar curva actual</h2>
-
-<% b = params[:n].to_i %>
-
-<p> Puntos removidos hasta ahora: <%= b %></p>
-
-<br>
-<% if b < @test.curva_h.length %>
-	<strong><%= link_to 'Sacar Punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b+1) %></strong> | 
-<% else %>
-	<p>No se pueden sacar más puntos | </p>
-<% end %>
-
-<% if b >= 1 %>
-	<strong><%= link_to 'Devolver Punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b-1) %></strong>
-<% else %>
-	<p>No se pueden devolver más puntos</p>
-<% end %>
-
-
-<br>
-
-<h2> Guardar curva </h2>
-
-<strong><%= link_to 'Guardar', pumps_path %></strong>

@@ -38,3 +38,19 @@
   <%= submit_tag "Importar" %>
 <% end %>
 <br>
+
+
+<h1>Buscar bomba</h1>
+
+
+<%= form_tag buscar_pumps_path do %>
+  <div class="field">
+    <p> Caudal: <%= text_field_tag :caudal %></p>
+  </div>
+
+  <div class="field">
+    <p> Altura: <%= text_field_tag :altura %></p>
+  </div>
+
+  <%= submit_tag "Buscar" %>
+<% end %>

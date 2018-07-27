@@ -1,3 +1,5 @@
+require 'matrix'
+
 class Test < ApplicationRecord
 	belongs_to :pump
 
@@ -28,6 +30,23 @@ class Test < ApplicationRecord
 			nueva_lista.push([punto[0].to_f, punto[1].to_f])
 		end
 		return nueva_lista
+	end
+
+	def self.regression datos, degree
+		x = []
+		y = []
+
+		for dato in datos
+			x.push(dato[0])
+			y.push(dato[1])
+		end
+
+		x_data = x.map { |xi| (0..degree).map { |pow| (xi**pow).to_r } }
+	 
+		mx = Matrix[*x_data]
+		my = Matrix.column_vector(y)
+	 
+		((mx.t * mx).inv * mx.t * my).transpose.to_a[0].map(&:to_f)
 	end
 
 end
