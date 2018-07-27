@@ -14,4 +14,12 @@ class Pump < ApplicationRecord
       Pump.create!(row.to_hash)
     end
   end
+
+  def self.valida(pump, caudal, altura)
+    if pump.valid_tests.length == 0
+      return false
+    end
+    test1 = Test.find
+    return true
+  end
 end

@@ -26,9 +26,9 @@
   <%= @pump.rodete_min %>
 </p>
 
-
-
-<div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+<% if @pump.valid_tests.length > 0 %>
+  <div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+<% end %>
 
 
 <div>
@@ -36,21 +36,36 @@
   <strong><%= link_to 'Volver', pumps_path %></strong>
 </div>
 
+<div>
+  <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(@pump) %>
+
+
 <% datos = [] %>
+
 <h2> Pruebas de Bombeo ingresadas </h2>
+
 <% if @pump.tests.count > 0 %>
 	<% @pump.tests.each do |test| %>
+  
     <div>
-      <p> Prueba de bombeo numero: <%=test.id%></p>
-  		<strong><p>Diametro rodete: <%= test.diametro_rodete %></p></strong>
-      <p> Curva hidraulica: <%= test.current_h.length %> puntos</p>
-      <% datos.push(Test.pasar_a_numero(test.current_h)) %>
-
+      <strong><p> Prueba de bombeo numero: <%=test.id%> , diametro del rodete: <%= test.diametro_rodete %></p></strong>
     </div>
+  
+    <% if @pump.valid_tests.include?(test.id.to_s) %>
+      <% datos.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete]) %>
+      <%= link_to 'Sacar de las pruebas validas', pump_test_sacar_valida_path(pump_id: @pump.id, test_id: test.id) %>
+
+    <% else %>
+      <%= link_to 'Ingresar como prueba valida', pump_test_entrar_valida_path(pump_id: @pump.id, test_id: test.id) %>
+    <% end %>
 	<% end %>
 <% else %>
 	<p>No hay pruebas para esta bomba</p>
 <% end %>
+
+<h2> Para dejar esta configuracion como definitiva: </h2>
+
+<%= link_to "Configuracion definitiva", pump_definitiva_path(pump_id: @pump.id) %>
 
 
 
@@ -69,15 +84,12 @@
       dashStyle: 'solid',
       hideinlegend: false
     },
-    name: 'Rodete 500',
+    name: 'Rodete ' + new_data[lista][1],
     //color: 'rgba(223, 83, 83, .5)',
-    data: new_data[lista]
+    data: new_data[lista][0]
   }
   new_series.push(dicc)
  }
-
- document.write(new_series[1]["data"])
-
 
  Highcharts.chart('container', {
     chart: {

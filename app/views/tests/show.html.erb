@@ -13,6 +13,20 @@
 
 <div id="container3" style="width: 600px; height: 500px; margin: 0 auto"></div>
 
+<h2>Editar curva actual</h2>
+
+<p>Sacamos los puntos donde cae la curva...</p>
+
+<p id="prueba"></p>
+
+<%= link_to 'Sacar ultimo punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: 1) %>
+
+<br>
+
+<h2> Guardar curva sin cambios </h2>
+
+<strong><%= link_to 'Guardar', pump_test_guardar_igual_path(pump_id: @pump.id, test_id: @test.id) %></strong>
+
 
 <script type="text/javascript">
  Highcharts.chart('container', {
@@ -223,19 +237,5 @@
     }]
   });
 
+
 </script>
-
-
-<h2>Editar curva actual</h2>
-
-<p>Sacamos los puntos donde cae la curva...</p>
-
-<p id="prueba"></p>
-
-<%= link_to 'Sacar ultimo punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: 1) %>
-
-<br>
-
-<h2> Guardar curva sin cambios </h2>
-
-<strong><%= link_to 'Guardar', pumps_path %></strong>

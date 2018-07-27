@@ -1,0 +1,5 @@
+<%= @pumps_final %>
+
+<% @pumps_final.each do |pump| %>
+	<p><%= pump.nombre %> pruebas validas: <%= pump.valid_tests.length %></p>
+<% end %>

@@ -1,5 +1,6 @@
 class PumpsController < ApplicationController
   before_action :set_pump, only: [:show, :edit, :update, :destroy]
+  #skip_before_action :buscar
 
   # GET /pumps
   # GET /pumps.json
@@ -71,6 +72,56 @@ class PumpsController < ApplicationController
     Pump.import(params[:file])
     redirect_to root_url, notice: "Bomba importada"
   end
+
+  def buscar
+    @caudal = params[:caudal].to_f
+    @altura = params[:altura].to_f
+    @pumps = Pump.all
+    @pumps_final = []
+    @pumps.each do |pump|
+      if Pump.valida(pump, @caudal, @altura)
+        @pumps_final.push(pump)
+      end
+    end
+  end
+
+  def definitiva
+    @pump = Pump.find(params[:pump_id])
+    @tests_definitivos = []
+    @cierto = 234556
+    @pump.valid_tests.each do |d|
+      pump = @pump.tests.find(d.to_f)
+      # Aqui en volada no vale la pena meter la curva e y p
+      @tests_definitivos.push([pump.diametro_rodete,
+       pump.coefficients_h, pump.coefficients_e, pump.coefficients_p, pump.xmaximo])
+    end
+    lista_diametros = []
+    @tests_definitivos.each do |test|
+      lista_diametros.push(test[0])
+    end
+    if lista_diametros.exclude?(@pump.rodete_max)
+      @cierto = 1
+      # Si no lo tiene, crearlo y meterlo a la lista de informacion
+    else
+      indice = lista_diametros.index(@pump.rodete_max)
+      @pump.searching_info.push([@tests_definitivos[indice][1],
+       @tests_definitivos[indice][4]])
+
+    end
+
+    if lista_diametros.exclude?(@pump.rodete_min)
+      @cierto = 2
+      # Si no lo tiene, crearlo y meterlo a la lista de informacion
+    else
+      indice = lista_diametros.index(@pump.rodete_min)
+      @pump.searching_info.push([@tests_definitivos[indice][1],
+       @tests_definitivos[indice][4]])
+    end
+
+
+    #redirect_to pumps_path
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
