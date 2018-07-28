@@ -1,56 +1,57 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Catalogo Bombas</h1>
+<div class="center jumbotron">
+  <h1>Catalogo Bombas</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Rpm</th>
-      <th>Rodete max</th>
-      <th>Rodete min</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @pumps.each do |pump| %>
+  <table>
+    <thead>
       <tr>
-        <td><%= pump.nombre %></td>
-        <td><%= pump.rpm %></td>
-        <td><%= pump.rodete_max %></td>
-        <td><%= pump.rodete_min %></td>
-        <td><%= link_to 'Show', pump %></td>
-        <td><%= link_to 'Edit', edit_pump_path(pump) %></td>
-        <td><%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(pump) %></td>
-        <td><%= link_to 'Destroy', pump, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th>Nombre</th>
+        <th>Rpm</th>
+        <th>Rodete max</th>
+        <th>Rodete min</th>
+        <th colspan="3"></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<li><%= link_to 'New Pump', new_pump_path %></li>
+    <tbody>
+      <% @pumps.each do |pump| %>
+        <tr>
+          <td><%= pump.nombre %></td>
+          <td><%= pump.rpm %></td>
+          <td><%= pump.rodete_max %></td>
+          <td><%= pump.rodete_min %></td>
+          <td><%= link_to 'Show', pump %></td>
+          <td><%= link_to 'Edit', edit_pump_path(pump) %></td>
+          <td><%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(pump) %></td>
+          <td><%= link_to 'Destroy', pump, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <p><%= link_to 'New Pump', new_pump_path %></p>
+</div>
 
+<div class="center jumbotron">
+  <h1>Importar Bomba</h1>
+  <%= form_tag import_pumps_path, multipart: true do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Importar" %>
+  <% end %>
+</div>
 
-<h2>Importar Bomba</h2>
-<%= form_tag import_pumps_path, multipart: true do %>
-  <%= file_field_tag :file %>
-  <%= submit_tag "Importar" %>
-<% end %>
-<br>
+<div class="center jumbotron">
+  <h1>Buscar bomba</h1>
 
+  <%= form_tag buscar_pumps_path do %>
+    <div class="field">
+      <p> Caudal: <%= text_field_tag :caudal %></p>
+    </div>
 
-<h1>Buscar bomba</h1>
+    <div class="field">
+      <p> Altura: <%= text_field_tag :altura %></p>
+    </div>
 
-
-<%= form_tag buscar_pumps_path do %>
-  <div class="field">
-    <p> Caudal: <%= text_field_tag :caudal %></p>
-  </div>
-
-  <div class="field">
-    <p> Altura: <%= text_field_tag :altura %></p>
-  </div>
-
-  <%= submit_tag "Buscar" %>
-<% end %>
+    <%= submit_tag "Buscar", class: 'button' %>
+  <% end %>
+</div>
