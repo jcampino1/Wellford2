@@ -23,7 +23,9 @@ ActiveRecord::Schema.define(version: 20180727200739) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "valid_tests", default: [], array: true
-    t.string "searching_info", default: [], array: true
+    t.string "curva_rodete_max", default: [], array: true
+    t.string "curva_rodete_min", default: [], array: true
+    t.string "x_maximos", default: [], array: true
   end
 
   create_table "tests", force: :cascade do |t|
