@@ -139,6 +139,19 @@ class PumpsController < ApplicationController
     #redirect_to pumps_path
   end
 
+  def detalle
+    @pump = Pump.find(params[:pump_id])
+    @caudal = params[:caudal].to_f
+    @altura = params[:altura].to_f
+    @curvas_definitivas = []
+
+    @pump.valid_tests.each do |d|
+      test = @pump.tests.find(d.to_f)
+      @curvas_definitivas.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete])
+    end
+    # Nos va a faltar el pseudo-rodete max y pseudo-rodete_min
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

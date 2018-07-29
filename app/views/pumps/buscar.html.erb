@@ -1,5 +1,21 @@
+<h1> Resultados busqueda </h1>
+
 <%= @pumps_final %>
 
-<% @pumps_final.each do |pump| %>
-	<p><%= pump.nombre %> pruebas validas: <%= pump.valid_tests.length %></p>
+<% if @pumps_final.length > 0 %>
+	
+	<% @pumps_final.each do |pump| %>
+		<p><%= pump.nombre %> pruebas validas: <%= pump.valid_tests.length %></p>
+		<%= link_to "Ver detalle", pump_detalle_path(pump_id: pump.id, caudal: @caudal,
+		altura: @altura) %>
+	<% end %>
+
+
+
+
+<%else%>
+	<p> No hay bombas que satisfagan lo solicitado </p>
 <% end %>
+
+
+<%= link_to "Volver", root_url %>
