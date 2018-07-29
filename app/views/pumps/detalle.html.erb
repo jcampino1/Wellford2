@@ -2,7 +2,7 @@
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script src="//rawgithub.com/phpepe/highcharts-regression/master/highcharts-regression.js?8"></script>
 
-<h1> Detalles busqueda </h1>
+<h1> Detalles busqueda </h1> 
 
 <p> <%= @pump.nombre %> </p>
 
@@ -35,6 +35,7 @@
  }
  
  var dicc2 = {
+  regression: true,
  	name: 'Punto solicitado',
  	data: <%= raw datos %>
  }
