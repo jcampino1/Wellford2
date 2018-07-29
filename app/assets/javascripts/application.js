@@ -12,8 +12,10 @@
 //
 //= require rails-ujs
 //= require turbolinks
-//= require_tree .
 //= require chartkick
 //= require highcharts
 //= require jquery
 //= require pumps.js
+//= require jquery3
+//= require bootstrap
+//= require_tree .

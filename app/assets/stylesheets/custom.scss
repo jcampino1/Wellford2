@@ -1,0 +1,123 @@
+@import 'bootstrap-sprockets';
+@import 'bootstrap';
+
+/* universal */
+
+body {
+  padding-top: 60px;
+}
+
+section {
+  overflow: auto;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.center {
+  text-align: center;
+}
+
+.center h1 {
+  margin-bottom: 10px;
+}
+
+/* typography */
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1;
+}
+
+h1 {
+  font-size: 3em;
+  letter-spacing: -2px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 2em;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: bold;
+}
+
+p {
+  font-size: 1.1em;
+  line-height: 1.7em;
+}
+
+#logo {
+  float: left;
+  margin-right: 800px;
+  font-size: 1.7em;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  padding-top: 9px;
+  font-weight: bold;
+}
+
+#logo:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+#link {
+  font-weight: normal;
+  font-style: italic;
+}
+
+#link:hover {
+  background-color: darkgray;
+  font-weight: bold;
+}
+
+#link:active {
+  color: none;
+}
+
+#link:visited {
+  color: black;
+}
+
+#link-b {
+  font-weight: normal;
+  font-style: italic;
+}
+
+#link-b:hover {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+}
+
+#link-b:active {
+  color: none;
+}
+
+#link-b:visited {
+  color: white;
+}
+
+.form-submit-button {
+  font-weight: normal;
+  font-style: italic;
+}
+
+.form-submit-button:hover {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+}
+
+.form-submit-button:active {
+  color: none;
+}
+
+.form-submit-button:visited {
+  color: white;
+}
