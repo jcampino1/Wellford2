@@ -7,6 +7,7 @@
 <div class="center jumbotron">
 
   <h1> Detalles bomba y pruebas de bombeo</h1>
+  <br>
   <p>
     <strong>Nombre:</strong>
     <%= @pump.nombre %>
@@ -33,8 +34,8 @@
 
 
   <div>
-    <%= link_to 'Editar detalles bomba', edit_pump_path(@pump) %> |
-    <strong><%= link_to 'Volver', pumps_path %></strong>
+    <%= link_to 'Editar detalles bomba', edit_pump_path(@pump), class: "btn btn-lg", id: "link" %>
+    <strong><%= link_to 'Volver', pumps_path, class: "btn btn-lg", id: "link" %></strong>
   </div>
 </div>
 
@@ -43,8 +44,8 @@
 <% datos = [] %>
 <div class="center jumbotron">
 
-  <h2> Pruebas de Bombeo </h2>
-  <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(@pump) %>
+  <h1> Pruebas de Bombeo </h1>
+  <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(@pump), class: "btn btn-lg", id: "link" %>
   <br>
 
   <% if @pump.tests.count > 0 %>
@@ -56,10 +57,10 @@
     
         <% if @pump.valid_tests.include?(test.id.to_s) %>
           <% datos.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete]) %>
-          <%= link_to 'Sacar de las pruebas validas', pump_test_sacar_valida_path(pump_id: @pump.id, test_id: test.id) %>
+          <%= link_to 'Sacar de las pruebas validas', pump_test_sacar_valida_path(pump_id: @pump.id, test_id: test.id), id: "link" %>
 
         <% else %>
-          <%= link_to 'Ingresar como prueba valida', pump_test_entrar_valida_path(pump_id: @pump.id, test_id: test.id) %>
+          <%= link_to 'Ingresar como prueba valida', pump_test_entrar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
       </div>
       <% end %>
   	<% end %>
@@ -70,7 +71,7 @@
   <br>
   <h2> Para dejar esta configuracion como definitiva: </h2>
 
-  <%= link_to "Configuracion definitiva", pump_definitiva_path(pump_id: @pump.id) %>
+  <%= link_to "Configuracion definitiva", pump_definitiva_path(pump_id: @pump.id), class: "btn btn-lg", id:"link-b" %>
 </div>
 
 
