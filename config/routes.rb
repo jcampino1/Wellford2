@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     collection { post :buscar }
     #get 'busqueda', to: 'pumps#busqueda', as: :busqueda
     get 'definitiva', to: 'pumps#definitiva', as: :definitiva
+    get 'detalle', to: 'pumps#detalle', as: :detalle
 
   	resources :tests do
   		get 'analisis', to: 'tests#analisis', as: :analisis
