@@ -5,6 +5,15 @@ class TestsController < ApplicationController
 		@test = @pump.tests.build
 	end
 
+	def destroy
+		@test = @pump.tests.find(params[:test_id])
+		if @pump.valid_tests.include?(@test.id)
+			@pump.valid_tests.delete(@test.id)
+		end
+		@test.destroy
+		redirect_to root_url
+	end
+
 	def show
 		@test = @pump.tests.find(params[:id])
 		@puntos = Test.pasar_a_numero(@test.curva_h)
@@ -59,6 +68,7 @@ class TestsController < ApplicationController
 		@test.save
 		redirect_to pump_path(@pump)
 	end
+	
 
 	def guardar_igual
 		@test = @pump.tests.find(params[:test_id])

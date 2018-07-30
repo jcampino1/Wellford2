@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20180730173243) do
     t.string "curva_rodete_max", default: [], array: true
     t.string "curva_rodete_min", default: [], array: true
     t.string "x_maximos", default: [], array: true
+
     t.integer "succion"
     t.integer "descarga"
     t.integer "motor_hp"
@@ -48,7 +49,8 @@ ActiveRecord::Schema.define(version: 20180730173243) do
     t.integer "acople_machon"
     t.integer "acople_motor"
     t.integer "a"
-  end
+    t.string "efficiency_info", default: [], array: true
+    t.string "efficiency_info_diams", default: [], array: true
 
   create_table "tests", force: :cascade do |t|
     t.float "diametro_rodete"

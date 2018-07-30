@@ -37,8 +37,8 @@ class Test < ApplicationRecord
 		y = []
 
 		for dato in datos
-			x.push(dato[0])
-			y.push(dato[1])
+			x.push(dato[0].to_f)
+			y.push(dato[1].to_f)
 		end
 
 		x_data = x.map { |xi| (0..degree).map { |pow| (xi**pow).to_r } }

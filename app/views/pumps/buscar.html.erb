@@ -1,13 +1,22 @@
 <h1> Resultados busqueda </h1>
 
-
 <% if @pumps_final.length > 0 %>
 	
 	<% @pumps_final.each do |pump| %>
-		<p><%= pump.nombre %> pruebas validas: <%= pump.valid_tests.length %></p>
-		<%= link_to "Ver detalle", pump_detalle_path(pump_id: pump.id, caudal: @caudal,
-		altura: @altura) %>
+		<div class="center jumbotron">
+			<% diametro_final = Pump.diametro_final(pump.curva_rodete_max[0],
+			pump.rodete_max, @caudal, @altura) %>
+			<p><%= pump.nombre %></p>
+			<p>Recorte rodete: <%= diametro_final %></p>
+			<% eficiencia = Pump.calcular_eficiencia(@caudal, 
+			pump.efficiency_info, pump.efficiency_info_diams, diametro_final) %>
+			<p>Eficiencia aproximada: <%= eficiencia*100 %>%</p>
+			<%= link_to "Ver detalle", pump_detalle_path(pump_id: pump.id, caudal: @caudal,
+			altura: @altura, eficiencia: eficiencia), class: "btn btn-lg", id:"link" %>
+		</div>
 	<% end %>
+
+
 
 
 
@@ -17,4 +26,4 @@
 <% end %>
 
 
-<%= link_to "Volver", root_url %>
+<%= link_to "Volver", root_url, class: "btn btn-lg", id:"link" %>

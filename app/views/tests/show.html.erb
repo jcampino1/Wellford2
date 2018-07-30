@@ -6,6 +6,12 @@
 
 <center><h1>Analisis informacion ingresada</h1></center>
 
+<div class="center jumbotron">
+  <h2>Editar curva actual</h2>
+  <p>Sacamos los puntos donde cae la curva...</p>
+  <%= link_to 'Sacar ultimo punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: 1), class: "btn btn-lg", id:"link" %>
+</div>
+
 
 <div id="container" style="width: 500px; height: 500px; margin: 0 auto"></div>
 
@@ -13,19 +19,19 @@
 
 <div id="container3" style="width: 600px; height: 500px; margin: 0 auto"></div>
 
-<h2>Editar curva actual</h2>
 
-<p>Sacamos los puntos donde cae la curva...</p>
-
-<p id="prueba"></p>
-
-<%= link_to 'Sacar ultimo punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: 1) %>
 
 <br>
 
-<h2> Guardar curva sin cambios </h2>
+<div class="center jumbotron">
+  <h2> Guardar curvas sin cambios </h2>
+  <strong><%= link_to 'Guardar', pump_test_guardar_igual_path(pump_id: @pump.id, test_id: @test.id), class: "btn btn-lg", id:"link" %></strong>
+</div>
 
-<strong><%= link_to 'Guardar', pump_test_guardar_igual_path(pump_id: @pump.id, test_id: @test.id) %></strong>
+<div class="center jumbotron">
+  <h3> Eliminar prueba de bombeo </h3>
+  <%= link_to "Eliminar", pump_test_path(pump_id: @pump.id, test_id: @test.id), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "btn btn-lg", id:"link"  %>
+</div>
 
 
 <script type="text/javascript">

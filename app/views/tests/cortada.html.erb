@@ -7,6 +7,26 @@
 
 <center><h1>Analisis informacion ingresada</h1></center>
 
+<% b = params[:n].to_i %>
+
+<div class="center jumbotron">
+  <h2>Editar curva actual</h2>
+  <p> Puntos removidos hasta ahora: <%= b %></p>
+
+  <br>
+  <% if b < @test.curva_h.length %>
+    <strong><%= link_to 'Sacar Punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b+1), class: "btn btn-lg", id:"link" %></strong> | 
+  <% else %>
+    <p>No se pueden sacar más puntos | </p>
+  <% end %>
+
+  <% if b >= 1 %>
+    <strong><%= link_to 'Devolver Punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b-1), class: "btn btn-lg", id:"link" %></strong>
+  <% else %>
+    <p>No se pueden devolver más puntos</p>
+  <% end %>
+</div>
+
 
 <div id="container" style="width: 500px; height: 500px; margin: 0 auto"></div>
 
@@ -14,31 +34,17 @@
 
 <div id="container3" style="width: 600px; height: 500px; margin: 0 auto"></div>
 
-<h2>Editar curva actual</h2>
-
-<% b = params[:n].to_i %>
-
-<p> Puntos removidos hasta ahora: <%= b %></p>
-
-<br>
-<% if b < @test.curva_h.length %>
-  <strong><%= link_to 'Sacar Punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b+1) %></strong> | 
-<% else %>
-  <p>No se pueden sacar más puntos | </p>
-<% end %>
-
-<% if b >= 1 %>
-  <strong><%= link_to 'Devolver Punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b-1) %></strong>
-<% else %>
-  <p>No se pueden devolver más puntos</p>
-<% end %>
-
-
 <br>
 
-<h2> Guardar curva </h2>
+<div class="center jumbotron">
+  <h2> Guardar curvas </h2>
+  <strong><%= link_to 'Guardar', pump_test_guardar_path(pump_id: @pump.id, test_id: @test.id, n: b), class: "btn btn-lg", id:"link" %></strong>
+</div>
 
-<strong><%= link_to 'Guardar', pump_test_guardar_path(pump_id: @pump.id, test_id: @test.id, n: b) %></strong>
+<div class="center jumbotron">
+  <h3> Eliminar prueba de bombeo </h3>
+  <%= link_to "Eliminar", pump_test_destroy_path(pump_id: @pump.id, test_id: @test.id), data: { confirm: '¿Estás seguro?' }, class: "btn btn-lg", id:"link"  %>
+</div>
 
 
 <script type="text/javascript">

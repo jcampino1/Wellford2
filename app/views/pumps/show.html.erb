@@ -36,24 +36,31 @@
     </ul>
   </nav>
 
-  <% if @pump.valid_tests.length > 0 %>
-    <div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
-  <% end %>
-
-
   <div>
     <%= link_to 'Editar detalles bomba', edit_pump_path(@pump), class: "btn btn-lg", id: "link" %>
     <strong><%= link_to 'Volver', pumps_path, class: "btn btn-lg", id: "link" %></strong>
   </div>
 </div>
 
+<% if @pump.valid_tests.length > 0 %>
+  <div class="center jumbotron">
+    <div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+  </div>
+<% end %>
+
+<% if @pump.valid_tests.length > 0 %>
+  <div class="center jumbotron">
+    <div id="container2" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+  </div>
+<% end %>
 
 
 <% datos = [] %>
+<% datos_e = [] %>
 <div class="center jumbotron">
 
-  <h1> Pruebas de Bombeo </h1>
-  <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(@pump), class: "btn btn-lg", id: "link" %>
+  <h2> Pruebas de Bombeo </h2>
+  <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(@pump), class: "btn btn-lg btn-primary", id:"link-b" %>
   <br>
 
   <% if @pump.tests.count > 0 %>
@@ -65,21 +72,29 @@
     
         <% if @pump.valid_tests.include?(test.id.to_s) %>
           <% datos.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete]) %>
-          <%= link_to 'Sacar de las pruebas validas', pump_test_sacar_valida_path(pump_id: @pump.id, test_id: test.id), id: "link" %>
+          <% datos_e.push([Test.pasar_a_numero(test.current_e), test.diametro_rodete]) %>
+          <%= link_to 'Sacar de las pruebas validas', pump_test_sacar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
+
 
         <% else %>
           <%= link_to 'Ingresar como prueba valida', pump_test_entrar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
+        <% end %>
+
+        <%= link_to "Eliminar", pump_test_path(pump_id: @pump.id, test_id: test.id), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "btn btn-lg", id:"link"  %>
       </div>
-      <% end %>
   	<% end %>
   <% else %>
   	<p>No hay pruebas para esta bomba</p>
   <% end %>
 
   <br>
-  <h2> Para dejar esta configuracion como definitiva: </h2>
 
-  <%= link_to "Configuracion definitiva", pump_definitiva_path(pump_id: @pump.id), class: "btn btn-lg", id:"link-b" %>
+  
+</div>
+
+<div class="center jumbotron">
+<h2> Para dejar esta configuracion como definitiva: </h2>
+<%= link_to "Configuracion definitiva", pump_definitiva_path(pump_id: @pump.id), class: "btn btn-lg btn-primary", id:"link-b" %>
 </div>
 
 
@@ -166,18 +181,88 @@
       }
     },
     series: new_series
-    //series: [{
-    //  regression: true,
-    //  regressionSettings: {
-    //    type: 'polynomial',
-    //   color: 'rgba(223, 183, 83, .9)',
-    //    dashStyle: 'solid',
-    //    hideinlegend: false
-    //  },
-    //  name: 'Rodete 214',
-    //  color: 'rgba(223, 83, 83, .5)',
-    //  data: new_data[1]
-    //}]
+  });
+
+ var new_series_e = []
+ var new_data_e = <%= raw datos_e %>
+
+ for (lista in new_data_e){
+  var dicc = {
+    regression: true,
+    regressionSettings: {
+      type: 'polynomial',
+      //color: 'rgba(223, 183, 83, .9)',
+      dashStyle: 'solid',
+      hideinlegend: false
+    },
+    name: 'Rodete ' + new_data_e[lista][1],
+    //color: 'rgba(223, 83, 83, .5)',
+    data: new_data_e[lista][0]
+
+  }
+  new_series_e.push(dicc)
+ }
+
+ Highcharts.chart('container2', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Curvas Eficiencia'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Eficiencia'
+      }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'left',
+      verticalAlign: 'top',
+      x: 100,
+      y: 70,
+      floating: false,
+      backgroundColor: '#FFFFFF',
+      borderWidth: 1
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} m3, {point.y} m'
+        }
+      }
+    },
+    series: new_series_e
   });
 
 </script>

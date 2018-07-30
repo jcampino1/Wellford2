@@ -95,44 +95,52 @@ class PumpsController < ApplicationController
       # Aqui en volada no vale la pena meter la curva e y p
       @tests_definitivos.push([pump.diametro_rodete,
        pump.coefficients_h, pump.coefficients_e,
-        pump.coefficients_p, pump.xmaximo])
+        pump.coefficients_p, pump.xmaximo, pump.current_h])
     end
-    lista_diametros = []
-    lista_maximos = []
+    @lista_diametros = []
+    @lista_maximos = []
     @tests_definitivos.each do |test|
-      lista_diametros.push(test[0])
-      lista_maximos.push(test[4])
+      @lista_diametros.push(test[0])
+      @lista_maximos.push(test[4])
     end
-    if lista_diametros.exclude?(@pump.rodete_max)
-      @cierto = 1
-      @pumps.curva_rodete_max = "hola"
-      # Si no lo tiene, crearlo y meterlo a la lista de informacion
+    if @lista_diametros.exclude?(@pump.rodete_max)
+      indice = @lista_diametros.index(@lista_diametros.max)
+      nueva_curva_rodete_max = Pump.crear_curva(@tests_definitivos[indice][5],
+        @tests_definitivos[indice][0], @pump.rodete_max)
+      @pump.curva_rodete_max.clear
+      # Se meten solo los coeficientes h
+      @pump.curva_rodete_max.push(nueva_curva_rodete_max)
+
     else
-      @indicex = lista_diametros.index(@pump.rodete_max)
+      @indicex = @lista_diametros.index(@pump.rodete_max)
       @pump.curva_rodete_max.clear
       @pump.curva_rodete_max.push(@tests_definitivos[@indicex][1])
-      #@pump.curva_rodete_max = [Pump.lista_a_numero(@tests_definitivos[indice][1]),
-      # @tests_definitivos[indice][4].to_f]
 
     end
 
-    if lista_diametros.exclude?(@pump.rodete_min)
-      @cierto = 2
-      indice = lista_diametros.index(lista_diametros.min)
+    if @lista_diametros.exclude?(@pump.rodete_min)
+      indice = @lista_diametros.index(@lista_diametros.min)
+      nueva_curva_rodete_min = Pump.crear_curva(@tests_definitivos[indice][5],
+        @tests_definitivos[indice][0], @pump.rodete_min)
       @pump.curva_rodete_min.clear
-      @pump.curva_rodete_min.push(@tests_definitivos[indice][1])
-      #@pump.curva_rodete_min = [Pump.lista_a_numero(@tests_definitivos[indice][1]),
-      # @tests_definitivos[indice][4].to_f]
-      # Si no lo tiene, crearlo y meterlo a la lista de informacion
+      @pump.curva_rodete_min.push(nueva_curva_rodete_min)
     else
-      indice = lista_diametros.index(@pump.rodete_min)
+      indice = @lista_diametros.index(@pump.rodete_min)
       @pump.curva_rodete_min.clear
       @pump.curva_rodete_min.push(@tests_definitivos[indice][1])
-      #@pump.curva_rodete_min = [Pump.lista_a_numero(@tests_definitivos[indice][1]),
-      # @tests_definitivos[indice][4].to_f]
     end
     @pump.x_maximos.clear
-    @pump.x_maximos.push(lista_maximos.max.to_f)
+    @pump.x_maximos.push(@lista_maximos.max.to_f)
+
+    # Ahora la informacion de la eficiencia
+    indice1 = @lista_diametros.index(@lista_diametros.max)
+    indice2 = @lista_diametros.index(@lista_diametros.min)
+    @pump.efficiency_info.clear
+    @pump.efficiency_info_diams.clear
+    @pump.efficiency_info.push(@tests_definitivos[indice1][2])
+    @pump.efficiency_info_diams.push(@tests_definitivos[indice1][0])
+    @pump.efficiency_info.push(@tests_definitivos[indice2][2])
+    @pump.efficiency_info_diams.push(@tests_definitivos[indice2][0])
     @pump.save
 
 
@@ -144,11 +152,14 @@ class PumpsController < ApplicationController
     @pump = Pump.find(params[:pump_id])
     @caudal = params[:caudal].to_f
     @altura = params[:altura].to_f
+    @eficiencia = params[:eficiencia].to_f
     @curvas_definitivas = []
+    @curvas_eficiencias = []
 
     @pump.valid_tests.each do |d|
       test = @pump.tests.find(d.to_f)
       @curvas_definitivas.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete])
+      @curvas_eficiencias.push([Test.pasar_a_numero(test.current_e), test.diametro_rodete])
     end
     # Nos va a faltar el pseudo-rodete max y pseudo-rodete_min
   end
