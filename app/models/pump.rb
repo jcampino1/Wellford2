@@ -1,17 +1,20 @@
+
 class Pump < ApplicationRecord
+
 	has_many :tests, dependent: :destroy
 
-	validates :nombre, presence: true
-	validates :rpm, presence: true
-	validates :rodete_max, presence: true
-	validates :rodete_min, presence: true
-
   def self.import(file)
-    """
-    Crea las bombas a partir de la info del csv
-    """
-    CSV.foreach(file.path, headers: :true) do |row|
-      Pump.create!(row.to_hash)
+    CSV.foreach(file.path, headers: true) do |row|
+      Pump.create!(bomba: row[0], rpm: row[1], succion: row[2],
+                   motor_hp: row[3], frame: row[4], base: row[5],
+                   machon_omega: row[6], machon_dentado: row[7],
+                   rodete_max: row[10], anillo_delantero: row[11],
+                   anillo_trasero: row[12], delantero_motor: row[13],
+                   trasero_motor: row[14], delantero_bomba: row[15],
+                   trasero_bomba: row[16], caudal_minimo: row[17],
+                   ancho_b1: row[20], largo_l1: row[21], hs: row[29], hd: row[30],
+                   a: row[31], peso_motobomba: row[32], acople_machon: row[33],
+                   acople_motor: row[34])
     end
   end
 
@@ -29,15 +32,15 @@ class Pump < ApplicationRecord
     if caudal > pump.x_maximos.max.to_f
       return false
     end
-    
+
     # Vemos que este bajo la curva a rodete max
-    if pump.curva_rodete_max[0][0].to_f + pump.curva_rodete_max[0][1].to_f*caudal + 
+    if pump.curva_rodete_max[0][0].to_f + pump.curva_rodete_max[0][1].to_f*caudal +
       pump.curva_rodete_max[0][2].to_f*caudal*caudal < altura
       return false
     end
 
     # Vemos que este sobre la curva de rodete min
-    if pump.curva_rodete_min[0][0].to_f + pump.curva_rodete_min[0][1].to_f*caudal + 
+    if pump.curva_rodete_min[0][0].to_f + pump.curva_rodete_min[0][1].to_f*caudal +
       pump.curva_rodete_min[0][2].to_f*caudal*caudal > altura
       return false
     end
@@ -87,7 +90,5 @@ class Pump < ApplicationRecord
     end
     return Test.regression(nueva_curva, 2)
   end
-
-
 
 end

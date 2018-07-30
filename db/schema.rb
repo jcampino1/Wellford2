@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180730172040) do
+ActiveRecord::Schema.define(version: 20180730173243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "pumps", force: :cascade do |t|
-    t.string "nombre"
+    t.string "bomba"
     t.float "rpm"
     t.float "rodete_max"
     t.float "rodete_min"
@@ -26,9 +26,31 @@ ActiveRecord::Schema.define(version: 20180730172040) do
     t.string "curva_rodete_max", default: [], array: true
     t.string "curva_rodete_min", default: [], array: true
     t.string "x_maximos", default: [], array: true
+
+    t.integer "succion"
+    t.integer "descarga"
+    t.integer "motor_hp"
+    t.string "frame"
+    t.string "base"
+    t.string "machon_omega"
+    t.string "machon_dentado"
+    t.string "anillo_delantero"
+    t.string "anillo_trasero"
+    t.string "delantero_motor"
+    t.string "trasero_motor"
+    t.string "delantero_bomba"
+    t.string "trasero_bomba"
+    t.integer "caudal_minimo"
+    t.integer "ancho_b1"
+    t.integer "largo_l1"
+    t.integer "hs"
+    t.integer "hd"
+    t.integer "peso_motobomba"
+    t.integer "acople_machon"
+    t.integer "acople_motor"
+    t.integer "a"
     t.string "efficiency_info", default: [], array: true
     t.string "efficiency_info_diams", default: [], array: true
-  end
 
   create_table "tests", force: :cascade do |t|
     t.float "diametro_rodete"

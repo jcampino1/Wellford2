@@ -6,21 +6,35 @@
 
 <div class="center jumbotron">
 
-  <h1> Detalles bomba <%= @pump.nombre %></h1>
-  <br>
-
-  <p>
-    <strong>Rpm:</strong>
-    <%= @pump.rpm %>  
-
-
-  
-    <strong>Rodete max:</strong>
-    <%= @pump.rodete_max %>
-  
-    <strong>Rodete min:</strong>
-    <%= @pump.rodete_min %>
-  </p>
+  <h1> Detalles bomba <%= @pump.bomba %> y pruebas de bombeo</h1>
+  <nav>
+    <ul>
+        <p></p><strong>RPM: </strong><%= @pump.rpm %></p>
+        <p></p><strong>Succion: </strong><%= @pump.succion %></p>
+        <p></p><strong>Descarga: </strong><%= @pump.descarga %></p>
+        <p></p><strong>Motor (HP): </strong><%= @pump.motor_hp%></p>
+        <p></p><strong>Frame: </strong><%= @pump.frame %></p>
+        <p></p><strong>Base: </strong><%= @pump.base %></p>
+        <p></p><strong>Tipo Machón Omega: </strong><%= @pump.machon_omega %></p>
+        <p></p><strong>Tipo Machón Dentado: </strong><%= @pump.machon_dentado %></p>
+        <p></p><strong>Rodete Máximo: </strong><%= @pump.rodete_max %></p>
+        <p></p><strong>Anillo Delantero: </strong><%= @pump.anillo_delantero %></p>
+        <p></p><strong>Anillo Trasero: </strong><%= @pump.anillo_trasero %></p>
+        <p></p><strong>Delantero Motor: </strong><%= @pump.delantero_motor %></p>
+        <p></p><strong>Trasero Motor: </strong><%= @pump.trasero_motor %></p>
+        <p></p><strong>Delantero Bomba: </strong><%= @pump.delantero_bomba %></p>
+        <p></p><strong>Trasero Bomba: </strong><%= @pump.trasero_bomba %></p>
+        <p></p><strong>Caudal Mínimo: </strong><%= @pump.caudal_minimo %></p>
+        <p></p><strong>Ancho (B1): </strong><%= @pump.ancho_b1 %></p>
+        <p></p><strong>Largo (L1): </strong><%= @pump.largo_l1 %></p>
+        <p></p><strong>Hs: </strong><%= @pump.hs %></p>
+        <p></p><strong>Hd: </strong><%= @pump.hd %></p>
+        <p></p><strong>A: </strong><%= @pump.a %></p>
+        <p></p><strong>Peso motobomba: </strong><%= @pump.peso_motobomba %></p>
+        <p></p><strong>Acople Machón: </strong><%= @pump.acople_machon %></p>
+        <p></p><strong>Acople Motor: </strong><%= @pump.acople_motor %></p>
+    </ul>
+  </nav>
 
   <div>
     <%= link_to 'Editar detalles bomba', edit_pump_path(@pump), class: "btn btn-lg", id: "link" %>
