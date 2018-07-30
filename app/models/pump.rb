@@ -6,15 +6,15 @@ class Pump < ApplicationRecord
   def self.import(file)
     CSV.foreach(file.path, headers: true) do |row|
       Pump.create!(bomba: row[0], rpm: row[1], succion: row[2],
-                   motor_hp: row[3], frame: row[4], base: row[5],
-                   machon_omega: row[6], machon_dentado: row[7],
-                   rodete_max: row[10], anillo_delantero: row[11],
-                   anillo_trasero: row[12], delantero_motor: row[13],
-                   trasero_motor: row[14], delantero_bomba: row[15],
-                   trasero_bomba: row[16], caudal_minimo: row[17],
-                   ancho_b1: row[20], largo_l1: row[21], hs: row[29], hd: row[30],
-                   a: row[31], peso_motobomba: row[32], acople_machon: row[33],
-                   acople_motor: row[34])
+                   descarga: row[3], motor_hp: row[4], frame: row[5],
+                   base: row[6], machon_omega: row[7], machon_dentado: row[8],
+                   rodete_max: row[11], anillo_delantero: row[12],
+                   anillo_trasero: row[13], delantero_motor: row[14],
+                   trasero_motor: row[15], delantero_bomba: row[16],
+                   trasero_bomba: row[17], caudal_minimo: row[18],
+                   ancho_b1: row[21], largo_l1: row[22], hs: row[29],
+                   hd: row[30], a: row[31], peso_motobomba: row[32],
+                   acople_machon: row[33], acople_motor: row[34])
     end
   end
 
