@@ -121,3 +121,9 @@ p {
 .form-submit-button:visited {
   color: white;
 }
+
+nav ul {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow: auto;
+}

@@ -58,3 +58,5 @@ end
 gem 'chartkick'
 gem "highcharts-rails"
 gem 'jquery-rails'
+gem 'roo'
+gem 'spreadsheet'
