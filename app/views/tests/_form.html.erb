@@ -12,7 +12,9 @@
   <% end %>
 <% end %>
 
-<%= form_tag import_pump_tests_path(@pump), multipart: true do %>
-  <%= file_field_tag :file %>
-  <%= submit_tag "Importar" %>
-<% end %>
+<div class="jumbotron">
+  <%= form_tag import_pump_tests_path(@pump), multipart: true do %>
+    <%= file_field_tag :file, class: "btn" %>
+    <%= submit_tag "Importar", class: "btn btn-lg btn-primary", id:"link-b" %>
+  <% end %>
+</div>

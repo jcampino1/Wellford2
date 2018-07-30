@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180727200739) do
+ActiveRecord::Schema.define(version: 20180730172040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 20180727200739) do
     t.string "curva_rodete_max", default: [], array: true
     t.string "curva_rodete_min", default: [], array: true
     t.string "x_maximos", default: [], array: true
+    t.string "efficiency_info", default: [], array: true
+    t.string "efficiency_info_diams", default: [], array: true
   end
 
   create_table "tests", force: :cascade do |t|
