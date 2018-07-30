@@ -1,5 +1,5 @@
 class Pump < ApplicationRecord
-	has_many :tests
+	has_many :tests, dependent: :destroy
 
 	validates :nombre, presence: true
 	validates :rpm, presence: true
@@ -45,6 +45,26 @@ class Pump < ApplicationRecord
 
   end
 
+  def self.calcular_eficiencia(caudal, coeficientes_eficiencia, diametros, diametro_final)
+    """
+    Entrega la eficiencia aproximada de una bomba en un punto dado (Q, H)
+    """
+    eficiencia1 = coeficientes_eficiencia[1][0].to_f + coeficientes_eficiencia[1][1].to_f*caudal + coeficientes_eficiencia[1][2].to_f*caudal*caudal
+    eficiencia2 = coeficientes_eficiencia[0][0].to_f + coeficientes_eficiencia[0][1].to_f*caudal + coeficientes_eficiencia[0][2].to_f*caudal*caudal
+    diam1 = diametros[1].to_f
+    diam2 = diametros[0].to_f
+    pendiente = (eficiencia2 - eficiencia1)/(diam2 - diam1)
+    return eficiencia1 + pendiente*(diametro_final - diam1)
+  end
+
+  def self.diametro_final(curva_h, rodete_max, caudal, altura)
+    altura_rodete_max = curva_h[0].to_f + curva_h[1].to_f*caudal + curva_h[2].to_f*caudal*caudal
+    razon = altura**2/altura_rodete_max**2
+    return razon*rodete_max
+
+  end
+
+
 
   def self.lista_a_numero(lista)
     nueva_lista = []
@@ -52,6 +72,20 @@ class Pump < ApplicationRecord
       nueva_lista.push(d.to_f)
     end
     return nueva_lista
+  end
+
+  def self.crear_curva(curva, diametro_curva, nuevo_diametro)
+    """
+    Funcion que crea una nueva curva a partir de otra curva y los diametros
+    de los rodetes por semejanza hidraulica
+    """
+    nueva_curva = []
+    curva.each do |punto|
+      nueva_altura = ((nuevo_diametro.to_f*punto[1].to_f*punto[1].to_f)/diametro_curva.to_f)**0.5
+      nuevo_punto = [punto[0], nueva_altura]
+      nueva_curva.push(nuevo_punto)
+    end
+    return Test.regression(nueva_curva, 2)
   end
 
 

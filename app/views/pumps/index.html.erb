@@ -22,9 +22,9 @@
           <td><%= pump.rodete_max %></td>
           <td><%= pump.rodete_min %></td>
           <td><%= link_to 'Ver', pump, class: "btn btn-lg", id:"link" %></td>
-          <td><%= link_to 'Editar', edit_pump_path(pump), class: "btn btn-lg", id:"link" %></td>
           <td><%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(pump), class: "btn btn-lg", id:"link" %></td>
-          <td><%= link_to 'Eliminar', pump, method: :delete, data: { confirm: '¿Está seguro?' }, class: "btn btn-lg", id:"link" %></td>
+          <td><%= link_to "Eliminar", pump, method: :delete, data: { confirm: '¿Estás seguro?' }, class: "btn btn-lg", id:"link"  %></td>
+          
         </tr>
       <% end %>
     </tbody>
@@ -32,26 +32,26 @@
   <p><%= link_to 'Nueva Bomba', new_pump_path, class: "btn btn-lg btn-primary", id:"link-b" %></p>
 </div>
 
+<div class="center jumbotron">
+  <h1>Buscar bomba</h1>
+
+  <%= form_tag buscar_path do %>
+    <div class="field">
+      <p> Caudal: <%= text_field_tag :caudal %> (lt/s) </p>
+    </div>
+
+    <div class="field">
+      <p> Altura: <%= text_field_tag :altura %> (m)</p>
+    </div>
+
+    <%= submit_tag "Buscar", class: 'btn btn-lg btn-primary', id:"link-b" %>
+  <% end %>
+</div>
+
 <div class="jumbotron">
   <h1>Importar Bomba</h1>
   <%= form_tag import_pumps_path, multipart: true do %>
     <%= file_field_tag :file, class: "btn" %>
     <%= submit_tag "Importar", class: "btn btn-lg btn-primary", id:"link-b" %>
-  <% end %>
-</div>
-
-<div class="center jumbotron">
-  <h1>Buscar bomba</h1>
-
-  <%= form_tag buscar_pumps_path do %>
-    <div class="field">
-      <p> Caudal: <%= text_field_tag :caudal %></p>
-    </div>
-
-    <div class="field">
-      <p> Altura: <%= text_field_tag :altura %></p>
-    </div>
-
-    <%= submit_tag "Buscar", class: 'btn btn-lg btn-primary', id:"link-b" %>
   <% end %>
 </div>
