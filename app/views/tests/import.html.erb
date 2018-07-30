@@ -1,0 +1,93 @@
+<h1>Analisis informacion ingresada</h1>
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="//rawgithub.com/phpepe/highcharts-regression/master/highcharts-regression.js?8"></script>
+
+<h2>Editar curva actual</h2>
+
+<p>Seleccionar que puntos se quieren sacar...</p>
+
+
+<div id="container" style="width: 500px; height: 500px; margin: 0 auto"></div>
+
+<script type="text/javascript">
+ Highcharts.chart('container', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Evaluacion de puntos'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Altura (m)'
+      }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'left',
+      verticalAlign: 'top',
+      x: 100,
+      y: 70,
+      floating: true,
+      backgroundColor: '#FFFFFF',
+      borderWidth: 1
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} cm, {point.y} kg'
+        }
+      }
+    },
+    series: [{
+      regression: true,
+      regressionSettings: {
+        type: 'polynomial',
+        color: 'rgba(223, 183, 83, .9)',
+        dashStyle: 'dash'
+      },
+      name: 'Rodete 214',
+      color: 'rgba(223, 83, 83, .5)',
+      data: [                
+      	<%@test.current_h.each do |d|%>
+      		<%=raw d %>,
+      	<%end%>                   
+ 	  ]
+    }]
+  });
+
+</script>
+
+

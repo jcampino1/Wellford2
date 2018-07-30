@@ -1,5 +1,7 @@
 {
   "name": "example",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "highcharts": "^6.1.1"
+  }
 }

@@ -1,34 +1,44 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Catalogo Bombas</h1>
+<div class="center jumbotron">
+  <h1>Catalogo Bombas</h1>
+  <nav>
+    <ul>
+      <% Pump.all.each do |pump| %>
+      <p>
+        <%= pump.bomba %>
+        <%= link_to 'Ver', pump, class: "btn btn-lg", id:"link" %>
+        <%= link_to 'Editar', edit_pump_path(pump), class: "btn btn-lg", id:"link" %>
+        <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(pump), class: "btn btn-lg", id:"link" %>
+        <%= link_to 'Eliminar', pump, method: :delete, data: { confirm: '¿Está seguro?' }, class: "btn btn-lg", id:"link" %>
+      </p>
+      <% end %>
+    </ul>
+  </nav>
 
-<table>
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Rpm</th>
-      <th>Rodete max</th>
-      <th>Rodete min</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+  <p><%= link_to 'Nueva Bomba', new_pump_path, class: "btn btn-lg btn-primary", id:"link-b" %></p>
+</div>
 
-  <tbody>
-    <% @pumps.each do |pump| %>
-      <tr>
-        <td><%= pump.nombre %></td>
-        <td><%= pump.rpm %></td>
-        <td><%= pump.rodete_max %></td>
-        <td><%= pump.rodete_min %></td>
-        <td><%= link_to 'Show', pump %></td>
-        <td><%= link_to 'Edit', edit_pump_path(pump) %></td>
-        <td><%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(pump) %></td>
-        <td><%= link_to 'Destroy', pump, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="center jumbotron">
+  <h1>Buscar bomba</h1>
 
-<br>
+  <%= form_tag buscar_path do %>
+    <div class="field">
+      <p> Caudal: <%= text_field_tag :caudal %> (lt/s) </p>
+    </div>
 
-<%= link_to 'New Pump', new_pump_path %>
+    <div class="field">
+      <p> Altura: <%= text_field_tag :altura %> (m)</p>
+    </div>
+
+    <%= submit_tag "Buscar", class: 'btn btn-lg btn-primary', id:"link-b" %>
+  <% end %>
+</div>
+
+<div class="jumbotron">
+  <h1>Importar Bomba</h1>
+  <%= form_tag import_pumps_path, multipart: true do %>
+    <%= file_field_tag :file, class: "btn" %>
+    <%= submit_tag "Importar", class: "btn btn-lg btn-primary", id:"link-b" %>
+  <% end %>
+</div>

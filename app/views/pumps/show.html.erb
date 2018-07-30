@@ -1,24 +1,268 @@
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="//rawgithub.com/phpepe/highcharts-regression/master/highcharts-regression.js?8"></script>
+
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Nombre:</strong>
-  <%= @pump.nombre %>
-</p>
+<div class="center jumbotron">
 
-<p>
-  <strong>Rpm:</strong>
-  <%= @pump.rpm %>
-</p>
+  <h1> Detalles bomba <%= @pump.bomba %> y pruebas de bombeo</h1>
+  <nav>
+    <ul>
+        <p></p><strong>RPM: </strong><%= @pump.rpm %></p>
+        <p></p><strong>Succion: </strong><%= @pump.succion %></p>
+        <p></p><strong>Descarga: </strong><%= @pump.descarga %></p>
+        <p></p><strong>Motor (HP): </strong><%= @pump.motor_hp%></p>
+        <p></p><strong>Frame: </strong><%= @pump.frame %></p>
+        <p></p><strong>Base: </strong><%= @pump.base %></p>
+        <p></p><strong>Tipo Machón Omega: </strong><%= @pump.machon_omega %></p>
+        <p></p><strong>Tipo Machón Dentado: </strong><%= @pump.machon_dentado %></p>
+        <p></p><strong>Rodete Máximo: </strong><%= @pump.rodete_max %></p>
+        <p></p><strong>Anillo Delantero: </strong><%= @pump.anillo_delantero %></p>
+        <p></p><strong>Anillo Trasero: </strong><%= @pump.anillo_trasero %></p>
+        <p></p><strong>Delantero Motor: </strong><%= @pump.delantero_motor %></p>
+        <p></p><strong>Trasero Motor: </strong><%= @pump.trasero_motor %></p>
+        <p></p><strong>Delantero Bomba: </strong><%= @pump.delantero_bomba %></p>
+        <p></p><strong>Trasero Bomba: </strong><%= @pump.trasero_bomba %></p>
+        <p></p><strong>Caudal Mínimo: </strong><%= @pump.caudal_minimo %></p>
+        <p></p><strong>Ancho (B1): </strong><%= @pump.ancho_b1 %></p>
+        <p></p><strong>Largo (L1): </strong><%= @pump.largo_l1 %></p>
+        <p></p><strong>Hs: </strong><%= @pump.hs %></p>
+        <p></p><strong>Hd: </strong><%= @pump.hd %></p>
+        <p></p><strong>A: </strong><%= @pump.a %></p>
+        <p></p><strong>Peso motobomba: </strong><%= @pump.peso_motobomba %></p>
+        <p></p><strong>Acople Machón: </strong><%= @pump.acople_machon %></p>
+        <p></p><strong>Acople Motor: </strong><%= @pump.acople_motor %></p>
+    </ul>
+  </nav>
 
-<p>
-  <strong>Rodete max:</strong>
-  <%= @pump.rodete_max %>
-</p>
+  <div>
+    <%= link_to 'Editar detalles bomba', edit_pump_path(@pump), class: "btn btn-lg", id: "link" %>
+    <strong><%= link_to 'Volver', pumps_path, class: "btn btn-lg", id: "link" %></strong>
+  </div>
+</div>
 
-<p>
-  <strong>Rodete min:</strong>
-  <%= @pump.rodete_min %>
-</p>
+<% if @pump.valid_tests.length > 0 %>
+  <div class="center jumbotron">
+    <div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+  </div>
+<% end %>
 
-<%= link_to 'Edit', edit_pump_path(@pump) %> |
-<%= link_to 'Back', pumps_path %>
+<% if @pump.valid_tests.length > 0 %>
+  <div class="center jumbotron">
+    <div id="container2" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+  </div>
+<% end %>
+
+
+<% datos = [] %>
+<% datos_e = [] %>
+<div class="center jumbotron">
+
+  <h2> Pruebas de Bombeo </h2>
+  <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(@pump), class: "btn btn-lg btn-primary", id:"link-b" %>
+  <br>
+
+  <% if @pump.tests.count > 0 %>
+  	<% @pump.tests.each do |test| %>
+      <br>
+    
+      <div>
+        <strong> Prueba de bombeo numero: <%=test.id%> , diametro del rodete: <%= test.diametro_rodete %></strong>
+    
+        <% if @pump.valid_tests.include?(test.id.to_s) %>
+          <% datos.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete]) %>
+          <% datos_e.push([Test.pasar_a_numero(test.current_e), test.diametro_rodete]) %>
+          <%= link_to 'Sacar de las pruebas validas', pump_test_sacar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
+
+
+        <% else %>
+          <%= link_to 'Ingresar como prueba valida', pump_test_entrar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
+        <% end %>
+
+        <%= link_to "Eliminar", pump_test_path(pump_id: @pump.id, test_id: test.id), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "btn btn-lg", id:"link"  %>
+      </div>
+  	<% end %>
+  <% else %>
+  	<p>No hay pruebas para esta bomba</p>
+  <% end %>
+
+  <br>
+
+  
+</div>
+
+<div class="center jumbotron">
+<h2> Para dejar esta configuracion como definitiva: </h2>
+<%= link_to "Configuracion definitiva", pump_definitiva_path(pump_id: @pump.id), class: "btn btn-lg btn-primary", id:"link-b" %>
+</div>
+
+
+
+<script type="text/javascript">
+
+ var new_series = []
+ var new_data = <%= raw datos %>
+
+ for (lista in new_data){
+  var dicc = {
+    regression: true,
+    regressionSettings: {
+      type: 'polynomial',
+      //color: 'rgba(223, 183, 83, .9)',
+      dashStyle: 'solid',
+      hideinlegend: false
+    },
+    name: 'Rodete ' + new_data[lista][1],
+    //color: 'rgba(223, 83, 83, .5)',
+    data: new_data[lista][0]
+
+  }
+  new_series.push(dicc)
+ }
+
+ Highcharts.chart('container', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Curvas hidraulicas'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Altura (m)'
+      }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'left',
+      verticalAlign: 'top',
+      x: 100,
+      y: 70,
+      floating: false,
+      backgroundColor: '#FFFFFF',
+      borderWidth: 1
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} m3, {point.y} m'
+        }
+      }
+    },
+    series: new_series
+  });
+
+ var new_series_e = []
+ var new_data_e = <%= raw datos_e %>
+
+ for (lista in new_data_e){
+  var dicc = {
+    regression: true,
+    regressionSettings: {
+      type: 'polynomial',
+      //color: 'rgba(223, 183, 83, .9)',
+      dashStyle: 'solid',
+      hideinlegend: false
+    },
+    name: 'Rodete ' + new_data_e[lista][1],
+    //color: 'rgba(223, 83, 83, .5)',
+    data: new_data_e[lista][0]
+
+  }
+  new_series_e.push(dicc)
+ }
+
+ Highcharts.chart('container2', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Curvas Eficiencia'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Eficiencia'
+      }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'left',
+      verticalAlign: 'top',
+      x: 100,
+      y: 70,
+      floating: false,
+      backgroundColor: '#FFFFFF',
+      borderWidth: 1
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} m3, {point.y} m'
+        }
+      }
+    },
+    series: new_series_e
+  });
+
+</script>

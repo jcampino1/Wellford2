@@ -1,10 +1,15 @@
 require_relative 'boot'
 
 require 'rails/all'
+require 'csv'
+require 'matrix'
+require 'pathname'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+
+Spreadsheet.client_encoding = 'UTF-8'
 
 module Example
   class Application < Rails::Application

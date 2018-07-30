@@ -1,0 +1,259 @@
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="//rawgithub.com/phpepe/highcharts-regression/master/highcharts-regression.js?8"></script>
+
+
+<p id="notice"><%= notice %></p>
+
+<center><h1>Analisis informacion ingresada</h1></center>
+
+<% b = params[:n].to_i %>
+
+<div class="center jumbotron">
+  <h2>Editar curva actual</h2>
+  <p> Puntos removidos hasta ahora: <%= b %></p>
+
+  <br>
+  <% if b < @test.curva_h.length %>
+    <strong><%= link_to 'Sacar Punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b+1), class: "btn btn-lg", id:"link" %></strong> | 
+  <% else %>
+    <p>No se pueden sacar más puntos | </p>
+  <% end %>
+
+  <% if b >= 1 %>
+    <strong><%= link_to 'Devolver Punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: b-1), class: "btn btn-lg", id:"link" %></strong>
+  <% else %>
+    <p>No se pueden devolver más puntos</p>
+  <% end %>
+</div>
+
+
+<div id="container" style="width: 500px; height: 500px; margin: 0 auto"></div>
+
+<div id="container2" style="width: 600px; height: 500px; margin: 0 auto"></div>
+
+<div id="container3" style="width: 600px; height: 500px; margin: 0 auto"></div>
+
+<br>
+
+<div class="center jumbotron">
+  <h2> Guardar curvas </h2>
+  <strong><%= link_to 'Guardar', pump_test_guardar_path(pump_id: @pump.id, test_id: @test.id, n: b), class: "btn btn-lg", id:"link" %></strong>
+</div>
+
+<div class="center jumbotron">
+  <h3> Eliminar prueba de bombeo </h3>
+  <%= link_to "Eliminar", pump_test_destroy_path(pump_id: @pump.id, test_id: @test.id), data: { confirm: '¿Estás seguro?' }, class: "btn btn-lg", id:"link"  %>
+</div>
+
+
+<script type="text/javascript">
+ Highcharts.chart('container', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Curva Hidraulica'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Altura (m)'
+      }
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} m3, {point.y} m'
+        }
+      }
+    },
+    series: [{
+      regression: true,
+      regressionSettings: {
+        type: 'polynomial',
+        color: 'rgba(223, 183, 83, .9)',
+        dashStyle: 'solid',
+        hideinlegend: false
+      },
+      name: 'Rodete 214',
+      color: 'rgba(223, 83, 83, .5)',
+      data: [                
+      	<% @puntos.each do |d|%>
+      		<%=raw d %>,
+      	<%end%>                   
+ 	  ]
+    }]
+  });
+
+</script>
+
+<script type="text/javascript">
+ Highcharts.chart('container2', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Curva Eficiencia'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Altura (m)'
+      }
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} m3, {point.y} m'
+        }
+      }
+    },
+    series: [{
+      regression: true,
+      regressionSettings: {
+        type: 'polynomial',
+        color: 'rgba(223, 183, 83, .9)',
+        dashStyle: 'solid',
+        hideinlegend: false
+      },
+      name: 'Eficiencia',
+      color: 'rgba(223, 83, 83, .5)',
+      data: [                
+        <% @puntos2.each do |d|%>
+          <%=raw d %>,
+        <%end%>                   
+    ]
+    }]
+  });
+
+</script>
+
+<script type="text/javascript">
+ Highcharts.chart('container3', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Curva Potencia'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Altura (m)'
+      }
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} m3, {point.y} m'
+        }
+      }
+    },
+    series: [{
+      regression: true,
+      regressionSettings: {
+        type: 'polynomial',
+        order: 3,
+        color: 'rgba(223, 183, 83, .9)',
+        dashStyle: 'solid',
+        hideinlegend: false
+      },
+      name: 'Potencia',
+      color: 'rgba(223, 83, 83, .5)',
+      data: [                
+        <% @puntos3.each do |d|%>
+          <%=raw d %>,
+        <%end%>                   
+    ]
+    }]
+  });
+
+</script>

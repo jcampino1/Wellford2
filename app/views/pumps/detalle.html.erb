@@ -1,0 +1,202 @@
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="//rawgithub.com/phpepe/highcharts-regression/master/highcharts-regression.js?8"></script>
+
+<h1> Detalles busqueda </h1> 
+
+<p> <%= @pump.nombre %> </p>
+
+<h3> Solicitud </h3>
+<p> Caudal: <%= @caudal %>, Altura: <%= @altura %> </p>
+
+<p> Eficiencia: <%= @eficiencia %> </p>
+
+<%= link_to "Volver a la busqueda", buscar_path(caudal: @caudal, altura: @altura), class: "btn btn-lg btn-primary", id:"link-b" %>
+
+<div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+
+<div id="container2" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+
+<% datos = [[@caudal, @altura]] %>
+<% datos_e = [[@caudal, @eficiencia]] %>
+
+<script type="text/javascript">
+
+ var new_series = []
+ var new_data = <%= raw @curvas_definitivas %>
+
+ for (lista in new_data){
+  var dicc = {
+    regression: true,
+    regressionSettings: {
+      type: 'polynomial',
+      //color: 'rgba(223, 183, 83, .9)',
+      dashStyle: 'solid',
+      hideinlegend: false
+    },
+    name: 'Rodete ' + new_data[lista][1],
+    //color: 'rgba(223, 83, 83, .5)',
+    data: new_data[lista][0]
+  }
+  new_series.push(dicc)
+ }
+ 
+ var dicc2 = {
+  regression: true,
+ 	name: 'Punto solicitado',
+ 	data: <%= raw datos %>
+ }
+ new_series.push(dicc2)
+
+ Highcharts.chart('container', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Curvas hidraulicas'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Altura (m)'
+      }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'left',
+      verticalAlign: 'top',
+      x: 100,
+      y: 70,
+      floating: false,
+      backgroundColor: '#FFFFFF',
+      borderWidth: 1
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} m3, {point.y} m'
+        }
+      }
+    },
+    series: new_series
+  });
+
+ var new_series_e = []
+ var new_data_e = <%= raw @curvas_eficiencias %>
+
+ for (lista in new_data_e){
+  var dicc = {
+    regression: true,
+    regressionSettings: {
+      type: 'polynomial',
+      //color: 'rgba(223, 183, 83, .9)',
+      dashStyle: 'solid',
+      hideinlegend: false
+    },
+    name: 'Rodete ' + new_data_e[lista][1],
+    //color: 'rgba(223, 83, 83, .5)',
+    data: new_data_e[lista][0]
+  }
+  new_series_e.push(dicc)
+ }
+ 
+ var dicc2 = {
+  regression: true,
+  name: 'Punto solicitado',
+  data: <%= raw datos_e %>
+ }
+ new_series_e.push(dicc2)
+
+ Highcharts.chart('container2', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Curvas hidraulicas'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (m3)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Altura (m)'
+      }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'left',
+      verticalAlign: 'top',
+      x: 100,
+      y: 70,
+      floating: false,
+      backgroundColor: '#FFFFFF',
+      borderWidth: 1
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} m3, {point.y} m'
+        }
+      }
+    },
+    series: new_series_e
+  });
+
+</script>
+
