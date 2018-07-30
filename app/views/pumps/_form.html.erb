@@ -14,7 +14,12 @@
 
     <div class="field">
       <%= form.label :nombre %>
-      <%= form.text_field :nombre, id: :pump_nombre %>
+      <%= form.text_field :bomba, id: :pump_bomba %>
+    </div>
+
+    <div class="field">
+      <%= form.label :succion %>
+      <%= form.text_field :succion, id: :pump_succion %>
     </div>
 
     <div class="field">
@@ -28,12 +33,111 @@
     </div>
 
     <div class="field">
-      <%= form.label :rodete_min %>
-      <%= form.text_field :rodete_min, id: :pump_rodete_min %>
+      <%= form.label :descarga %>
+      <%= form.text_field :descarga, id: :pump_descarga %>
+    </div>
+
+    <div class="field">
+      <%= form.label :motor_hp, value: "Motor (HP)" %>
+      <%= form.text_field :motor_hp, id: :pump_motor_hp %>
+    </div>
+    
+    <div class="field">
+      <%= form.label :frame %>
+      <%= form.text_field :frame, id: :pump_frame %>
+    </div>
+
+    <div class="field">
+      <%= form.label :base %>
+      <%= form.text_field :base, id: :pump_base %>
+    </div>
+
+    <div class="field">
+      <%= form.label :machon_omega, value: "Tipo Machón Omega" %>
+      <%= form.text_field :machon_omega, id: :pump_machon_omega %>
+    </div>
+
+    <div class="field">
+      <%= form.label :machon_dentado %>
+      <%= form.text_field :machon_dentado, id: :pump_machon_dentado %>
+    </div>
+
+    <div class="field">
+      <%= form.label :anillo_delantero %>
+      <%= form.text_field :anillo_delantero, id: :pump_anillo_delantero %>
+    </div>
+
+    <div class="field">
+      <%= form.label :anillo_trasero %>
+      <%= form.text_field :anillo_trasero, id: :pump_anillo_trasero %>
+    </div>
+
+    <div class="field">
+      <%= form.label :delantero_motor %>
+      <%= form.text_field :delantero_motor, id: :pump_delantero_motor %>
+    </div>
+
+    <div class="field">
+      <%= form.label :trasero_motor %>
+      <%= form.text_field :trasero_motor, id: :pump_trasero_motor %>
+    </div>
+
+    <div class="field">
+      <%= form.label :delantero_bomba %>
+      <%= form.text_field :delantero_bomba, id: :pump_delantero_bomba %>
+    </div>
+
+    <div class="field">
+      <%= form.label :trasero_bomba %>
+      <%= form.text_field :trasero_bomba, id: :pump_trasero_bomba %>
+    </div>
+
+    <div class="field">
+      <%= form.label :caudal_minimo %>
+      <%= form.text_field :caudal_minimo, id: :pump_caudal_minimo %>
+    </div>
+
+    <div class="field">
+      <%= form.label :ancho_b1, value: "Ancho (B1)" %>
+      <%= form.text_field :ancho_b1, id: :pump_ancho_b1 %>
+    </div>
+
+    <div class="field">
+      <%= form.label :largo_l1, value: "Largo (L1)" %>
+      <%= form.text_field :largo_l1, id: :pump_largo_l1 %>
+    </div>
+
+    <div class="field">
+      <%= form.label :hs %>
+      <%= form.text_field :hs, id: :pump_hs %>
+    </div>
+
+    <div class="field">
+      <%= form.label :hd %>
+      <%= form.text_field :hd, id: :pump_hd %>
+    </div>
+
+    <div class="field">
+      <%= form.label :a %>
+      <%= form.text_field :a, id: :pump_a %>
+    </div>
+
+    <div class="field">
+      <%= form.label :peso_motobomba %>
+      <%= form.text_field :peso_motobomba, id: :pump_peso_motobomba %>
+    </div>
+
+    <div class="field">
+      <%= form.label :acople_machon %>
+      <%= form.text_field :acople_machon, id: :pump_acople_machon %>
+    </div>
+
+    <div class="field">
+      <%= form.label :acople_motor %>
+      <%= form.text_field :acople_motor, id: :pump_acople_motor %>
     </div>
 
     <div class="actions">
       <%= form.submit "Crear bomba" %>
     </div>
-  <% end %>
-</div>
+ <% end %>
