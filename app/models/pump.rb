@@ -5,7 +5,7 @@ class Pump < ApplicationRecord
 
   def self.import(file)
     CSV.foreach(file.path, headers: true) do |row|
-      Pump.create!(bomba: row[0], rpm: row[1], succion: row[2],
+      Pump.create!(bomba: row[0], rpm: row[1], succion: row[2], rodete_min: 0,
                    descarga: row[3], motor_hp: row[4], frame: row[5],
                    base: row[6], machon_omega: row[7], machon_dentado: row[8],
                    rodete_max: row[11], anillo_delantero: row[12],

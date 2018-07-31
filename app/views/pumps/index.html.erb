@@ -4,14 +4,21 @@
   <h1>Catalogo Bombas</h1>
   <nav>
     <ul>
-      <% Pump.all.each do |pump| %>
-      <p>
-        <%= pump.bomba %>
-        <%= link_to 'Ver', pump, class: "btn btn-lg", id:"link" %>
-        <%= link_to 'Editar', edit_pump_path(pump), class: "btn btn-lg", id:"link" %>
-        <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(pump), class: "btn btn-lg", id:"link" %>
-        <%= link_to 'Eliminar', pump, method: :delete, data: { confirm: '¿Está seguro?' }, class: "btn btn-lg", id:"link" %>
-      </p>
+      <%= search_form_for @q, html: { class: "form-inline" } do |f| %>
+        <%= f.search_field :bomba_cont, placeholder: "Buscar bomba...", class: "form-control" %>
+      <%end%>
+      <% if @pumps.any? %>
+        <% @pumps.each do |pump| %>
+          <p>
+            <%= pump.bomba %>/<%= pump.rpm %>
+            <%= link_to 'Ver', pump, class: "btn btn-lg", id:"link" %>
+            <%= link_to 'Editar', edit_pump_path(pump), class: "btn btn-lg", id:"link" %>
+            <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(pump), class: "btn btn-lg", id:"link" %>
+            <%= link_to 'Eliminar', pump, method: :delete, data: { confirm: '¿Está seguro?' }, class: "btn btn-lg", id:"link" %>
+          </p>
+        <% end %>
+      <% else %>
+        <p> No se encontraron bombas </p>
       <% end %>
     </ul>
   </nav>

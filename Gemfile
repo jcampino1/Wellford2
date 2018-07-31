@@ -60,3 +60,4 @@ gem "highcharts-rails"
 gem 'jquery-rails'
 gem 'roo'
 gem 'spreadsheet'
+gem 'ransack'
