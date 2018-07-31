@@ -1,19 +1,35 @@
-<div>
-	<%= @pump.curva_rodete_max %>
-</div>
+<h1> Informacion guardada para esta bomba: </h1>
 
-<div>
-	<%= @pump.curva_rodete_min %>
-</div>
+<div class="center jumbotron">
+	<div>
+		<%= @pump.curva_rodete_max %>
+	</div>
 
-<div>
-	<%= @pump.x_maximos %>
-</div>
+	<div>
+		<%= @pump.curva_rodete_min %>
+	</div>
 
-<div>
-	<%= @pump.efficiency_info %>
-</div>
+	<div>
+		<%= @pump.x_maximos %>
+	</div>
 
-<div>
-	<%= @pump.efficiency_info_diams %>
+	<div>
+		<%= @pump.efficiency_info %>
+	</div>
+
+	<div>
+		<%= @pump.efficiency_info_diams %>
+	</div>
+
+	<div>
+		<p> Indice: <%= @indice %> </p>
+	</div>
+
+	<div>
+		<p> Diametros <%= @d1 %> </p>
+	</div>
+
+	<div>
+		<p> Diametros <%= @pump.rodete_min %> </p>
+	</div>
 </div>

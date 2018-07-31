@@ -84,11 +84,14 @@ class Pump < ApplicationRecord
     """
     nueva_curva = []
     curva.each do |punto|
-      nueva_altura = ((nuevo_diametro.to_f*punto[1].to_f*punto[1].to_f)/diametro_curva.to_f)**0.5
-      nuevo_punto = [punto[0], nueva_altura]
+      razon_diametros = (nuevo_diametro.to_f/diametro_curva.to_f)**0.5
+      nueva_altura = punto[1].to_f*razon_diametros
+      #nueva_altura = ((nuevo_diametro.to_f*punto[1].to_f*punto[1].to_f)/diametro_curva.to_f)**0.5
+      nuevo_punto = [punto[0].to_f, nueva_altura]
       nueva_curva.push(nuevo_punto)
     end
-    return Test.regression(nueva_curva, 2)
+    #return Test.regression(nueva_curva, 2)
+    return nueva_curva
   end
 
 end

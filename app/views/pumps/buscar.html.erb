@@ -6,7 +6,7 @@
 		<div class="center jumbotron">
 			<% diametro_final = Pump.diametro_final(pump.curva_rodete_max[0],
 			pump.rodete_max, @caudal, @altura) %>
-			<p><%= pump.nombre %></p>
+			<p><%= pump.bomba %></p>
 			<p>Recorte rodete: <%= diametro_final %></p>
 			<% eficiencia = Pump.calcular_eficiencia(@caudal, 
 			pump.efficiency_info, pump.efficiency_info_diams, diametro_final) %>
