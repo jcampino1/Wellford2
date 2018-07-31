@@ -89,6 +89,8 @@ class PumpsController < ApplicationController
   def definitiva
     @pump = Pump.find(params[:pump_id])
     @tests_definitivos = []
+    @nueva_curva_rodete_min = []
+    @nueva_curva_rodete_max = []
 
     @pump.valid_tests.each do |d|
       pump = @pump.tests.find(d.to_f)
@@ -117,13 +119,14 @@ class PumpsController < ApplicationController
       @pump.curva_rodete_max.push(@tests_definitivos[@indicex][1])
 
     end
+    
 
     if @lista_diametros.exclude?(@pump.rodete_min)
-      indice = @lista_diametros.index(@lista_diametros.min)
-      nueva_curva_rodete_min = Pump.crear_curva(@tests_definitivos[indice][5],
-        @tests_definitivos[indice][0], @pump.rodete_min)
+      @indice = @lista_diametros.index(@lista_diametros.min)
+      @nueva_curva_rodete_min = Pump.crear_curva(@tests_definitivos[@indice][5],
+        @tests_definitivos[@indice][0], @pump.rodete_min)
       @pump.curva_rodete_min.clear
-      @pump.curva_rodete_min.push(nueva_curva_rodete_min)
+      @pump.curva_rodete_min.push(Test.regression(@nueva_curva_rodete_min, 2))
     else
       indice = @lista_diametros.index(@pump.rodete_min)
       @pump.curva_rodete_min.clear
