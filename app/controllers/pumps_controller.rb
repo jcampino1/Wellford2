@@ -105,18 +105,24 @@ class PumpsController < ApplicationController
       @lista_diametros.push(test[0])
       @lista_maximos.push(test[4])
     end
+
+    @pump.curva_rodete_max.clear
+    @pump.points_max.clear
+    @pump.curva_rodete_min.clear
+    @pump.points_min.clear
+
     if @lista_diametros.exclude?(@pump.rodete_max)
       indice = @lista_diametros.index(@lista_diametros.max)
-      nueva_curva_rodete_max = Pump.crear_curva(@tests_definitivos[indice][5],
+      @nueva_curva_rodete_max = Pump.crear_curva(@tests_definitivos[indice][5],
         @tests_definitivos[indice][0], @pump.rodete_max)
-      @pump.curva_rodete_max.clear
-      # Se meten solo los coeficientes h
-      @pump.curva_rodete_max.push(nueva_curva_rodete_max)
+      @pump.curva_rodete_max.push(Test.regression(@nueva_curva_rodete_max, 2))
+      @pump.points_max.push(@nueva_curva_rodete_max)
 
     else
       @indicex = @lista_diametros.index(@pump.rodete_max)
-      @pump.curva_rodete_max.clear
       @pump.curva_rodete_max.push(@tests_definitivos[@indicex][1])
+      @nueva_curva_rodete_max = Test.pasar_a_numero(@tests_definitivos[@indicex][5])
+      @pump.points_max.push(@tests_definitivos[@indicex][5])
 
     end
     
@@ -125,13 +131,15 @@ class PumpsController < ApplicationController
       @indice = @lista_diametros.index(@lista_diametros.min)
       @nueva_curva_rodete_min = Pump.crear_curva(@tests_definitivos[@indice][5],
         @tests_definitivos[@indice][0], @pump.rodete_min)
-      @pump.curva_rodete_min.clear
       @pump.curva_rodete_min.push(Test.regression(@nueva_curva_rodete_min, 2))
+      @pump.points_min.push(@nueva_curva_rodete_min)
     else
       indice = @lista_diametros.index(@pump.rodete_min)
-      @pump.curva_rodete_min.clear
       @pump.curva_rodete_min.push(@tests_definitivos[indice][1])
+      @nueva_curva_rodete_min = Test.pasar_a_numero(@tests_definitivos[indice][5])
+      @pump.points_min.push(@tests_definitivos[indice][5])
     end
+
     @pump.x_maximos.clear
     @pump.x_maximos.push(@lista_maximos.max.to_f)
 
@@ -156,15 +164,21 @@ class PumpsController < ApplicationController
     @caudal = params[:caudal].to_f
     @altura = params[:altura].to_f
     @eficiencia = params[:eficiencia].to_f
+    @diametro_final = params[:diametro_final].to_f
+    @diametro2 = params[:diametro2].to_f
     @curvas_definitivas = []
     @curvas_eficiencias = []
 
     @pump.valid_tests.each do |d|
       test = @pump.tests.find(d.to_f)
-      @curvas_definitivas.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete])
-      @curvas_eficiencias.push([Test.pasar_a_numero(test.current_e), test.diametro_rodete])
+      if test.diametro_rodete != @pump.rodete_max and test.diametro_rodete != @pump.rodete_min
+        @curvas_definitivas.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete])
+      end
+      @curvas_eficiencias.push([Test.pasar_a_numero(Pump.eficiencia_100(test.current_e)), test.diametro_rodete])
     end
     # Nos va a faltar el pseudo-rodete max y pseudo-rodete_min
+    @curvas_definitivas.push([Test.pasar_a_numero(@pump.points_max[0]), @pump.rodete_max])
+    @curvas_definitivas.push([Test.pasar_a_numero(@pump.points_min[0]), @pump.rodete_min])
   end
 
 
@@ -176,6 +190,6 @@ class PumpsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def pump_params
-      params.require(:pump).permit(:bomba, :rpm, :succion, :descarga, :motor_hp, :frame, :base, :machon_omega, :machon_dentado, :rodete_max, :anillo_delantero, :anillo_trasero, :delantero_motor, :trasero_motor, :delantero_bomba, :trasero_bomba, :caudal_minimo, :ancho_b1, :largo_l1, :hs, :hd, :a, :peso_motobomba, :acomple_machon, :acople_motor, :caudal, :altura)
+      params.require(:pump).permit(:bomba, :rpm, :succion, :descarga, :motor_hp, :frame, :base, :machon_omega, :machon_dentado, :rodete_max, :rodete_min, :anillo_delantero, :anillo_trasero, :delantero_motor, :trasero_motor, :delantero_bomba, :trasero_bomba, :caudal_minimo, :ancho_b1, :largo_l1, :hs, :hd, :a, :peso_motobomba, :acomple_machon, :acople_motor, :caudal, :altura)
     end
 end

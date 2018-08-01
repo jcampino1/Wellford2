@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180730173243) do
+ActiveRecord::Schema.define(version: 20180801160317) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,8 @@ ActiveRecord::Schema.define(version: 20180730173243) do
     t.integer "acople_motor"
     t.string "efficiency_info_diams", default: [], array: true
     t.integer "a"
+    t.string "points_max", default: [], array: true
+    t.string "points_min", default: [], array: true
   end
 
   create_table "tests", force: :cascade do |t|
