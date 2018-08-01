@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20180801203711) do
 
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +51,8 @@ ActiveRecord::Schema.define(version: 20180801203711) do
     t.integer "a"
     t.string "efficiency_info", default: [], array: true
     t.string "efficiency_info_diams", default: [], array: true
+    t.string "points_max", default: [], array: true
+    t.string "points_min", default: [], array: true
   end
 
   create_table "requests", force: :cascade do |t|

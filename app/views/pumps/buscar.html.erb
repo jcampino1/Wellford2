@@ -6,13 +6,25 @@
 		<div class="center jumbotron">
 			<% diametro_final = Pump.diametro_final(pump.curva_rodete_max[0],
 			pump.rodete_max, @caudal, @altura) %>
+
+			<% diametro2 = Pump.diametro_final2(pump.curva_rodete_max[0], pump.curva_rodete_min[0], pump.rodete_max, pump.rodete_min, @caudal, @altura) %>
+
 			<p><%= pump.bomba %></p>
-			<p>Recorte rodete: <%= diametro_final %></p>
+			<p>Recorte rodete por semejanza hidraulica: <%= diametro_final.round(2) %></p>
+			<p>Recorte rodete por interpolacion lineal: <%= diametro2.round(2) %></p>
+			
 			<% eficiencia = Pump.calcular_eficiencia(@caudal, 
 			pump.efficiency_info, pump.efficiency_info_diams, diametro_final) %>
-			<p>Eficiencia aproximada: <%= eficiencia*100 %>%</p>
+
+			<p>Eficiencia aproximada: <%= (eficiencia.*100).round(2) %>%</p>
+
+			<% lista_alturas = Pump.buscar_entremedio(pump, @caudal, @altura) %>
+			
+			
+
 			<%= link_to "Ver detalle", pump_detalle_path(pump_id: pump.id, caudal: @caudal,
-			altura: @altura, eficiencia: eficiencia), class: "btn btn-lg", id:"link" %>
+			altura: @altura, eficiencia: eficiencia, diametro_final: diametro_final, diametro2: diametro2), class: "btn btn-lg", id:"link" %>
+
 		</div>
 	<% end %>
 

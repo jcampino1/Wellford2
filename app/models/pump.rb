@@ -61,10 +61,42 @@ class Pump < ApplicationRecord
   end
 
   def self.diametro_final(curva_h, rodete_max, caudal, altura)
-    altura_rodete_max = curva_h[0].to_f + curva_h[1].to_f*caudal + curva_h[2].to_f*caudal*caudal
-    razon = altura**2/altura_rodete_max**2
-    return razon*rodete_max
+    a = curva_h[0].to_f
+    b = curva_h[1].to_f*caudal*rodete_max
+    c = (curva_h[2].to_f*(caudal**2) - altura)*(rodete_max**2)
+    raiz = ((b**2) - (4*a*c))**0.5
+    return (-b + raiz)/(2*a)
+    #altura_rodete_max = curva_h[0].to_f + curva_h[1].to_f*caudal + curva_h[2].to_f*caudal*caudal
+    #razon = altura/altura_rodete_max
+    #r_cuadrado = razon*(rodete_max**2)
+    #return r_cuadrado**0.5
+  end
 
+  def self.diametro_final2(curva_arriba, curva_abajo, d_arriba, d_abajo, caudal, altura)
+    h1 = curva_arriba[0].to_f + curva_arriba[1].to_f*caudal + curva_arriba[2].to_f*caudal*caudal
+    h2 = curva_abajo[0].to_f + curva_abajo[1].to_f*caudal + curva_abajo[2].to_f*caudal*caudal
+    pendiente = (d_arriba - d_abajo)/(h1 - h2)
+    return d_abajo + pendiente*(altura - h2)
+  end
+
+  def self.buscar_entremedio(pump, caudal, altura)
+    lista_alturas = []
+    lista_diametros = []
+    pump.valid_tests.each do |indice|
+      test = pump.tests.find(indice.to_f)
+      if test.diametro_rodete != pump.rodete_max and test.diametro_rodete != pump.rodete_min
+        altura = test.coefficients_h[0].to_f + test.coefficients_h[1].to_f*caudal + test.coefficients_h[2].to_f*caudal*caudal
+        lista_alturas.push(altura)
+        lista_diametros.push(test.diametro_rodete)
+      end
+    end
+    altura_max = pump.curva_rodete_max[0][0].to_f + pump.curva_rodete_max[0][1].to_f*caudal + pump.curva_rodete_max[0][2].to_f*caudal*caudal
+    lista_alturas.push(altura_max)
+    lista_diametros.push(pump.rodete_max)
+    altura_min = pump.curva_rodete_min[0][0].to_f + pump.curva_rodete_min[0][1].to_f*caudal + pump.curva_rodete_min[0][2].to_f*caudal*caudal
+    lista_alturas.push(altura_min)
+    lista_alturas.push(pump.rodete_min)
+    return lista_alturas
   end
 
 
@@ -84,13 +116,23 @@ class Pump < ApplicationRecord
     """
     nueva_curva = []
     curva.each do |punto|
-      razon_diametros = (nuevo_diametro.to_f/diametro_curva.to_f)**0.5
+      razon_diametros = (nuevo_diametro.to_f/diametro_curva.to_f)**2
       nueva_altura = punto[1].to_f*razon_diametros
+      nuevo_caudal = (punto[0].to_f*nuevo_diametro)/diametro_curva
       #nueva_altura = ((nuevo_diametro.to_f*punto[1].to_f*punto[1].to_f)/diametro_curva.to_f)**0.5
-      nuevo_punto = [punto[0].to_f, nueva_altura]
+      nuevo_punto = [nuevo_caudal, nueva_altura]
       nueva_curva.push(nuevo_punto)
     end
     #return Test.regression(nueva_curva, 2)
+    return nueva_curva
+  end
+
+  def self.eficiencia_100(curva)
+    nueva_curva = []
+    curva.each do |punto|
+      nuevo_punto = [punto[0].to_f, (punto[1].to_f)*100]
+      nueva_curva.push(nuevo_punto)
+    end
     return nueva_curva
   end
 
