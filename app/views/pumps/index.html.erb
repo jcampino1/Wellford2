@@ -1,51 +1,105 @@
-<p id="notice"><%= notice %></p>
+<% if current_user %>
+  <% if current_user.admin or current_user.aceptado %>
+    <% if current_user.admin %>
+      <div class="jumbotron">
+        <h3>Solicitudes a participar</h3>
+        <% if Request.all.where(state: "Pendiente").count > 0 %>
+          <% Request.all.where(state: "Pendiente").each do |request| %>
+            <ul>
+              <li>
+                <%= User.all.where(id: request.user_id).last.email %>  <%= link_to 'Aceptar', request_aceptar_path(request.id), class: "btn btn-lg", id: "link" %>  <%= link_to 'Rechazar', request_rechazar_path(request.id), class: "btn btn-lg", id: "link" %>
+              </li>
+            </ul>
+          <% end %>
+        <% else %>
+          <p>No hay solicitudes</p>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="center jumbotron">
+      <h1>Catalogo Bombas</h1>
+      <nav>
+        <%= search_form_for @q, html: { class: "form-inline" } do |f| %>
+          <%= f.search_field :bomba_cont, placeholder: "Buscar bomba...", class: "form-control" %>
+        <%end%>
+        <ul>
+          <% if @pumps.any? %>
+            <% @pumps.each do |pump| %>
+              <p>
+                <%= pump.bomba %>/<%= pump.rpm %>
+                <%= link_to 'Ver', pump, class: "btn btn-lg", id:"link" %>
+                <% if current_user %>
+                  <% if current_user.admin %>
+                    <%= link_to 'Editar', edit_pump_path(pump), class: "btn btn-lg", id:"link" %>
+                    <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(pump), class: "btn btn-lg", id:"link" %>
+                    <%= link_to 'Eliminar', pump, method: :delete, data: { confirm: '¿Está seguro?' }, class: "btn btn-lg", id:"link" %>
+                  <% end %>
+                <% end %>
+              </p>
+            <% end %>
+          <% else %>
+            <p> No se encontraron bombas </p>
+          <% end %>
+        </ul>
+      </nav>
+      <% if current_user %>
+        <% if current_user.admin %>
+          <p><%= link_to 'Nueva Bomba', new_pump_path, class: "btn btn-lg btn-primary", id:"link-b" %></p>
+        <% end %>
+      <% end %>
+    </div>
 
-<div class="center jumbotron">
-  <h1>Catalogo Bombas</h1>
-  <nav>
-    <ul>
-      <%= search_form_for @q, html: { class: "form-inline" } do |f| %>
-        <%= f.search_field :bomba_cont, placeholder: "Buscar bomba...", class: "form-control" %>
-      <%end%>
-      <% if @pumps.any? %>
-        <% @pumps.each do |pump| %>
-          <p>
-            <%= pump.bomba %>/<%= pump.rpm %>
-            <%= link_to 'Ver', pump, class: "btn btn-lg", id:"link" %>
-            <%= link_to 'Editar', edit_pump_path(pump), class: "btn btn-lg", id:"link" %>
-            <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(pump), class: "btn btn-lg", id:"link" %>
-            <%= link_to 'Eliminar', pump, method: :delete, data: { confirm: '¿Está seguro?' }, class: "btn btn-lg", id:"link" %>
-          </p>
+    <div class="center jumbotron">
+      <h1>Buscar bomba</h1>
+
+      <%= form_tag buscar_path do %>
+        <div class="field">
+          <p> Caudal: <%= text_field_tag :caudal %> (lt/s) </p>
+        </div>
+
+        <div class="field">
+          <p> Altura: <%= text_field_tag :altura %> (m)</p>
+        </div>
+
+        <%= submit_tag "Buscar", class: 'btn btn-lg btn-primary', id:"link-b" %>
+      <% end %>
+    </div>
+
+    <div class="jumbotron">
+      <h1>Importar Bomba</h1>
+      <% if current_user %>
+        <% if current_user.admin %>
+          <%= form_tag import_pumps_path, multipart: true do %>
+            <%= file_field_tag :file, class: "btn" %>
+            <%= submit_tag "Importar", class: "btn btn-lg btn-primary", id:"link-b" %>
+          <% end %>
+        <% else %>
+          <p class="center">Solo el administrador puede importar bombas</p>
         <% end %>
       <% else %>
-        <p> No se encontraron bombas </p>
+        <p class="center">Solo el administrador puede importar bombas</p>
       <% end %>
-    </ul>
-  </nav>
-
-  <p><%= link_to 'Nueva Bomba', new_pump_path, class: "btn btn-lg btn-primary", id:"link-b" %></p>
-</div>
-
-<div class="center jumbotron">
-  <h1>Buscar bomba</h1>
-
-  <%= form_tag buscar_path do %>
-    <div class="field">
-      <p> Caudal: <%= text_field_tag :caudal %> (lt/s) </p>
     </div>
-
-    <div class="field">
-      <p> Altura: <%= text_field_tag :altura %> (m)</p>
-    </div>
-
-    <%= submit_tag "Buscar", class: 'btn btn-lg btn-primary', id:"link-b" %>
+  <% else %>
+    <% if ya_postulo(current_user.id) %>
+      <% request = Request.all.where(user_id: current_user.id).last %>
+      <% if request.state == "Pendiente" %>
+        <p>Debes esperar a que el administrador te acepte, estado: <%= request.state %></p>
+      <% elsif request.state == "Aceptado" %>
+        <p>Haz sido aceptado, recarga la pagina para participar</p>
+        <% current_user.aceptado = true %>
+        <% current_user.save %>
+        <% request.destroy %>
+      <% elsif request.state == "Rechazado" %>
+        <strong><p>Tu solicitud para ser moderador ha sido rechazada, puedes volver a intentarlo!</p></strong>
+        <% request.destroy %>
+      <% end %>
+    <% else %>
+      <p>Debe enviar solicitud al administrador para participar.</p>
+      <%= button_to 'Enviar solicitud', {controller: "requests", action: :create, user_id: current_user.id}, method: :post %>
+    <% end %>
   <% end %>
-</div>
+<% else %>
+  <p>Debe iniciar sesión para participar.</p>
+<% end %>
 
-<div class="jumbotron">
-  <h1>Importar Bomba</h1>
-  <%= form_tag import_pumps_path, multipart: true do %>
-    <%= file_field_tag :file, class: "btn" %>
-    <%= submit_tag "Importar", class: "btn btn-lg btn-primary", id:"link-b" %>
-  <% end %>
-</div>
