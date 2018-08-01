@@ -6,7 +6,8 @@ class PumpsController < ApplicationController
   # GET /pumps
   # GET /pumps.json
   def index
-    @pumps = Pump.all
+    @q = Pump.search(params[:q])
+    @pumps = @q.result
   end
 
   # GET /pumps/1
@@ -190,6 +191,6 @@ class PumpsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def pump_params
-      params.require(:pump).permit(:bomba, :rpm, :succion, :descarga, :motor_hp, :frame, :base, :machon_omega, :machon_dentado, :rodete_max, :rodete_min, :anillo_delantero, :anillo_trasero, :delantero_motor, :trasero_motor, :delantero_bomba, :trasero_bomba, :caudal_minimo, :ancho_b1, :largo_l1, :hs, :hd, :a, :peso_motobomba, :acomple_machon, :acople_motor, :caudal, :altura)
+      params.require(:pump).permit(:bomba, :rpm, :succion, :descarga, :motor_hp, :frame, :base, :machon_omega, :machon_dentado, :rodete_max, :anillo_delantero, :anillo_trasero, :delantero_motor, :trasero_motor, :delantero_bomba, :trasero_bomba, :caudal_minimo, :ancho_b1, :largo_l1, :hs, :hd, :a, :peso_motobomba, :acomple_machon, :acople_motor, :caudal, :altura, :rodete_min)
     end
 end
