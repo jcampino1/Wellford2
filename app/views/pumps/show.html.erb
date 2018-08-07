@@ -50,6 +50,8 @@
       </div>
     </div>
 
+    <%= @pump.curva_rodete_min %>
+
     <% if @pump.valid_tests.length > 0 %>
       <div class="center jumbotron">
         <div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
@@ -84,7 +86,7 @@
           <br>
         
           <div>
-            <strong> Prueba de bombeo numero: <%=test.id%> , diametro del rodete: <%= test.diametro_rodete %></strong>
+            <strong> Nombre: <%= test.nombre %>, Numero pedido: <%=test.numero_pedido%>, diametro del rodete: <%= test.diametro_rodete %></strong>
         
             <% if @pump.valid_tests.include?(test.id.to_s) %>
               <% datos.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete]) %>

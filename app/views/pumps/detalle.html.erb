@@ -31,12 +31,8 @@
 </div>
 
 <div class="center jumbotron">
-  <p>Potencia: <%= @potencia_requerida[0][1].round(2) %> (unidad de medida)</p>
+  <p>Potencia: <%= @potencia_requerida[0][1].round(2) %> Kw</p>
   <div id="container3" style="width: 1000px; height: 500px; margin: 0 auto"></div>
-  <p> Q 1: <%= @c1 %></p>
-  <p> H 1: <%= @h1 %></p>
-  <p> E 1: <%= @e1 %></p>
-  <p> Potencia 1: <%= @pot1 %></p>
 </div>
 
 <div class="center jumbotron">
@@ -272,7 +268,7 @@
     },
     yAxis: {
       title: {
-        text: 'Potencia (nose)'
+        text: 'Potencia (Kw)'
       }
     },
     legend: {
@@ -305,7 +301,7 @@
         },
         tooltip: {
           headerFormat: '<b>{series.name}</b><br>',
-          pointFormat: '{point.x} l/s, {point.y} nose'
+          pointFormat: '{point.x} l/s, {point.y} Kw'
         }
       }
     },
