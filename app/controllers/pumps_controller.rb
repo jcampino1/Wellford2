@@ -75,6 +75,11 @@ class PumpsController < ApplicationController
     redirect_to root_url, notice: "Bomba(s) importada(s)"
   end
 
+  def import_motor
+    Motor.import_motor(params[:file])
+    redirect_to root_url, notice: "Motor(es) importado(s)"
+  end
+
   def buscar
     @caudal = params[:caudal].to_f
     @altura = params[:altura].to_f
@@ -126,7 +131,7 @@ class PumpsController < ApplicationController
       @pump.points_max.push(@tests_definitivos[@indicex][5])
 
     end
-    
+
 
     if @lista_diametros.exclude?(@pump.rodete_min)
       @indice = @lista_diametros.index(@lista_diametros.min)

@@ -5,16 +5,32 @@ class Pump < ApplicationRecord
 
   def self.import(file)
     CSV.foreach(file.path, headers: true) do |row|
-      Pump.create!(bomba: row[0], rpm: row[1], succion: row[2], rodete_min: 0,
-                   descarga: row[3], motor_hp: row[4], frame: row[5],
-                   base: row[6], machon_omega: row[7], machon_dentado: row[8],
-                   rodete_max: row[11], anillo_delantero: row[12],
-                   anillo_trasero: row[13], delantero_motor: row[14],
-                   trasero_motor: row[15], delantero_bomba: row[16],
-                   trasero_bomba: row[17], caudal_minimo: row[18],
-                   ancho_b1: row[21], largo_l1: row[22], hs: row[29],
-                   hd: row[30], a: row[31], peso_motobomba: row[32],
-                   acople_machon: row[33], acople_motor: row[34])
+      pump = Pump.find_by(bomba: row[0], rpm: row[1]) || Pump.create!(
+        bomba: row[0], rpm: row[1], frame: row[5], base: row[6],
+        ancho_b1: row[21], largo_l1: row[22], hs: row[29], hd: row[30], a: row[31])
+      pump.posibles_hp.push(row[4].to_s)
+      pump.peso.push(row[32].to_s)
+      pump.save
+    end
+    Pump.all.each do |pump|
+      if pump.posibles_hp.length > pump.posibles_kw.length
+        if pump.rpm > 2000
+          Motor.all.where("rpm > 2000").each do |motor|
+            if pump.posibles_hp.include? motor.hp.to_s
+              pump.posibles_kw.push(motor.kw.to_s)
+              pump.posibles_motores.push(motor.id.to_s)
+            end
+          end
+        else
+          Motor.all.where("rpm < 2000").each do |motor|
+            if pump.posibles_hp.include? motor.hp.to_s
+              pump.posibles_kw.push(motor.kw.to_s)
+              pump.posibles_motores.push(motor.id.to_s)
+            end
+          end
+        end
+      pump.save
+      end
     end
   end
 
@@ -137,3 +153,4 @@ class Pump < ApplicationRecord
   end
 
 end
+

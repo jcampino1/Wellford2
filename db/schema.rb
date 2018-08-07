@@ -10,49 +10,61 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180801203711) do
-
+ActiveRecord::Schema.define(version: 20180807155440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "pumps", force: :cascade do |t|
-    t.string "bomba"
-    t.float "rpm"
-    t.float "rodete_max"
-    t.float "rodete_min"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "valid_tests", default: [], array: true
-    t.string "curva_rodete_max", default: [], array: true
-    t.string "curva_rodete_min", default: [], array: true
-    t.string "x_maximos", default: [], array: true
+  create_table "intersections", force: :cascade do |t|
     t.integer "succion"
     t.integer "descarga"
-    t.integer "motor_hp"
-    t.string "frame"
-    t.string "base"
+    t.integer "pump_id"
+    t.integer "motor_id"
+    t.float "rodete_max"
+    t.float "rodete_min"
     t.string "machon_omega"
     t.string "machon_dentado"
     t.string "anillo_delantero"
     t.string "anillo_trasero"
-    t.string "delantero_motor"
-    t.string "trasero_motor"
-    t.string "delantero_bomba"
-    t.string "trasero_bomba"
+    t.string "bomba_delantero"
+    t.string "bomba_trasero"
+    t.string "acople_machon"
+    t.string "acople_motor"
     t.integer "caudal_minimo"
+  end
+
+  create_table "motors", force: :cascade do |t|
+    t.float "rpm"
+    t.integer "kw"
+    t.integer "hp"
+    t.string "rod_delantero"
+    t.string "rod_trasero"
+  end
+
+  create_table "pumps", force: :cascade do |t|
+    t.string "bomba"
+    t.float "rpm"
+    t.string "valid_tests", default: [], array: true
+    t.string "curva_rodete_max", default: [], array: true
+    t.string "curva_rodete_min", default: [], array: true
+    t.string "x_maximos", default: [], array: true
+    t.string "frame"
+    t.string "base"
     t.integer "ancho_b1"
     t.integer "largo_l1"
     t.integer "hs"
     t.integer "hd"
     t.integer "peso_motobomba"
-    t.integer "acople_machon"
-    t.integer "acople_motor"
-    t.integer "a"
-    t.string "efficiency_info", default: [], array: true
     t.string "efficiency_info_diams", default: [], array: true
+    t.integer "a"
     t.string "points_max", default: [], array: true
     t.string "points_min", default: [], array: true
+    t.string "posibles_hp", default: [], array: true
+    t.string "peso", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "posibles_kw", default: [], array: true
+    t.string "posibles_motores", default: [], array: true
   end
 
   create_table "requests", force: :cascade do |t|

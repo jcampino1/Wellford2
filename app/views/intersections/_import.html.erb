@@ -1,5 +1,7 @@
+
 <div class="jumbotron">
-  <%= form_tag import_pumps_path, multipart: true do %>
+<h1>Importar Intersecciones</h1>
+  <%= form_tag import_intersections_path, multipart: true do %>
     <%= file_field_tag :file, class: "btn" %>
     <%= submit_tag "Importar", class: "btn btn-lg btn-primary", id:"link-b" %>
   <% end %>
