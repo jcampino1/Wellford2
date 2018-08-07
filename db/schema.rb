@@ -10,35 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 20180807155440) do
-
+ActiveRecord::Schema.define(version: 20180807215228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "intersections", force: :cascade do |t|
-    t.integer "succion"
-    t.integer "descarga"
     t.integer "pump_id"
     t.integer "motor_id"
-    t.float "rodete_max"
-    t.float "rodete_min"
-    t.string "machon_omega"
-    t.string "machon_dentado"
-    t.string "anillo_delantero"
-    t.string "anillo_trasero"
-    t.string "bomba_delantero"
-    t.string "bomba_trasero"
-    t.string "acople_machon"
-    t.string "acople_motor"
-    t.integer "caudal_minimo"
+    t.string "base"
+    t.integer "ancho_b1"
+    t.integer "largo_l1"
+    t.integer "hs"
+    t.integer "hd"
+    t.integer "a"
+    t.integer "peso"
   end
 
   create_table "motors", force: :cascade do |t|
     t.float "rpm"
-    t.integer "kw"
+    t.float "kw"
     t.integer "hp"
+    t.string "frame"
+    t.string "machon_omega"
+    t.string "machon_dentado"
     t.string "rod_delantero"
     t.string "rod_trasero"
   end
@@ -50,28 +45,24 @@ ActiveRecord::Schema.define(version: 20180807155440) do
     t.string "curva_rodete_max", default: [], array: true
     t.string "curva_rodete_min", default: [], array: true
     t.string "x_maximos", default: [], array: true
-
-    t.string "efficiency_info", default: [], array: true
-
-    t.string "frame"
-    t.string "base"
-    t.integer "ancho_b1"
-    t.integer "largo_l1"
-    t.integer "hs"
-    t.integer "hd"
-    t.integer "peso_motobomba"
-    t.integer "acople_machon"
-    t.integer "acople_motor"
     t.string "efficiency_info_diams", default: [], array: true
-    t.integer "a"
     t.string "points_max", default: [], array: true
     t.string "points_min", default: [], array: true
     t.string "posibles_hp", default: [], array: true
-    t.string "peso", default: [], array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "posibles_kw", default: [], array: true
     t.string "posibles_motores", default: [], array: true
+    t.integer "succion"
+    t.integer "descarga"
+    t.float "rodete_max"
+    t.float "rodete_min"
+    t.string "anillo_delantero"
+    t.string "anillo_trasero"
+    t.string "bomba_delantero"
+    t.string "bomba_trasero"
+    t.integer "caudal_minimo_2900"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "caudal_minimo_1450"
   end
 
   create_table "requests", force: :cascade do |t|
@@ -80,19 +71,20 @@ ActiveRecord::Schema.define(version: 20180807155440) do
   end
 
   create_table "tests", force: :cascade do |t|
-    t.string "nombre"
-    t.float "numero_pedido"
     t.float "diametro_rodete"
     t.integer "pump_id"
-    t.string "curva_h", default: [], array: true
-    t.string "curva_e", default: [], array: true
-    t.string "current_h", default: [], array: true
-    t.string "current_e", default: [], array: true
-    t.string "coefficients_h", default: [], array: true
-    t.string "coefficients_e", default: [], array: true
-    t.string "xmaximos", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "curva_h", default: [], array: true
+    t.string "curva_e", default: [], array: true
+    t.string "curva_p", default: [], array: true
+    t.string "current_h", default: [], array: true
+    t.string "current_e", default: [], array: true
+    t.string "current_p", default: [], array: true
+    t.string "coefficients_h", default: [], array: true
+    t.string "coefficients_e", default: [], array: true
+    t.string "coefficients_p", default: [], array: true
+    t.float "xmaximo"
   end
 
   create_table "users", force: :cascade do |t|
