@@ -18,10 +18,8 @@ class TestsController < ApplicationController
 		@test = @pump.tests.find(params[:id])
 		@puntos = Test.pasar_a_numero(@test.curva_h)
 		@puntos2 = Test.pasar_a_numero(@test.curva_e)
-		@puntos3 = Test.pasar_a_numero(@test.curva_p)
 		@test.current_h = @test.curva_h
 		@test.current_e = @test.curva_e
-		@test.current_p = @test.curva_p
 		@test.save
 	end
 
@@ -46,10 +44,8 @@ class TestsController < ApplicationController
 		@test = @pump.tests.find(params[:test_id])
 		@test.current_h = @test.curva_h[0..@test.curva_h.length - params[:n].to_i - 1]
 		@test.current_e = @test.curva_e[0..@test.curva_e.length - params[:n].to_i - 1]
-		@test.current_p = @test.curva_p[0..@test.curva_p.length - params[:n].to_i - 1]
 		@puntos = Test.pasar_a_numero(@test.current_h)
 		@puntos2 = Test.pasar_a_numero(@test.current_e)
-		@puntos3 = Test.pasar_a_numero(@test.current_p)
 		@test.save
 	end
 
@@ -57,14 +53,11 @@ class TestsController < ApplicationController
 		@test = @pump.tests.find(params[:test_id])
 		@test.current_h = @test.curva_h[0..@test.curva_h.length - params[:n].to_i - 1]
 		@test.current_e = @test.curva_e[0..@test.curva_e.length - params[:n].to_i - 1]
-		@test.current_p = @test.curva_p[0..@test.curva_p.length - params[:n].to_i - 1]
 		@test.curva_h = []
-		@test.curva_p = []
 		@test.curva_e = []
 		@test.coefficients_h = Test.regression(Test.pasar_a_numero(@test.current_h), 2)
 		@test.coefficients_e = Test.regression(Test.pasar_a_numero(@test.current_e), 2)
-		@test.coefficients_p = Test.regression(Test.pasar_a_numero(@test.current_p), 3)
-		@test.xmaximo = @test.current_h[-1][0]
+		@test.xmaximos = @test.current_h[-1]
 		@test.save
 		redirect_to pump_path(@pump)
 	end
@@ -74,14 +67,11 @@ class TestsController < ApplicationController
 		@test = @pump.tests.find(params[:test_id])
 		@test.current_h = @test.curva_h
 		@test.current_e = @test.curva_e
-		@test.current_p = @test.curva_p
 		@test.curva_h = []
-		@test.curva_p = []
 		@test.curva_e = []
 		@test.coefficients_h = Test.regression(Test.pasar_a_numero(@test.current_h), 2)
 		@test.coefficients_e = Test.regression(Test.pasar_a_numero(@test.current_e), 2)
-		@test.coefficients_p = Test.regression(Test.pasar_a_numero(@test.current_p), 3)
-		@test.xmaximo = @test.current_h[-1][0]
+		@test.xmaximos = @test.current_h[-1]
 		@test.save
 		redirect_to pump_path(@pump)
 	end
@@ -111,7 +101,7 @@ class TestsController < ApplicationController
 
 	def test_params
 		params.require(:test).permit(:pump_id, :diametro_rodete,
-																 :curva_e, :curva_p, curva_h:[])
+																 :curva_e, curva_h:[])
 	end
 
 	def file_params
@@ -139,11 +129,12 @@ class TestsController < ApplicationController
 
 
 	def import
-	  diametro, curva_h, curva_e, curva_p = Test.import(@pump, params[:file])
-	  @test = @pump.tests.build({diametro_rodete: diametro,
+	  nombre, numero_pedido, diametro, curva_h, curva_e = Test.import(@pump, params[:file])
+	  @test = @pump.tests.build({nombre: nombre, 
+	  										numero_pedido: numero_pedido, 
+	  											diametro_rodete: diametro,
 	  													 curva_h: curva_h,
-	  													 curva_e: curva_e,
-	  													 curva_p: curva_p})
+	  													 curva_e: curva_e,})
 	  @test.pump = @pump
 	  @test.save
 

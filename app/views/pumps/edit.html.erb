@@ -1,6 +1,18 @@
-<h1>Editing Pump</h1>
+<% if current_user %>
+  <% if current_user.admin or current_user.aceptado %>
+    <% if current_user.admin %>
+			<h1>Editing Pump</h1>
 
-<%= render 'form', pump: @pump %>
+			<%= render 'form', pump: @pump %>
 
-<%= link_to 'Show', @pump, class: "btn btn-lg", id:"link" %> |
-<%= link_to 'Back', pumps_path, class: "btn btn-lg", id:"link" %>
+			<%= link_to 'Show', @pump, class: "btn btn-lg", id:"link" %> |
+			<%= link_to 'Back', pumps_path, class: "btn btn-lg", id:"link" %>
+		<% else %>
+			<p>No tienes el permiso para editar, sólo el administrador puede.</p>
+		<% end %>
+	<% else %>
+		<p>No tienes el permiso para editar, sólo el administrador puede.</p>
+	<% end %>
+<% else %>
+	<p>No tienes el permiso para editar, sólo el administrador puede.</p>
+<% end %>

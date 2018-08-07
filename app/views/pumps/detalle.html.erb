@@ -4,21 +4,44 @@
 
 <h1> Detalles busqueda </h1> 
 
-<p> <%= @pump.nombre %> </p>
+<h2> <%= @pump.bomba %> </h2>
 
-<h3> Solicitud </h3>
-<p> Caudal: <%= @caudal %>, Altura: <%= @altura %> </p>
+<div class="center jumbotron">
+  <h3> Solicitud </h3>
+  <p> Caudal: <%= @caudal %>, Altura: <%= @altura %> </p>
+</div>
 
-<p> Eficiencia: <%= @eficiencia %> </p>
 
-<%= link_to "Volver a la busqueda", buscar_path(caudal: @caudal, altura: @altura), class: "btn btn-lg btn-primary", id:"link-b" %>
+<div class="center jumbotron">
+  <p> Eficiencia: <%= (@eficiencia*100).round(2) %>% </p>
+  <p> Diametro por semejanza hidraulica: <%= @diametro_final.round(2) %> </p>
+</div>
 
-<div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+<div>
+  <%= link_to "Volver a la busqueda", buscar_path(caudal: @caudal, altura: @altura), class: "btn btn-lg btn-primary", id:"link-b" %>
+</div>
 
-<div id="container2" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+<div class="center jumbotron">
+  <div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+</div>
+
+<div class="center jumbotron">
+  <p> Eficiencia: <%= (@eficiencia*100).round(2) %>% </p>
+  <div id="container2" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+</div>
+
+<div class="center jumbotron">
+  <p>Potencia: <%= @potencia_requerida[0][1].round(2) %> Kw</p>
+  <div id="container3" style="width: 1000px; height: 500px; margin: 0 auto"></div>
+</div>
+
+<div class="center jumbotron">
+  <p> Potencia consumo: <%= @potencia_consumo.round(2) %></p>
+  <p> Potencia maxima: <%= @potencia_maxima.round(2) %></p>
+</div>
 
 <% datos = [[@caudal, @altura]] %>
-<% datos_e = [[@caudal, @eficiencia]] %>
+<% datos_e = [[@caudal, @eficiencia*100]] %>
 
 <script type="text/javascript">
 
@@ -62,7 +85,7 @@
     xAxis: {
       title: {
         enabled: true,
-        text: 'Caudal (m3)'
+        text: 'Caudal (l/s)'
       },
       startOnTick: true,
       endOnTick: true,
@@ -103,7 +126,7 @@
         },
         tooltip: {
           headerFormat: '<b>{series.name}</b><br>',
-          pointFormat: '{point.x} m3, {point.y} m'
+          pointFormat: '{point.x} l/s, {point.y} m'
         }
       }
     },
@@ -142,7 +165,7 @@
       zoomType: 'xy'
     },
     title: {
-      text: 'Curvas hidraulicas'
+      text: 'Curvas Eficiencia'
     },
     subtitle: {
       text: ''
@@ -150,7 +173,7 @@
     xAxis: {
       title: {
         enabled: true,
-        text: 'Caudal (m3)'
+        text: 'Caudal (l/s)'
       },
       startOnTick: true,
       endOnTick: true,
@@ -158,7 +181,7 @@
     },
     yAxis: {
       title: {
-        text: 'Altura (m)'
+        text: 'Eficiencia (%)'
       }
     },
     legend: {
@@ -191,12 +214,100 @@
         },
         tooltip: {
           headerFormat: '<b>{series.name}</b><br>',
-          pointFormat: '{point.x} m3, {point.y} m'
+          pointFormat: '{point.x} l/s, {point.y} %'
         }
       }
     },
     series: new_series_e
   });
+
+ var new_series_p = []
+
+ var dicc1_p = {
+  regression: true,
+  regressionSettings: {
+    type: 'polynomial',
+    order: 3,
+    //color: 'rgba(223, 183, 83, .9)',
+    dashStyle: 'solid',
+    hideinlegend: false
+  },
+  name: 'Nuevo rodete ' + <%= @diametro_final.round(2).to_s %>,
+  //color: 'rgba(223, 83, 83, .5)',
+  data: <%= raw @curva_potencia %>
+ }
+
+ dicc2_p = {
+  regression: true, 
+  name: "Punto solicitado",
+  data: <%= @potencia_requerida %>
+ }
+
+ new_series_p.push(dicc1_p)
+ new_series_p.push(dicc2_p)
+
+ Highcharts.chart('container3', {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    title: {
+      text: 'Curvas Potencia'
+    },
+    subtitle: {
+      text: ''
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Caudal (l/s)'
+      },
+      startOnTick: true,
+      endOnTick: true,
+      showLastLabel: true
+    },
+    yAxis: {
+      title: {
+        text: 'Potencia (Kw)'
+      }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'left',
+      verticalAlign: 'top',
+      x: 100,
+      y: 70,
+      floating: false,
+      backgroundColor: '#FFFFFF',
+      borderWidth: 1
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.x} l/s, {point.y} Kw'
+        }
+      }
+    },
+    series: new_series_p
+  });
+
 
 </script>
 

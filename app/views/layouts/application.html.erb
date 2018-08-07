@@ -19,11 +19,25 @@
 
   <body>
     <header class="navbar navbar-fixed-top navbar-inverse">
-      <div class="container">
-        <%= link_to "Inicio", root_url, id: "logo" %>
-      </div>
+      <nav>
+        <div class="navbar-left">
+          <%= link_to "Inicio", root_url, class: 'btn btn-lg', id: "logo" %>
+        </div>
+        <div class="navbar-right">
+          <% if user_signed_in? %>
+            <% if current_user.admin %>
+              <%= link_to 'Importar', user_path(current_user), class: 'navbar-link btn btn-lg' %>
+            <% end %>
+            <%= link_to "Cerrar Sesión", destroy_user_session_path, method: :delete, class: 'navbar-link btn btn-lg' %>
+          <% else %>
+            <%= link_to "Iniciar Sesión", new_user_session_path, class: 'navbar-link btn btn-lg' %><%= link_to "Registrarte", new_user_registration_path, class: 'navbar-link btn btn-lg' %>
+          <% end %>
+        </div>
+      </nav>
     </header>
     <div class="container">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
       <%= yield %>
     </div>
   </body>
