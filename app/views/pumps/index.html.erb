@@ -64,22 +64,6 @@
         <%= submit_tag "Buscar", class: 'btn btn-lg btn-primary', id:"link-b" %>
       <% end %>
     </div>
-
-    <div class="jumbotron">
-      <h1>Importar Bomba</h1>
-      <% if current_user %>
-        <% if current_user.admin %>
-          <%= form_tag import_pumps_path, multipart: true do %>
-            <%= file_field_tag :file, class: "btn" %>
-            <%= submit_tag "Importar", class: "btn btn-lg btn-primary", id:"link-b" %>
-          <% end %>
-        <% else %>
-          <p class="center">Solo el administrador puede importar bombas</p>
-        <% end %>
-      <% else %>
-        <p class="center">Solo el administrador puede importar bombas</p>
-      <% end %>
-    </div>
   <% else %>
     <% if ya_postulo(current_user.id) %>
       <% request = Request.all.where(user_id: current_user.id).last %>

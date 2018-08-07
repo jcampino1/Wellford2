@@ -19,6 +19,14 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :motors do
+    collection { post :import }
+  end
+
+  resources :intersections do
+    collection { post :import }
+  end
+
   resources :requests do
     get 'aceptar', to: 'requests#aceptar', as: :aceptar
     get 'rechazar', to: 'requests#rechazar', as: :rechazar
@@ -28,6 +36,7 @@ Rails.application.routes.draw do
   post 'buscar', to: 'pumps#buscar'
   root 'pumps#index'
   devise_for :users
+  resources :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
 end

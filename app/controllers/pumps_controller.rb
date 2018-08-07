@@ -75,6 +75,20 @@ class PumpsController < ApplicationController
     redirect_to root_url, notice: "Bomba(s) importada(s)"
   end
 
+
+
+  def buscar
+    @caudal = params[:caudal].to_f
+    @altura = params[:altura].to_f
+    @pumps = Pump.all
+    @pumps_final = []
+    @pumps.each do |pump|
+      if Pump.valida(pump, @caudal, @altura)
+        @pumps_final.push(pump)
+      end
+    end
+  end
+
   def definitiva
     @pump = Pump.find(params[:pump_id])
     @tests_definitivos = []
@@ -113,7 +127,7 @@ class PumpsController < ApplicationController
       @pump.points_max.push(@tests_definitivos[@indicex][4])
 
     end
-    
+
 
     if @lista_diametros.exclude?(@pump.rodete_min)
       @indice = @lista_diametros.index(@lista_diametros.min)
