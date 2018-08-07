@@ -29,11 +29,6 @@ class Pump < ApplicationRecord
       return false
     end
 
-    # Si el caudal es mayor que el Q_maximo factible para esa bomba
-    if caudal > pump.x_maximos.max.to_f
-      return false
-    end
-
     # Vemos que este bajo la curva a rodete max
     if pump.curva_rodete_max[0][0].to_f + pump.curva_rodete_max[0][1].to_f*caudal +
       pump.curva_rodete_max[0][2].to_f*caudal*caudal < altura
@@ -45,8 +40,26 @@ class Pump < ApplicationRecord
       pump.curva_rodete_min[0][2].to_f*caudal*caudal > altura
       return false
     end
+
+    if self.limite_de_la_derecha(pump.x_maximos[0], caudal, altura)
+      return false
+    end
+
+    # Si pasa todos los filtros retornamos true 
     return true
 
+  end
+
+  def self.limite_de_la_derecha(lista_maximos, q, h)
+    """
+    Funcion que ve si el punto pedido cae a la izquierda de las rectas
+    generadas por lo puntos maximos de cada curva hidraulica
+    """
+    caudales_factibles_maximos = []
+    lista_maximos.each do |punto|
+      caudales_factibles_maximos.push(punto[0].to_f)
+    end
+    return q > caudales_factibles_maximos.min
   end
 
   def self.calcular_eficiencia(caudal, coeficientes_eficiencia, diametros, diametro_final)
