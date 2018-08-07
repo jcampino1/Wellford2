@@ -75,18 +75,6 @@ class PumpsController < ApplicationController
     redirect_to root_url, notice: "Bomba(s) importada(s)"
   end
 
-  def buscar
-    @caudal = params[:caudal].to_f
-    @altura = params[:altura].to_f
-    @pumps = Pump.all
-    @pumps_final = []
-    @pumps.each do |pump|
-      if Pump.valida(pump, @caudal, @altura)
-        @pumps_final.push(pump)
-      end
-    end
-  end
-
   def definitiva
     @pump = Pump.find(params[:pump_id])
     @tests_definitivos = []
@@ -160,13 +148,27 @@ class PumpsController < ApplicationController
     #redirect_to pumps_path
   end
 
+  def buscar
+    @caudal = params[:caudal].to_f
+    @altura = params[:altura].to_f
+    @pumps = Pump.all
+    @pumps_final = []
+    @pumps.each do |pump|
+      if Pump.valida(pump, @caudal, @altura)
+        @pumps_final.push(pump)
+      end
+    end
+
+  end
+
   def detalle
     @pump = Pump.find(params[:pump_id])
     @caudal = params[:caudal].to_f
     @altura = params[:altura].to_f
     @eficiencia = params[:eficiencia].to_f
     @diametro_final = params[:diametro_final].to_f
-    @diametro2 = params[:diametro2].to_f
+    @curva_a_usar = Pump.pasar_a_curvah(params[:curva_a_usar])
+    @diametro_a_usar = params[:diametro_a_usar]
     @curvas_definitivas = []
     @curvas_eficiencias = []
 
@@ -175,11 +177,42 @@ class PumpsController < ApplicationController
       if test.diametro_rodete != @pump.rodete_max and test.diametro_rodete != @pump.rodete_min
         @curvas_definitivas.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete])
       end
-      @curvas_eficiencias.push([Test.pasar_a_numero(Pump.eficiencia_100(test.current_e)), test.diametro_rodete])
+      if @pump.efficiency_info_diams.include?(test.diametro_rodete.to_s)
+        @curvas_eficiencias.push([Test.pasar_a_numero(Pump.eficiencia_100(test.current_e)), test.diametro_rodete])
+      end
     end
-    # Nos va a faltar el pseudo-rodete max y pseudo-rodete_min
     @curvas_definitivas.push([Test.pasar_a_numero(@pump.points_max[0]), @pump.rodete_max])
     @curvas_definitivas.push([Test.pasar_a_numero(@pump.points_min[0]), @pump.rodete_min])
+    
+    # Determinacion curva hidraulica nuevo punto
+    # En un futuro debe ser determinada a partir de la curva mas cercana (logrado)
+    #@curva = Pump.crear_curva(@pump.points_max[0], @pump.rodete_max, @diametro_final)
+    @curva = Pump.crear_curva(Test.pasar_a_numero(@curva_a_usar), @diametro_a_usar.to_f, @diametro_final)
+    @caudal_max = @curva[-1][0]
+    @curvas_definitivas.push([@curva, "generado " + @diametro_final.round(2).to_s])
+
+    # Determinacion curva eficiencia, esta lista
+    coef_1 = Test.regression(@curvas_eficiencias[1][0], 2)
+    coef_2 = Test.regression(@curvas_eficiencias[0][0], 2)
+    @nueva_curva_e = Pump.generar_curva_e(@caudal_max, coef_1, coef_2, 
+      @curvas_eficiencias[1][1], @curvas_eficiencias[0][1], @diametro_final)
+    @curvas_eficiencias.push([@nueva_curva_e, "generado " + @diametro_final.round(2).to_s])
+    
+    # Determinacion curva potencia
+    @coeff_nueva_h = Test.regression(@curva, 2)
+    @curva_potencia = Pump.generar_curva_p(@nueva_curva_e, @coeff_nueva_h)
+    @c1 = @nueva_curva_e[4][0]
+    @e1 = @nueva_curva_e[4][1]
+    @h1 = @coeff_nueva_h[0] + @coeff_nueva_h[1]*@c1 + @coeff_nueva_h[2]*@c1*@c1
+    @pot1 = (@c1*@h1)/(@e1*101.9464)
+    
+    #Coeficientes de dicha curva y potencia requerida como punto para mostrar en grafico
+    curva_p = Test.regression(@curva_potencia, 2)
+    @potencia_requerida = [[@caudal, curva_p[0] + curva_p[1]*@caudal + curva_p[2]*@caudal*@caudal]]
+    
+    #Potencia consumo y maxima
+    @potencia_consumo = @potencia_requerida[0][1]
+    @potencia_maxima = Pump.potencia_maxima(@curva_potencia)
   end
 
 
