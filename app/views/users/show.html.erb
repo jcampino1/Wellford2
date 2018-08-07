@@ -1,25 +1,33 @@
-<div class="jumbotron">
-  <h1>Importar</h1>
-  <% if current_user %>
-    <% if current_user.admin %>
-      <h4>Bombas</h4>
-      <%= link_to 'Importar Bombas', new_pump_path, class: "btn btn-lg btn-primary", id:"link-b" %>
-      <h4>Motores</h4>
-      <%= link_to 'Importar Motores', new_motor_path, class: "btn btn-lg btn-primary", id:"link-b" %>
-      <h4>Intersecciones</h4>
-      <%= link_to 'Cargar intersecciones', new_intersection_path, class: "btn btn-lg btn-primary", id:"link-b" %>
-    <% else %>
-      <p class="center">Solo el administrador puede importar</p>
-    <% end %>
-  <% else %>
-    <p class="center">Solo el administrador puede importar</p>
-  <% end %>
-</div>
+<% if current_user %>
+  <% if current_user.admin %>
+    <div class="jumbotron">
+      <h1>Importar</h1>
+      <% if current_user %>
+        <% if current_user.admin %>
+          <h4>Bombas</h4>
+          <%= link_to 'Importar Bombas', new_pump_path, class: "btn btn-lg btn-primary", id:"link-b" %>
+          <h4>Motores</h4>
+          <%= link_to 'Importar Motores', new_motor_path, class: "btn btn-lg btn-primary", id:"link-b" %>
+          <h4>Intersecciones</h4>
+          <%= link_to 'Cargar intersecciones', new_intersection_path, class: "btn btn-lg btn-primary", id:"link-b" %>
+        <% else %>
+          <p class="center">Solo el administrador puede importar</p>
+        <% end %>
+      <% else %>
+        <p class="center">Solo el administrador puede importar</p>
+      <% end %>
+    </div>
 
-<div class="jumbotron">
-  <h1>Editar Perfil</h1>
-  <% if current_user.id == @user.id %>
-    <%= link_to "Editar Perfil", edit_user_registration_url,
-      class: "btn btn-lg", id: "link" %>
+    <div class="jumbotron">
+      <h1>Editar Perfil</h1>
+      <% if current_user.id == @user.id %>
+        <%= link_to "Editar Perfil", edit_user_registration_url,
+          class: "btn btn-lg", id: "link" %>
+      <% end %>
+    </div>
+  <% else %>
+    <p>Solo el administrador tiene acceso a esta pagina.</p>
   <% end %>
-</div>
+<% else %>
+  <p>Registrese para participar.</p>
+<% end %>
