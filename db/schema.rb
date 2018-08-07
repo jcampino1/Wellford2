@@ -10,7 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 20180807155440) do
+
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +50,9 @@ ActiveRecord::Schema.define(version: 20180807155440) do
     t.string "curva_rodete_max", default: [], array: true
     t.string "curva_rodete_min", default: [], array: true
     t.string "x_maximos", default: [], array: true
+
+    t.string "efficiency_info", default: [], array: true
+
     t.string "frame"
     t.string "base"
     t.integer "ancho_b1"
@@ -55,6 +60,8 @@ ActiveRecord::Schema.define(version: 20180807155440) do
     t.integer "hs"
     t.integer "hd"
     t.integer "peso_motobomba"
+    t.integer "acople_machon"
+    t.integer "acople_motor"
     t.string "efficiency_info_diams", default: [], array: true
     t.integer "a"
     t.string "points_max", default: [], array: true
@@ -73,20 +80,19 @@ ActiveRecord::Schema.define(version: 20180807155440) do
   end
 
   create_table "tests", force: :cascade do |t|
+    t.string "nombre"
+    t.float "numero_pedido"
     t.float "diametro_rodete"
     t.integer "pump_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "curva_h", default: [], array: true
     t.string "curva_e", default: [], array: true
-    t.string "curva_p", default: [], array: true
     t.string "current_h", default: [], array: true
     t.string "current_e", default: [], array: true
-    t.string "current_p", default: [], array: true
     t.string "coefficients_h", default: [], array: true
     t.string "coefficients_e", default: [], array: true
-    t.string "coefficients_p", default: [], array: true
-    t.float "xmaximo"
+    t.string "xmaximos", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
