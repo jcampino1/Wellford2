@@ -19,6 +19,7 @@ class Pump < ApplicationRecord
             if pump.posibles_hp.include? motor.hp.to_s
               pump.posibles_kw.push(motor.kw.to_s)
               pump.posibles_motores.push(motor.id.to_s)
+              pump.save
             end
           end
         else
@@ -26,10 +27,10 @@ class Pump < ApplicationRecord
             if pump.posibles_hp.include? motor.hp.to_s
               pump.posibles_kw.push(motor.kw.to_s)
               pump.posibles_motores.push(motor.id.to_s)
+              pump.save
             end
           end
         end
-      pump.save
       end
     end
   end
@@ -61,7 +62,7 @@ class Pump < ApplicationRecord
       return false
     end
 
-    # Si pasa todos los filtros retornamos true 
+    # Si pasa todos los filtros retornamos true
     return true
 
   end
@@ -94,7 +95,7 @@ class Pump < ApplicationRecord
 
   def self.diametro_final1(curva_h, rodete_max, caudal, altura)
     """
-    Determina el diametro final mediante formula deducida por Enrique 
+    Determina el diametro final mediante formula deducida por Enrique
     y Victoria a partir de semejanza hidraulica.
     """
 
@@ -144,7 +145,7 @@ class Pump < ApplicationRecord
 
   def self.diametro_final2(curva_arriba, curva_abajo, d_arriba, d_abajo, caudal, altura)
     """
-    Determinacion del diametro a partir de interpolacion lineal entre 
+    Determinacion del diametro a partir de interpolacion lineal entre
     rodete max y rodete min
     """
     h1 = curva_arriba[0].to_f + curva_arriba[1].to_f*caudal + curva_arriba[2].to_f*caudal*caudal
@@ -208,7 +209,7 @@ class Pump < ApplicationRecord
     return nueva_curva
   end
 
-  
+
   def self.eficiencia_100(curva)
     """
     Se usa para pasar las eficiencias a porcentaje.
@@ -247,7 +248,7 @@ class Pump < ApplicationRecord
 
   def self.generar_curva_p(curva_e, coeff_h)
     """
-    Genera la curva de potencias a partir de los valores de la eficiencia, caudal 
+    Genera la curva de potencias a partir de los valores de la eficiencia, caudal
     y altura obtenidos anteriormente
     """
     curva = []
