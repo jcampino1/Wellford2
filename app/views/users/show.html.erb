@@ -15,3 +15,11 @@
     <p class="center">Solo el administrador puede importar</p>
   <% end %>
 </div>
+
+<div class="jumbotron">
+  <h1>Editar Perfil</h1>
+  <% if current_user.id == @user.id %>
+    <%= link_to "Editar Perfil", edit_user_registration_url,
+      class: "btn btn-lg", id: "link" %>
+  <% end %>
+</div>
