@@ -5,33 +5,18 @@ class Pump < ApplicationRecord
 
   def self.import(file)
     CSV.foreach(file.path, headers: true) do |row|
-      pump = Pump.find_by(bomba: row[0], rpm: row[1]) || Pump.create!(
-        bomba: row[0], rpm: row[1], frame: row[5], base: row[6],
-        ancho_b1: row[21], largo_l1: row[22], hs: row[29], hd: row[30], a: row[31])
-      pump.posibles_hp.push(row[4].to_s)
-      pump.peso.push(row[32].to_s)
-      pump.save
-    end
-    Pump.all.each do |pump|
-      if pump.posibles_hp.length > pump.posibles_kw.length
-        if pump.rpm > 2000
-          Motor.all.where("rpm > 2000").each do |motor|
-            if pump.posibles_hp.include? motor.hp.to_s
-              pump.posibles_kw.push(motor.kw.to_s)
-              pump.posibles_motores.push(motor.id.to_s)
-              pump.save
-            end
-          end
-        else
-          Motor.all.where("rpm < 2000").each do |motor|
-            if pump.posibles_hp.include? motor.hp.to_s
-              pump.posibles_kw.push(motor.kw.to_s)
-              pump.posibles_motores.push(motor.id.to_s)
-              pump.save
-            end
-          end
-        end
-      end
+      Pump.create!(
+        bomba: row[0], succion: row[1], descarga: row[2], rodete_max: row[5],
+        rodete_min: row[6], caudal_minimo_2900: row[3],
+        caudal_minimo_1450: row[4], anillo_delantero: row[7],
+        anillo_trasero: row[8], bomba_delantero: row[9],
+        bomba_trasero: row[10], rpm: 2900)
+      Pump.create!(
+        bomba: row[0], succion: row[1], descarga: row[2], rodete_max: row[5],
+        rodete_min: row[6], caudal_minimo_2900: row[3],
+        caudal_minimo_1450: row[4], anillo_delantero: row[7],
+        anillo_trasero: row[8], bomba_delantero: row[9],
+        bomba_trasero: row[10], rpm: 1450)
     end
   end
 

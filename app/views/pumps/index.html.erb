@@ -17,7 +17,7 @@
       </div>
     <% end %>
     <div class="center jumbotron">
-      <h1>Catalogo Bombas</h1>
+      <h1>Catálogo Bombas</h1>
       <nav>
         <%= search_form_for @q, html: { class: "form-inline" } do |f| %>
           <%= f.search_field :bomba_cont, placeholder: "Buscar bomba...", class: "form-control" %>
@@ -30,8 +30,7 @@
                 <%= link_to 'Ver', pump, class: "btn btn-lg", id:"link" %>
                 <% if current_user %>
                   <% if current_user.admin %>
-                    <%= link_to 'Editar', edit_pump_path(pump), class: "btn btn-lg", id:"link" %>
-                    <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(pump), class: "btn btn-lg", id:"link" %>
+                    
                     <%= link_to 'Eliminar', pump, method: :delete, data: { confirm: '¿Está seguro?' }, class: "btn btn-lg", id:"link" %>
                   <% end %>
                 <% end %>

@@ -16,14 +16,17 @@
             <p><strong>Posibles HP: </strong><%= @pump.posibles_hp%></p>
             <p><strong>Posibles Kw: </strong><%= @pump.posibles_kw%></p>
             <p><strong>Posibles Motores (ID): </strong><%= @pump.posibles_motores%></p>
-            <p><strong>Frame: </strong><%= @pump.frame %></p>
-            <p><strong>Base: </strong><%= @pump.base %></p>
-            <p><strong>Ancho (B1): </strong><%= @pump.ancho_b1 %></p>
-            <p><strong>Largo (L1): </strong><%= @pump.largo_l1 %></p>
-            <p><strong>Hs: </strong><%= @pump.hs %></p>
-            <p><strong>Hd: </strong><%= @pump.hd %></p>
-            <p><strong>A: </strong><%= @pump.a %></p>
-            <p><strong>Peso motobomba: </strong><%= @pump.peso %></p>
+            <p><strong>Rodete Máximo: </strong><%= @pump.rodete_max %></p>
+            <p><strong>Rodete Mínimo: </strong><%= @pump.rodete_min %></p>
+            <p><strong>Succión: </strong><%= @pump.succion %></p>
+            <p><strong>Descarga: </strong><%= @pump.descarga %></p>
+            <p><strong>Anillo Delantero: </strong><%= @pump.anillo_delantero %></p>
+            <p><strong>Anillo Trasero: </strong><%= @pump.anillo_trasero %></p>
+            <p><strong>Bomba Delantero: </strong><%= @pump.bomba_delantero %></p>
+            <p><strong>Bomba Trasero: </strong><%= @pump.bomba_trasero %></p>
+            <p><strong>Caudal Minimo (2900rpm): </strong><%= @pump.caudal_minimo_2900 %></p>
+            <p><strong>Caudal Minimo (1450rpm): </strong><%= @pump.caudal_minimo_1450 %></p>
+            
         </ul>
       </nav>
 
@@ -36,8 +39,6 @@
         <strong><%= link_to 'Volver', pumps_path, class: "btn btn-lg", id: "link" %></strong>
       </div>
     </div>
-
-    <%= @pump.curva_rodete_min %>
 
     <% if @pump.valid_tests.length > 0 %>
       <div class="center jumbotron">
@@ -61,10 +62,10 @@
         <% if current_user.admin %>
           <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(@pump), class: "btn btn-lg btn-primary", id:"link-b" %>
         <% else %>
-          <p class="center">Solo el administrador puede ingresar pruebas</p>
+          <p class="center">Sólo el administrador puede ingresar pruebas</p>
         <% end %>
       <% else %>
-        <p class="center">Solo el administrador puede ingresar pruebas</p>
+        <p class="center">Sólo el administrador puede ingresar pruebas</p>
       <% end %>
       <br>
 
@@ -77,12 +78,12 @@
         
             <% if @pump.valid_tests.include?(test.id.to_s) %>
               <% datos.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete]) %>
-              <% datos_e.push([Test.pasar_a_numero(test.current_e), test.diametro_rodete]) %>
-              <%= link_to 'Sacar de las pruebas validas', pump_test_sacar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
+              <% datos_e.push([Pump.eficiencia_100(Test.pasar_a_numero(test.current_e)), test.diametro_rodete]) %>
+              <%= link_to 'Sacar de las pruebas válidas', pump_test_sacar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
 
 
             <% else %>
-              <%= link_to 'Ingresar como prueba valida', pump_test_entrar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
+              <%= link_to 'Ingresar como prueba válida', pump_test_entrar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
             <% end %>
 
             <%= link_to "Eliminar", pump_test_path(pump_id: @pump.id, test_id: test.id), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "btn btn-lg", id:"link"  %>
@@ -98,8 +99,12 @@
     </div>
 
     <div class="center jumbotron">
-    <h2> Para dejar esta configuracion como definitiva: </h2>
-    <%= link_to "Configuracion definitiva", pump_definitiva_path(pump_id: @pump.id), class: "btn btn-lg btn-primary", id:"link-b" %>
+      <h2> Para dejar esta configuración como definitiva: </h2>
+      <% if @pump.valid_tests.length >= 2 %>
+      <%= link_to "Configuración definitiva", pump_definitiva_path(pump_id: @pump.id), class: "btn btn-lg btn-primary", id:"link-b" %>
+      <% else %>
+        <p> Debes tener al menos 2 pruebas válidas para dejar la configuración definitiva.</p>
+      <%end%>
     </div>
 
 
@@ -132,21 +137,23 @@
           zoomType: 'xy'
         },
         title: {
-          text: 'Curvas hidraulicas'
+          text: 'Curvas hidráulicas'
         },
         subtitle: {
           text: ''
         },
         xAxis: {
+          min: 0,
           title: {
             enabled: true,
-            text: 'Caudal (m3)'
+            text: 'Caudal (l/s)'
           },
           startOnTick: true,
           endOnTick: true,
           showLastLabel: true
         },
         yAxis: {
+          min: 0,
           title: {
             text: 'Altura (m)'
           }
@@ -181,7 +188,7 @@
             },
             tooltip: {
               headerFormat: '<b>{series.name}</b><br>',
-              pointFormat: '{point.x} m3, {point.y} m'
+              pointFormat: '{point.x} l/s, {point.y} m'
             }
           }
         },
@@ -214,21 +221,23 @@
           zoomType: 'xy'
         },
         title: {
-          text: 'Curvas Eficiencia'
+          text: 'Curvas de eficiencia'
         },
         subtitle: {
           text: ''
         },
         xAxis: {
+          min: 0,
           title: {
             enabled: true,
-            text: 'Caudal (m3)'
+            text: 'Caudal (l/s)'
           },
           startOnTick: true,
           endOnTick: true,
           showLastLabel: true
         },
         yAxis: {
+          min: 0,
           title: {
             text: 'Eficiencia'
           }
@@ -263,7 +272,7 @@
             },
             tooltip: {
               headerFormat: '<b>{series.name}</b><br>',
-              pointFormat: '{point.x} m3, {point.y} m'
+              pointFormat: '{point.x} l/s, {point.y} %'
             }
           }
         },

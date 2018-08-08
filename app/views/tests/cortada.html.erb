@@ -5,7 +5,7 @@
 
 <p id="notice"><%= notice %></p>
 
-<center><h1>Analisis informacion ingresada</h1></center>
+<center><h1>Análisis información ingresada</h1></center>
 
 <% b = params[:n].to_i %>
 
@@ -27,10 +27,13 @@
   <% end %>
 </div>
 
+<div class="center jumbotron">
+  <div id="container" style="width: 500px; height: 500px; margin: 0 auto"></div>
+</div>
 
-<div id="container" style="width: 500px; height: 500px; margin: 0 auto"></div>
-
-<div id="container2" style="width: 600px; height: 500px; margin: 0 auto"></div>
+<div class="center jumbotron">
+  <div id="container2" style="width: 600px; height: 500px; margin: 0 auto"></div>
+</div>
 
 
 <br>
@@ -53,7 +56,7 @@
       zoomType: 'xy'
     },
     title: {
-      text: 'Curva Hidraulica'
+      text: 'Curva hidráulica'
     },
     subtitle: {
       text: ''
@@ -61,7 +64,7 @@
     xAxis: {
       title: {
         enabled: true,
-        text: 'Caudal (m3)'
+        text: 'Caudal (l/s)'
       },
       startOnTick: true,
       endOnTick: true,
@@ -92,7 +95,7 @@
         },
         tooltip: {
           headerFormat: '<b>{series.name}</b><br>',
-          pointFormat: '{point.x} m3, {point.y} m'
+          pointFormat: '{point.x} l/s, {point.y} m'
         }
       }
     },
@@ -104,7 +107,7 @@
         dashStyle: 'solid',
         hideinlegend: false
       },
-      name: 'Rodete 214',
+      name: 'Curva hidrálica',
       color: 'rgba(223, 83, 83, .5)',
       data: [                
       	<% @puntos.each do |d|%>
@@ -123,7 +126,7 @@
       zoomType: 'xy'
     },
     title: {
-      text: 'Curva Eficiencia'
+      text: 'Curva eficiencia'
     },
     subtitle: {
       text: ''
@@ -131,7 +134,7 @@
     xAxis: {
       title: {
         enabled: true,
-        text: 'Caudal (m3)'
+        text: 'Caudal (l/s)'
       },
       startOnTick: true,
       endOnTick: true,
@@ -139,7 +142,7 @@
     },
     yAxis: {
       title: {
-        text: 'Altura (m)'
+        text: 'Eficiencia (%)'
       }
     },
     plotOptions: {
@@ -162,7 +165,7 @@
         },
         tooltip: {
           headerFormat: '<b>{series.name}</b><br>',
-          pointFormat: '{point.x} m3, {point.y} m'
+          pointFormat: '{point.x} l/s, {point.y} %'
         }
       }
     },

@@ -1,7 +1,7 @@
-<h1> Informacion guardada para esta bomba: </h1>
+<h1> Información guardada para esta bomba: </h1>
 
 
-<h2> Asi quedaria la cosa..</h2>
+<h2> Así quedaría la cosa..</h2>
 
 <% datos = [] %>
 <% @tests_definitivos.each do |lista| %>
@@ -79,21 +79,23 @@
       zoomType: 'xy'
     },
     title: {
-      text: 'Curvas hidraulicas'
+      text: 'Curvas hidráulicas'
     },
     subtitle: {
       text: ''
     },
     xAxis: {
+      min: 0,
       title: {
         enabled: true,
-        text: 'Caudal (m3)'
+        text: 'Caudal (l/s)'
       },
       startOnTick: true,
       endOnTick: true,
       showLastLabel: true
     },
     yAxis: {
+      min: 0,
       title: {
         text: 'Altura (m)'
       }
@@ -128,7 +130,7 @@
         },
         tooltip: {
           headerFormat: '<b>{series.name}</b><br>',
-          pointFormat: '{point.x} m3, {point.y} m'
+          pointFormat: '{point.x} l/s, {point.y} m'
         }
       }
     },

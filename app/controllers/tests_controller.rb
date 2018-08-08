@@ -11,13 +11,13 @@ class TestsController < ApplicationController
 			@pump.valid_tests.delete(@test.id)
 		end
 		@test.destroy
-		redirect_to root_url
+		redirect_to pump_path(@pump)
 	end
 
 	def show
 		@test = @pump.tests.find(params[:id])
 		@puntos = Test.pasar_a_numero(@test.curva_h)
-		@puntos2 = Test.pasar_a_numero(@test.curva_e)
+		@puntos2 = Pump.eficiencia_100(Test.pasar_a_numero(@test.curva_e))
 		@test.current_h = @test.curva_h
 		@test.current_e = @test.curva_e
 		@test.save
@@ -45,7 +45,7 @@ class TestsController < ApplicationController
 		@test.current_h = @test.curva_h[0..@test.curva_h.length - params[:n].to_i - 1]
 		@test.current_e = @test.curva_e[0..@test.curva_e.length - params[:n].to_i - 1]
 		@puntos = Test.pasar_a_numero(@test.current_h)
-		@puntos2 = Test.pasar_a_numero(@test.current_e)
+		@puntos2 = Pump.eficiencia_100(Test.pasar_a_numero(@test.current_e))
 		@test.save
 	end
 
