@@ -1,4 +1,4 @@
-<h1> Resultados busqueda </h1>
+<h1> Resultados búsqueda </h1>
 
 <% if @pumps_final.length > 0 %>
 	
@@ -7,14 +7,14 @@
 
 			<% diametro_final, curva_a_usar, diametro_a_usar = Pump.diametro_final(pump, @caudal, @altura) %>
 
-			<p><%= pump.bomba %></p>
-			<p>Recorte rodete por semejanza hidraulica: <%= diametro_final.round(2) %></p>
+			<p><strong><%= pump.bomba %></strong></p>
+			<p>Recorte rodete por semejanza hidráulica: <strong><%= diametro_final.round(2) %></strong></p>
 			
 
 			<% eficiencia = Pump.calcular_eficiencia(@caudal, 
 			pump.efficiency_info, pump.efficiency_info_diams, diametro_final) %>
 
-			<p>Eficiencia aproximada: <%= (eficiencia.*100).round(2) %>%</p>			
+			<p>Eficiencia aproximada: <strong><%= (eficiencia.*100).round(2) %>%</strong></p>			
 			
 
 			<%= link_to "Ver detalle", pump_detalle_path(pump_id: pump.id, caudal: @caudal,

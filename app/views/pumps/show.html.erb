@@ -99,8 +99,12 @@
     </div>
 
     <div class="center jumbotron">
-    <h2> Para dejar esta configuración como definitiva: </h2>
-    <%= link_to "Configuración definitiva", pump_definitiva_path(pump_id: @pump.id), class: "btn btn-lg btn-primary", id:"link-b" %>
+      <h2> Para dejar esta configuración como definitiva: </h2>
+      <% if @pump.valid_tests.length >= 2 %>
+      <%= link_to "Configuración definitiva", pump_definitiva_path(pump_id: @pump.id), class: "btn btn-lg btn-primary", id:"link-b" %>
+      <% else %>
+        <p> Debes tener al menos 2 pruebas válidas para dejar la configuración definitiva.</p>
+      <%end%>
     </div>
 
 

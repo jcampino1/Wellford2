@@ -11,7 +11,7 @@ class TestsController < ApplicationController
 			@pump.valid_tests.delete(@test.id)
 		end
 		@test.destroy
-		redirect_to root_url
+		redirect_to pump_path(@pump)
 	end
 
 	def show

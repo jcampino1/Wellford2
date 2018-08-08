@@ -30,8 +30,7 @@
                 <%= link_to 'Ver', pump, class: "btn btn-lg", id:"link" %>
                 <% if current_user %>
                   <% if current_user.admin %>
-                    <%= link_to 'Editar', edit_pump_path(pump), class: "btn btn-lg", id:"link" %>
-                    <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(pump), class: "btn btn-lg", id:"link" %>
+                    
                     <%= link_to 'Eliminar', pump, method: :delete, data: { confirm: '¿Está seguro?' }, class: "btn btn-lg", id:"link" %>
                   <% end %>
                 <% end %>
