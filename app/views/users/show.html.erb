@@ -1,3 +1,4 @@
+
 <div class="jumbotron">
   <h1>Importar</h1>
   <% if current_user %>
@@ -11,7 +12,16 @@
     <% else %>
       <p class="center">Solo el administrador puede importar</p>
     <% end %>
+    <div class="jumbotron">
+      <h1>Editar Perfil</h1>
+      <% if current_user.id == @user.id %>
+        <%= link_to "Editar Perfil", edit_user_registration_url,
+          class: "btn btn-lg", id: "link" %>
+      <% end %>
+    </div>
   <% else %>
-    <p class="center">Solo el administrador puede importar</p>
+    <p>Solo el administrador tiene acceso a esta pagina.</p>
   <% end %>
-</div>
+<% else %>
+  <p>Registrese para participar.</p>
+<% end %>
