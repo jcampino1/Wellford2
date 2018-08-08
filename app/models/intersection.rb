@@ -19,6 +19,8 @@ class Intersection < ApplicationRecord
       pump.posibles_kw.push(motor.kw.to_s)
       pump.posibles_motores.push(motor_id.to_s)
       pump.save
+    end
+    Pump.all.each do |pump|
       if pump.posibles_hp.length < 1
         pump.destroy
       end
