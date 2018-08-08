@@ -4,19 +4,21 @@
 
 <p id="notice"><%= notice %></p>
 
-<center><h1>Analisis informacion ingresada</h1></center>
+<center><h1>Análisis información ingresada</h1></center>
 
 <div class="center jumbotron">
   <h2>Editar curva actual</h2>
   <p>Sacamos los puntos donde cae la curva...</p>
-  <%= link_to 'Sacar ultimo punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: 1), class: "btn btn-lg", id:"link" %>
+  <%= link_to 'Sacar último punto', pump_test_cortada_path(pump_id: @pump.id, test_id: @test.id, n: 1), class: "btn btn-lg", id:"link" %>
 </div>
 
+<div class="center jumbotron">
+  <div id="container" style="width: 500px; height: 500px; margin: 0 auto"></div>
+</div>
 
-<div id="container" style="width: 500px; height: 500px; margin: 0 auto"></div>
-
-<div id="container2" style="width: 600px; height: 500px; margin: 0 auto"></div>
-
+<div class="center jumbotron">
+  <div id="container2" style="width: 600px; height: 500px; margin: 0 auto"></div>
+</div>
 
 <br>
 
@@ -38,21 +40,23 @@
       zoomType: 'xy'
     },
     title: {
-      text: 'Curva Hidraulica'
+      text: 'Curva hidráulica'
     },
     subtitle: {
       text: ''
     },
     xAxis: {
+      min: 0,
       title: {
         enabled: true,
-        text: 'Caudal (m3)'
+        text: 'Caudal (l/s)'
       },
       startOnTick: true,
       endOnTick: true,
       showLastLabel: true
     },
     yAxis: {
+      min: 0,
       title: {
         text: 'Altura (m)'
       }
@@ -77,7 +81,7 @@
         },
         tooltip: {
           headerFormat: '<b>{series.name}</b><br>',
-          pointFormat: '{point.x} m3, {point.y} m'
+          pointFormat: '{point.x} l/s, {point.y} m'
         }
       }
     },
@@ -89,7 +93,7 @@
         dashStyle: 'solid',
         hideinlegend: false
       },
-      name: 'Curva hidraulica',
+      name: 'Curva hidráulica',
       color: 'rgba(223, 83, 83, .5)',
       data: [                
       	<% @puntos.each do |d|%>
@@ -116,7 +120,7 @@
     xAxis: {
       title: {
         enabled: true,
-        text: 'Caudal (m3)'
+        text: 'Caudal (l/s)'
       },
       startOnTick: true,
       endOnTick: true,
@@ -124,7 +128,7 @@
     },
     yAxis: {
       title: {
-        text: 'Altura (m)'
+        text: 'Eficiencia (%)'
       }
     },
     plotOptions: {
@@ -147,7 +151,7 @@
         },
         tooltip: {
           headerFormat: '<b>{series.name}</b><br>',
-          pointFormat: '{point.x} m3, {point.y} m'
+          pointFormat: '{point.x} l/s, {point.y} %'
         }
       }
     },

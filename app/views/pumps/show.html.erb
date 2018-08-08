@@ -40,8 +40,6 @@
       </div>
     </div>
 
-    <%= @pump.curva_rodete_min %>
-
     <% if @pump.valid_tests.length > 0 %>
       <div class="center jumbotron">
         <div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
@@ -64,10 +62,10 @@
         <% if current_user.admin %>
           <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(@pump), class: "btn btn-lg btn-primary", id:"link-b" %>
         <% else %>
-          <p class="center">Solo el administrador puede ingresar pruebas</p>
+          <p class="center">Sólo el administrador puede ingresar pruebas</p>
         <% end %>
       <% else %>
-        <p class="center">Solo el administrador puede ingresar pruebas</p>
+        <p class="center">Sólo el administrador puede ingresar pruebas</p>
       <% end %>
       <br>
 
@@ -80,12 +78,12 @@
         
             <% if @pump.valid_tests.include?(test.id.to_s) %>
               <% datos.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete]) %>
-              <% datos_e.push([Test.pasar_a_numero(test.current_e), test.diametro_rodete]) %>
-              <%= link_to 'Sacar de las pruebas validas', pump_test_sacar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
+              <% datos_e.push([Pump.eficiencia_100(Test.pasar_a_numero(test.current_e)), test.diametro_rodete]) %>
+              <%= link_to 'Sacar de las pruebas válidas', pump_test_sacar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
 
 
             <% else %>
-              <%= link_to 'Ingresar como prueba valida', pump_test_entrar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
+              <%= link_to 'Ingresar como prueba válida', pump_test_entrar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
             <% end %>
 
             <%= link_to "Eliminar", pump_test_path(pump_id: @pump.id, test_id: test.id), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "btn btn-lg", id:"link"  %>
@@ -101,8 +99,8 @@
     </div>
 
     <div class="center jumbotron">
-    <h2> Para dejar esta configuracion como definitiva: </h2>
-    <%= link_to "Configuracion definitiva", pump_definitiva_path(pump_id: @pump.id), class: "btn btn-lg btn-primary", id:"link-b" %>
+    <h2> Para dejar esta configuración como definitiva: </h2>
+    <%= link_to "Configuración definitiva", pump_definitiva_path(pump_id: @pump.id), class: "btn btn-lg btn-primary", id:"link-b" %>
     </div>
 
 
@@ -135,21 +133,23 @@
           zoomType: 'xy'
         },
         title: {
-          text: 'Curvas hidraulicas'
+          text: 'Curvas hidráulicas'
         },
         subtitle: {
           text: ''
         },
         xAxis: {
+          min: 0,
           title: {
             enabled: true,
-            text: 'Caudal (m3)'
+            text: 'Caudal (l/s)'
           },
           startOnTick: true,
           endOnTick: true,
           showLastLabel: true
         },
         yAxis: {
+          min: 0,
           title: {
             text: 'Altura (m)'
           }
@@ -184,7 +184,7 @@
             },
             tooltip: {
               headerFormat: '<b>{series.name}</b><br>',
-              pointFormat: '{point.x} m3, {point.y} m'
+              pointFormat: '{point.x} l/s, {point.y} m'
             }
           }
         },
@@ -217,21 +217,23 @@
           zoomType: 'xy'
         },
         title: {
-          text: 'Curvas Eficiencia'
+          text: 'Curvas de eficiencia'
         },
         subtitle: {
           text: ''
         },
         xAxis: {
+          min: 0,
           title: {
             enabled: true,
-            text: 'Caudal (m3)'
+            text: 'Caudal (l/s)'
           },
           startOnTick: true,
           endOnTick: true,
           showLastLabel: true
         },
         yAxis: {
+          min: 0,
           title: {
             text: 'Eficiencia'
           }
@@ -266,7 +268,7 @@
             },
             tooltip: {
               headerFormat: '<b>{series.name}</b><br>',
-              pointFormat: '{point.x} m3, {point.y} m'
+              pointFormat: '{point.x} l/s, {point.y} %'
             }
           }
         },
