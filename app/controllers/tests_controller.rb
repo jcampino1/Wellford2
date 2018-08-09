@@ -7,8 +7,9 @@ class TestsController < ApplicationController
 
 	def destroy
 		@test = @pump.tests.find(params[:test_id])
-		if @pump.valid_tests.include?(@test.id)
-			@pump.valid_tests.delete(@test.id)
+		if @pump.valid_tests.include?(@test.id.to_s)
+			@pump.valid_tests.delete(@test.id.to_s)
+			@pump.save
 		end
 		@test.destroy
 		redirect_to pump_path(@pump)

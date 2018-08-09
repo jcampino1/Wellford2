@@ -264,5 +264,18 @@ class Pump < ApplicationRecord
     return lista_potencias.max
   end
 
+  def self.buscar_motor(pump, pot_cons, pot_max)
+    pump.posibles_kw.each do |potencia|
+      if potencia.to_f > pot_cons
+        if potencia.to_f*1.15 > pot_max
+          index = pump.posibles_kw.index(potencia)
+          return index
+        end
+      else
+        return 1000
+      end
+    end
+  end
+
 end
 
