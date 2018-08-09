@@ -60,6 +60,14 @@
           <p> Altura: <%= text_field_tag :altura %> (m)</p>
         </div>
 
+        <div class="field">
+          <strong><p> MARCAS MOTORES </p></strong>
+          <p> WEG: <%= check_box_tag(:weg) %></p>
+          <p> Siemens: <%= check_box_tag(:siemens) %></p>
+          <p> Wellford: <%= check_box_tag(:wellford) %></p>
+          <p> CG: <%= check_box_tag(:cg) %></p>
+        </div>
+
         <%= submit_tag "Buscar", class: 'btn btn-lg btn-primary', id:"link-b" %>
       <% end %>
     </div>

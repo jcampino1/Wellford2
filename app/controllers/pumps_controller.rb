@@ -164,6 +164,23 @@ class PumpsController < ApplicationController
   def buscar
     @caudal = params[:caudal].to_f
     @altura = params[:altura].to_f
+    @lista_marcas = []
+    @weg = params[:weg]
+    @wellford = params[:wellford]
+    @siemens = params[:siemens]
+    @cg = params[:cg]
+    if @weg
+      @lista_marcas.push("WEG")
+    end
+    if @wellford
+      @lista_marcas.push("Wellford")
+    end
+    if @siemens
+      @lista_marcas.push("Siemens")
+    end
+    if @cg
+      @lista_marcas.push("CG")
+    end
     @pumps = Pump.all
     @pumps_final = []
     @pumps.each do |pump|
@@ -182,6 +199,8 @@ class PumpsController < ApplicationController
     @diametro_final = params[:diametro_final].to_f
     @curva_a_usar = Pump.pasar_a_curvah(params[:curva_a_usar])
     @diametro_a_usar = params[:diametro_a_usar]
+    #@lista_marcas = []
+    @lista_marcas = params[:lista_marcas]
     @curvas_definitivas = []
     @curvas_eficiencias = []
 
@@ -227,7 +246,22 @@ class PumpsController < ApplicationController
     @potencia_consumo = @potencia_requerida[0][1]
     @potencia_maxima = Pump.potencia_maxima(@curva_potencia)
 
-    @motor = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima)
+    if @lista_marcas.include?("WEG")
+      @motor_weg = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.15)
+    end
+
+    if @lista_marcas.include?("Wellford")
+      @motor_wellford = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.05)
+    end
+
+    if @lista_marcas.include?("CG")
+      @motor_cg = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.05)
+    end
+
+    if @lista_marcas.include?("Siemens")
+      @motor_siemens = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.1)
+    end
+
   end
 
 

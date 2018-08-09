@@ -264,17 +264,15 @@ class Pump < ApplicationRecord
     return lista_potencias.max
   end
 
-  def self.buscar_motor(pump, pot_cons, pot_max)
+  def self.buscar_motor(pump, pot_cons, pot_max, coef)
     pump.posibles_kw.each do |potencia|
       if potencia.to_f > pot_cons
-        if potencia.to_f*1.15 > pot_max
-          index = pump.posibles_kw.index(potencia)
-          return index
+        if (potencia.to_f)*coef > pot_max
+          return potencia
         end
-      else
-        return 1000
       end
     end
+    return 1000
   end
 
 end
