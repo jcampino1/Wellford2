@@ -4,7 +4,7 @@
 
 <h1> Detalles búsqueda </h1> 
 
-<h2> <%= @pump.bomba %> </h2>
+<h2> <%= @pump.bomba %>/<%= @pump.rpm %> </h2>
 
 <div class="center jumbotron">
   <h3> Solicitud </h3>
@@ -38,7 +38,25 @@
 <div class="center jumbotron">
   <p> Potencia consumo: <%= @potencia_consumo.round(2) %></p>
   <p> Potencia máxima: <%= @potencia_maxima.round(2) %></p>
-  <p> Indice: <%= @motor %>
+</div>
+
+<div class="center jumbotron">
+<h2> Motores elegidos según la marca </h2>  
+  <% if @lista_marcas.include?("WEG") %>
+    <p> WEG: <%= @motor_weg %> Kw</p>
+  <% end %>
+
+  <% if @lista_marcas.include?("Wellford") %>
+    <p> Wellford: <%= @motor_wellford %> Kw</p>
+  <% end %>
+
+  <% if @lista_marcas.include?("CG") %>
+    <p> CG: <%= @motor_cg %> Kw </p>
+  <% end %>
+
+  <% if @lista_marcas.include?("Siemens") %>
+    <p> Siemens: <%= @motor_siemens %> Kw</p>
+  <% end %>
 </div>
 
 <% datos = [[@caudal, @altura]] %>
