@@ -226,6 +226,8 @@ class PumpsController < ApplicationController
     #Potencia consumo y maxima
     @potencia_consumo = @potencia_requerida[0][1]
     @potencia_maxima = Pump.potencia_maxima(@curva_potencia)
+
+    @motor = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima)
   end
 
 
