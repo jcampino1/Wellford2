@@ -199,7 +199,6 @@ class PumpsController < ApplicationController
     @diametro_final = params[:diametro_final].to_f
     @curva_a_usar = Pump.pasar_a_curvah(params[:curva_a_usar])
     @diametro_a_usar = params[:diametro_a_usar]
-    #@lista_marcas = []
     @lista_marcas = params[:lista_marcas]
     @curvas_definitivas = []
     @curvas_eficiencias = []
@@ -246,20 +245,28 @@ class PumpsController < ApplicationController
     @potencia_consumo = @potencia_requerida[0][1]
     @potencia_maxima = Pump.potencia_maxima(@curva_potencia)
 
+    #@weg = false
+    #@wellford = false
+    #@cg = false
+    #@siemens = false
     if @lista_marcas.include?("WEG")
-      @motor_weg = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.15)
+      @weg = "1"
+      @motor_weg, @hp_weg = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.15)
     end
 
     if @lista_marcas.include?("Wellford")
-      @motor_wellford = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.05)
+      @wellford = "1"
+      @motor_wellford, @hp_wellford = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.05)
     end
 
     if @lista_marcas.include?("CG")
-      @motor_cg = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.05)
+      @cg = "1"
+      @motor_cg, @hp_cg = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.05)
     end
 
     if @lista_marcas.include?("Siemens")
-      @motor_siemens = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.1)
+      @siemens = "1"
+      @motor_siemens, @hp_siemens = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.1)
     end
 
   end

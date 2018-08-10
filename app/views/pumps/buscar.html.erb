@@ -22,6 +22,7 @@
 			<% if @lista_marcas.length > 0 %>
 				<%= link_to "Ver detalle", pump_detalle_path(pump_id: pump.id, caudal: @caudal,
 				altura: @altura, eficiencia: eficiencia, diametro_final: diametro_final, curva_a_usar: curva_a_usar, diametro_a_usar: diametro_a_usar, lista_marcas: @lista_marcas), class: "btn btn-lg", id:"link" %>
+				
 			
 			<% end %>
 
