@@ -268,11 +268,12 @@ class Pump < ApplicationRecord
     pump.posibles_kw.each do |potencia|
       if potencia.to_f > pot_cons
         if (potencia.to_f)*coef > pot_max
-          return potencia
+          indice = pump.posibles_kw.index(potencia)
+          return potencia, pump.posibles_hp[indice]
         end
       end
     end
-    return 1000
+    return -1, -1
   end
 
 end
