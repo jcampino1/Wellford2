@@ -1,31 +1,36 @@
 <h1> Resultados búsqueda </h1>
-<% if @lista_marcas.length == 0 %>
-	<h2> No seleccionaste ninguna marca de motores! No podrás ver los detalles de cada bomba</h2>
-<% end %>
+
 
 <% if @pumps_final.length > 0 %>
+	<% lista_eficiencias = [] %>
+	<% lista_resultados = [] %>
+	<% lista_ordenada = [] %>
 	
 	<% @pumps_final.each do |pump| %>
-		<div class="center jumbotron">
-
-			<% diametro_final, curva_a_usar, diametro_a_usar = Pump.diametro_final(pump, @caudal, @altura) %>
-
-			<p><strong><%= pump.bomba %>/<%= pump.rpm %></strong></p>
-			<p>Recorte rodete por semejanza hidráulica: <strong><%= diametro_final.round(2) %></strong></p>
-			
+			<% diametro_final, curva_a_usar, diametro_a_usar = Pump.diametro_final(pump, @caudal, @altura) %>			
 
 			<% eficiencia = Pump.calcular_eficiencia(@caudal, 
 			pump.efficiency_info, pump.efficiency_info_diams, diametro_final) %>
 
-			<p>Eficiencia aproximada: <strong><%= (eficiencia.*100).round(2) %>%</strong></p>			
-			
-			<% if @lista_marcas.length > 0 %>
-				<%= link_to "Ver detalle", pump_detalle_path(pump_id: pump.id, caudal: @caudal,
-				altura: @altura, eficiencia: eficiencia, diametro_final: diametro_final, curva_a_usar: curva_a_usar, diametro_a_usar: diametro_a_usar, lista_marcas: @lista_marcas), class: "btn btn-lg", id:"link" %>
-				
-			
+			<% if eficiencia > 0.3 %>
+				<% lista_eficiencias.push(eficiencia) %>
+				<% lista_resultados.push([pump.bomba + "/" + pump.rpm.to_s, eficiencia, diametro_final, curva_a_usar, diametro_a_usar, pump.id]) %>
 			<% end %>
+	<% end %>
 
+	<% while lista_eficiencias.length > 0 %>
+		<% indice = lista_eficiencias.index(lista_eficiencias.max) %>
+		<% lista_ordenada.push(lista_resultados[indice]) %>
+		<% lista_eficiencias.delete(lista_eficiencias[indice]) %>
+		<% lista_resultados.delete(lista_resultados[indice]) %>
+	<% end %>
+
+	<% lista_ordenada.each do |bomba| %>
+		<div class="center jumbotron">
+			<h2><%= bomba[0] %></h2>
+			<p>Recorte rodete: <strong><%= bomba[2].round(2) %></strong></p>
+			<p>Eficiencia aproximada: <strong><%= (bomba[1]*100).round(2) %>%</strong></p>
+			<%= link_to "Ver detalle", pump_detalle_path(pump_id: bomba[5], caudal: @caudal, altura: @altura, eficiencia: bomba[1], diametro_final: bomba[2], curva_a_usar: bomba[3], diametro_a_usar: bomba[4], lista_marcas: @lista_marcas), class: "btn btn-lg", id:"link" %>
 		</div>
 	<% end %>
 
