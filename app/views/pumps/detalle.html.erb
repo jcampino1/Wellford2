@@ -17,6 +17,41 @@
   <p> Diametro por semejanza hidraulica: <%= @diametro_final.round(2) %> </p>
 </div>
 
+<div class="center jumbotron">
+<h2> Motores elegidos según la marca </h2>  
+  <% if @lista_marcas.include?("WEG") %>
+    <% if @motor_weg != -1 %>
+      <p> WEG: <%= @motor_weg %> Kw, <%= @hp_weg %> Hp</p>
+    <% else %>
+      <p> WEG: No hay motores que cumplan las condiciones</p>
+    <% end %>
+  <% end %>
+
+  <% if @lista_marcas.include?("Wellford") %>
+    <% if @motor_wellford != -1 %>
+      <p> Wellford: <%= @motor_wellford %> Kw, <%= @hp_wellford %> Hp</p>
+    <% else %>
+      <p> Wellford: No hay motores que cumplan las condiciones</p>
+    <% end %>
+  <% end %>
+
+  <% if @lista_marcas.include?("CG") %>
+    <% if @motor_cg != -1 %>
+      <p> CG: <%= @motor_cg %> Kw, <%= @hp_cg %> Hp </p>
+    <% else %>
+      <p> CG: No hay motores que cumplan las condiciones</p>
+    <%end%>
+  <% end %>
+
+  <% if @lista_marcas.include?("Siemens") %>
+    <% if @motor_siemens != -1 %>
+      <p> Siemens: <%= @motor_siemens %> Kw, <%= @hp_siemens %> Hp</p>
+    <%else%>
+      <p> Siemens: No hay motores que cumplan las condiciones </p>
+    <% end %>
+  <% end %>
+</div>
+
 <div>
   <%= link_to "Volver a la búsqueda", buscar_path(caudal: @caudal, altura: @altura, weg: @weg, wellford: @wellford, cg: @cg, siemens: @siemens), class: "btn btn-lg btn-primary", id:"link-b" %>
 </div>
