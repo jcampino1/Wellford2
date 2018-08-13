@@ -181,6 +181,11 @@ class PumpsController < ApplicationController
     if @cg
       @lista_marcas.push("CG")
     end
+
+    if @lista_marcas.length == 0
+      @lista_marcas = ["WEG", "Wellford", "Siemens", "CG"]
+    end
+
     @pumps = Pump.all
     @pumps_final = []
     @pumps.each do |pump|
@@ -205,28 +210,31 @@ class PumpsController < ApplicationController
 
     @pump.valid_tests.each do |d|
       test = @pump.tests.find(d.to_f)
-      if test.diametro_rodete != @pump.rodete_max and test.diametro_rodete != @pump.rodete_min
-        @curvas_definitivas.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete])
-      end
+      # En caso de querer mostrar todas las curvas h, descomentar las 3 stes lineas.
+    #  if test.diametro_rodete != @pump.rodete_max and test.diametro_rodete != @pump.rodete_min
+    #    @curvas_definitivas.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete])
+    #  end
       if @pump.efficiency_info_diams.include?(test.diametro_rodete.to_s)
         @curvas_eficiencias.push([Test.pasar_a_numero(Pump.eficiencia_100(test.current_e)), test.diametro_rodete])
       end
     end
-    @curvas_definitivas.push([Test.pasar_a_numero(@pump.points_max[0]), @pump.rodete_max])
-    @curvas_definitivas.push([Test.pasar_a_numero(@pump.points_min[0]), @pump.rodete_min])
+    @curvas_definitivas.push([Test.pasar_a_numero(@pump.points_max[0]), " máximo (" + @pump.rodete_max.to_s + ")"])
+    @curvas_definitivas.push([Test.pasar_a_numero(@pump.points_min[0]), " mínimo (" + @pump.rodete_min.to_s + ")"])
     
     # Determinacion curva hidraulica nuevo punto
-    # En un futuro debe ser determinada a partir de la curva mas cercana (logrado)
-    #@curva = Pump.crear_curva(@pump.points_max[0], @pump.rodete_max, @diametro_final)
     @curva = Pump.crear_curva(Test.pasar_a_numero(@curva_a_usar), @diametro_a_usar.to_f, @diametro_final)
     @caudal_max = @curva[-1][0]
     @curvas_definitivas.push([@curva, "generado " + @diametro_final.round(2).to_s])
 
-    # Determinacion curva eficiencia, esta lista
+    # Determinacion curva eficiencia
     coef_1 = Test.regression(@curvas_eficiencias[1][0], 2)
     coef_2 = Test.regression(@curvas_eficiencias[0][0], 2)
     @nueva_curva_e = Pump.generar_curva_e(@caudal_max, coef_1, coef_2, 
       @curvas_eficiencias[1][1], @curvas_eficiencias[0][1], @diametro_final)
+
+    # En caso de querer volver a mostrar todas las curvas de eficiencia, 
+    # comentar linea de abajo
+    @curvas_eficiencias.clear
     @curvas_eficiencias.push([@nueva_curva_e, "generado " + @diametro_final.round(2).to_s])
     
     # Determinacion curva potencia
