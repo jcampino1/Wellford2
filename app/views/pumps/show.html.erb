@@ -31,10 +31,8 @@
       </nav>
 
       <div>
-        <% if current_user %>
-          <% if current_user.admin %>
-            <%= link_to 'Editar detalles bomba', edit_pump_path(@pump), class: "btn btn-lg", id: "link" %>
-          <% end %>
+        <% if current_user.admin %>
+          <%= link_to 'Editar detalles bomba', edit_pump_path(@pump), class: "btn btn-lg", id: "link" %>
         <% end %>
         <strong><%= link_to 'Volver', pumps_path, class: "btn btn-lg", id: "link" %></strong>
       </div>
@@ -58,14 +56,10 @@
     <div class="center jumbotron">
 
       <h2> Pruebas de Bombeo </h2>
-      <% if current_user %>
-        <% if current_user.admin %>
-          <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(@pump), class: "btn btn-lg btn-primary", id:"link-b" %>
-        <% else %>
-          <p class="center">Sólo el administrador puede ingresar pruebas</p>
-        <% end %>
+      <% if current_user.admin %>
+        <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(@pump), class: "btn btn-lg btn-primary", id:"link-b" %>
       <% else %>
-        <p class="center">Sólo el administrador puede ingresar pruebas</p>
+        <p class="center">Sólo el administrador puede ingresar/modificar pruebas</p>
       <% end %>
       <br>
 
@@ -74,19 +68,28 @@
           <br>
         
           <div>
-            <strong> Nombre: <%= test.nombre %>, Numero pedido: <%=test.numero_pedido%>, diametro del rodete: <%= test.diametro_rodete %></strong>
+            <% if current_user.admin %>
+              <strong> Nombre: <%= test.nombre %>, Numero pedido: <%=test.numero_pedido%>, diametro del rodete: <%= test.diametro_rodete %></strong>
+            <% end %>
         
             <% if @pump.valid_tests.include?(test.id.to_s) %>
               <% datos.push([Test.pasar_a_numero(test.current_h), test.diametro_rodete]) %>
               <% datos_e.push([Pump.eficiencia_100(Test.pasar_a_numero(test.current_e)), test.diametro_rodete]) %>
-              <%= link_to 'Sacar de las pruebas válidas', pump_test_sacar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
+
+              <% if current_user.admin %>
+                <%= link_to 'Sacar de las pruebas válidas', pump_test_sacar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
+              <% end %>
 
 
             <% else %>
-              <%= link_to 'Ingresar como prueba válida', pump_test_entrar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
+              <% if current_user.admin %>
+                <%= link_to 'Ingresar como prueba válida', pump_test_entrar_valida_path(pump_id: @pump.id, test_id: test.id), class: "btn btn-lg", id: "link" %>
+              <% end %>
             <% end %>
 
-            <%= link_to "Eliminar", pump_test_path(pump_id: @pump.id, test_id: test.id), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "btn btn-lg", id:"link"  %>
+            <% if current_user.admin %>
+              <%= link_to "Eliminar", pump_test_path(pump_id: @pump.id, test_id: test.id), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "btn btn-lg", id:"link"  %>
+            <% end %>
           </div>
       	<% end %>
       <% else %>
@@ -100,11 +103,15 @@
 
     <div class="center jumbotron">
       <h2> Para dejar esta configuración como definitiva: </h2>
-      <% if @pump.valid_tests.length >= 2 %>
-      <%= link_to "Configuración definitiva", pump_definitiva_path(pump_id: @pump.id), class: "btn btn-lg btn-primary", id:"link-b" %>
+      <% if current_user.admin %>
+        <% if @pump.valid_tests.length >= 2 %>
+        <%= link_to "Configuración definitiva", pump_definitiva_path(pump_id: @pump.id), class: "btn btn-lg btn-primary", id:"link-b" %>
+        <% else %>
+          <p> Debes tener al menos 2 pruebas válidas para dejar la configuración definitiva.</p>
+        <%end%>
       <% else %>
-        <p> Debes tener al menos 2 pruebas válidas para dejar la configuración definitiva.</p>
-      <%end%>
+        <p> Sólo el administrador puede establecer configuraciones definitivas</p>
+      <% end %>
     </div>
 
 
