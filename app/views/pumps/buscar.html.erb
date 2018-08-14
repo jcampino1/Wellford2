@@ -30,7 +30,7 @@
 			<h2><%= bomba[0] %></h2>
 			<p>Recorte rodete: <strong><%= bomba[2].round(2) %></strong></p>
 			<p>Eficiencia aproximada: <strong><%= (bomba[1]*100).round(2) %>%</strong></p>
-			<%= link_to "Ver detalle", pump_detalle_path(pump_id: bomba[5], caudal: @caudal, altura: @altura, eficiencia: bomba[1], diametro_final: bomba[2], curva_a_usar: bomba[3], diametro_a_usar: bomba[4], lista_marcas: @lista_marcas), class: "btn btn-lg", id:"link" %>
+			<%= link_to "Ver detalle", pump_detalle_path(pump_id: bomba[5], caudal: @caudal, altura: @altura, eficiencia: bomba[1], diametro_final: bomba[2], curva_a_usar: bomba[3], diametro_a_usar: bomba[4], lista_marcas: @lista_marcas, lista_polos: @lista_polos), class: "btn btn-lg", id:"link" %>
 		</div>
 	<% end %>
 

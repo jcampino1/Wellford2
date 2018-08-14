@@ -68,6 +68,12 @@
           <p> CG: <%= check_box_tag(:cg) %></p>
         </div>
 
+        <div class="field">
+          <h2> Polos </h2>
+          <p> 2 polos (2900) <%= check_box_tag(:dos_polos) %></p>
+          <p> 4 polos (1450-1480) <%= check_box_tag(:cuatro_polos) %></p>
+        </div>
+
         <%= submit_tag "Buscar", class: 'btn btn-lg btn-primary', id:"link-b" %>
       <% end %>
     </div>

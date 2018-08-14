@@ -165,10 +165,14 @@ class PumpsController < ApplicationController
     @caudal = params[:caudal].to_f
     @altura = params[:altura].to_f
     @lista_marcas = []
+    @lista_polos = []
     @weg = params[:weg]
     @wellford = params[:wellford]
     @siemens = params[:siemens]
     @cg = params[:cg]
+    @dos_polos = params[:dos_polos]
+    @cuatro_polos = params[:cuatro_polos]
+
     if @weg
       @lista_marcas.push("WEG")
     end
@@ -186,7 +190,26 @@ class PumpsController < ApplicationController
       @lista_marcas = ["WEG", "Wellford", "Siemens", "CG"]
     end
 
-    @pumps = Pump.all
+    if @dos_polos
+      @lista_polos.push("2")
+    end
+    if @cuatro_polos
+      @lista_polos.push("4")
+    end
+
+    if @lista_polos.length == 0 or @lista_polos.length ==2
+      @pumps = Pump.all
+    
+    else
+      if @lista_polos[0] == "2"
+        @pumps = Pump.where(rpm: 2900)
+      else
+        @pumps = Pump.where(rpm: 1450).or(Pump.where(rpm: 1480))
+      end
+    end
+
+    #@pumps = Pump.all
+
     @pumps_final = []
     @pumps.each do |pump|
       if Pump.valida(pump, @caudal, @altura)
@@ -205,6 +228,7 @@ class PumpsController < ApplicationController
     @curva_a_usar = Pump.pasar_a_curvah(params[:curva_a_usar])
     @diametro_a_usar = params[:diametro_a_usar]
     @lista_marcas = params[:lista_marcas]
+    @lista_polos = params[:lista_polos]
     @curvas_definitivas = []
     @curvas_eficiencias = []
 
@@ -275,6 +299,16 @@ class PumpsController < ApplicationController
     if @lista_marcas.include?("Siemens")
       @siemens = "1"
       @motor_siemens, @hp_siemens = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.1)
+    end
+
+    # Para devolver los polos seleccionados
+    if @lista_polos != NIL
+      if @lista_polos.include?("2")
+        @dos_polos = "1"
+      end
+      if @lista_polos.include?("4")
+        @cuatro_polos = "1"
+      end
     end
 
   end
