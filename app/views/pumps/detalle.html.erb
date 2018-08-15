@@ -71,8 +71,8 @@
 </div>
 
 <div class="center jumbotron">
-  <p> Potencia consumo: <%= @potencia_consumo.round(2) %></p>
-  <p> Potencia máxima: <%= @potencia_maxima.round(2) %></p>
+  <p> Potencia consumo: <%= @potencia_consumo.round(2) %> Kw / <%= (@potencia_consumo*1.341).round(2) %> Hp</p>
+  <p> Potencia máxima: <%= @potencia_maxima.round(2) %> Kw / <%= (@potencia_maxima*1.341).round(2) %> Hp</p>
 </div>
 
 <div class="center jumbotron">
