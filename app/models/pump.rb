@@ -54,14 +54,16 @@ class Pump < ApplicationRecord
 
   def self.limite_de_la_derecha(lista_maximos, q, h)
     """
-    Funcion que ve si el punto pedido cae a la izquierda de las rectas
-    generadas por lo puntos maximos de cada curva hidraulica
+    Funcion que ve si el punto pedido cae a la derecha de la recta
+    generadas por lo puntos maximos de la curva a rodete max y 
+    la curva a rodete min
     """
-    caudales_factibles_maximos = []
-    lista_maximos.each do |punto|
-      caudales_factibles_maximos.push(punto[0].to_f)
-    end
-    return q > caudales_factibles_maximos.min
+    punto_rodete_max = [lista_maximos[0][0].to_f, lista_maximos[0][1].to_f]
+    punto_rodete_min = [lista_maximos[1][0].to_f, lista_maximos[1][1].to_f]
+    pendiente = (punto_rodete_max[0] - punto_rodete_min[0])/(punto_rodete_max[1] - punto_rodete_min[1])
+    caudal_calculado = punto_rodete_min[0] + pendiente*(h - punto_rodete_min[1])
+
+    return q > caudal_calculado
   end
 
   def self.calcular_eficiencia(caudal, coeficientes_eficiencia, diametros, diametro_final)
