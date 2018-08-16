@@ -105,7 +105,7 @@ class PumpsController < ApplicationController
     @lista_maximos = []
     @tests_definitivos.each do |test|
       @lista_diametros.push(test[0])
-      @lista_maximos.push(test[3])
+      #@lista_maximos.push(test[3])
     end
 
     @pump.curva_rodete_max.clear
@@ -127,6 +127,7 @@ class PumpsController < ApplicationController
       @pump.points_max.push(@tests_definitivos[@indicex][4])
 
     end
+    @lista_maximos.push(@nueva_curva_rodete_max[-1])
 
 
     if @lista_diametros.exclude?(@pump.rodete_min)
@@ -141,6 +142,7 @@ class PumpsController < ApplicationController
       @nueva_curva_rodete_min = Test.pasar_a_numero(@tests_definitivos[indice][4])
       @pump.points_min.push(@tests_definitivos[indice][4])
     end
+    @lista_maximos.push(@nueva_curva_rodete_min[-1])
 
     @pump.x_maximos.clear
     @pump.x_maximos.push(@lista_maximos)
