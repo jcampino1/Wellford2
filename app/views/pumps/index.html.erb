@@ -1,21 +1,36 @@
 <% if current_user %>
   <% if current_user.admin or current_user.aceptado %>
-    <% if current_user.admin %>
-      <div class="jumbotron">
-        <h3>Solicitudes a participar</h3>
-        <% if Request.all.where(state: "Pendiente").count > 0 %>
-          <% Request.all.where(state: "Pendiente").each do |request| %>
-            <ul>
-              <li>
-                <%= User.all.where(id: request.user_id).last.email %>  <%= link_to 'Aceptar', request_aceptar_path(request.id), class: "btn btn-lg", id: "link" %>  <%= link_to 'Rechazar', request_rechazar_path(request.id), class: "btn btn-lg", id: "link" %>
-              </li>
-            </ul>
-          <% end %>
-        <% else %>
-          <p>No hay solicitudes</p>
-        <% end %>
-      </div>
-    <% end %>
+
+  <div class="center jumbotron">
+      <h1>Buscar bomba</h1>
+
+      <%= form_tag buscar_path do %>
+        <div class="field">
+          <p> Caudal: <%= text_field_tag :caudal %> (lt/s) </p>
+        </div>
+
+        <div class="field">
+          <p> Altura: <%= text_field_tag :altura %> (m)</p>
+        </div>
+
+        <div class="field">
+          <h2> MARCAS MOTORES </h2>
+          <p> WEG: <%= check_box_tag(:weg) %></p>
+          <p> Siemens: <%= check_box_tag(:siemens) %></p>
+          <p> Wellford: <%= check_box_tag(:wellford) %></p>
+          <p> CG: <%= check_box_tag(:cg) %></p>
+        </div>
+
+        <div class="field">
+          <h2> Polos </h2>
+          <p> 2 polos (2900) <%= check_box_tag(:dos_polos) %></p>
+          <p> 4 polos (1450-1480) <%= check_box_tag(:cuatro_polos) %></p>
+        </div>
+
+        <%= submit_tag "Buscar", class: 'btn btn-lg btn-primary', id:"link-b" %>
+      <% end %>
+    </div>
+
     <div class="center jumbotron">
       <h1>Catálogo Bombas</h1>
       <nav>
@@ -48,35 +63,23 @@
       <% end %>
     </div>
 
-    <div class="center jumbotron">
-      <h1>Buscar bomba</h1>
+    <% if current_user.admin %>
+      <div class="jumbotron">
+        <h3>Solicitudes a participar</h3>
+        <% if Request.all.where(state: "Pendiente").count > 0 %>
+          <% Request.all.where(state: "Pendiente").each do |request| %>
+            <ul>
+              <li>
+                <%= User.all.where(id: request.user_id).last.email %>  <%= link_to 'Aceptar', request_aceptar_path(request.id), class: "btn btn-lg", id: "link" %>  <%= link_to 'Rechazar', request_rechazar_path(request.id), class: "btn btn-lg", id: "link" %>
+              </li>
+            </ul>
+          <% end %>
+        <% else %>
+          <p>No hay solicitudes</p>
+        <% end %>
+      </div>
+    <% end %>
 
-      <%= form_tag buscar_path do %>
-        <div class="field">
-          <p> Caudal: <%= text_field_tag :caudal %> (lt/s) </p>
-        </div>
-
-        <div class="field">
-          <p> Altura: <%= text_field_tag :altura %> (m)</p>
-        </div>
-
-        <div class="field">
-          <h2> MARCAS MOTORES </h2>
-          <p> WEG: <%= check_box_tag(:weg) %></p>
-          <p> Siemens: <%= check_box_tag(:siemens) %></p>
-          <p> Wellford: <%= check_box_tag(:wellford) %></p>
-          <p> CG: <%= check_box_tag(:cg) %></p>
-        </div>
-
-        <div class="field">
-          <h2> Polos </h2>
-          <p> 2 polos (2900) <%= check_box_tag(:dos_polos) %></p>
-          <p> 4 polos (1450-1480) <%= check_box_tag(:cuatro_polos) %></p>
-        </div>
-
-        <%= submit_tag "Buscar", class: 'btn btn-lg btn-primary', id:"link-b" %>
-      <% end %>
-    </div>
   <% else %>
     <% if ya_postulo(current_user.id) %>
       <% request = Request.all.where(user_id: current_user.id).last %>
