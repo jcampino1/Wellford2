@@ -290,12 +290,12 @@ class PumpsController < ApplicationController
 
     if @lista_marcas.include?("Wellford")
       @wellford = "1"
-      @motor_wellford, @hp_wellford = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.05)
+      @motor_wellford, @hp_wellford = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.1)
     end
 
     if @lista_marcas.include?("CG")
       @cg = "1"
-      @motor_cg, @hp_cg = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.05)
+      @motor_cg, @hp_cg = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.1)
     end
 
     if @lista_marcas.include?("Siemens")
