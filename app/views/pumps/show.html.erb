@@ -9,26 +9,89 @@
 
     <div class="center jumbotron">
 
-      <h1> Detalles bomba <%= @pump.bomba %> y pruebas de bombeo</h1>
+      <h1> Detalles bomba <%= @pump.bomba %></h1>
+      <br>
       <nav>
         <ul>
-            <p><strong>RPM: </strong><%= @pump.rpm %></p>
-            <p><strong>Posibles HP: </strong><%= @pump.posibles_hp%></p>
-            <p><strong>Posibles Kw: </strong><%= @pump.posibles_kw%></p>
-            <p><strong>Posibles Motores (ID): </strong><%= @pump.posibles_motores%></p>
-            <p><strong>Rodete Máximo: </strong><%= @pump.rodete_max %></p>
-            <p><strong>Rodete Mínimo: </strong><%= @pump.rodete_min %></p>
-            <p><strong>Succión: </strong><%= @pump.succion %></p>
-            <p><strong>Descarga: </strong><%= @pump.descarga %></p>
-            <p><strong>Anillo Delantero: </strong><%= @pump.anillo_delantero %></p>
-            <p><strong>Anillo Trasero: </strong><%= @pump.anillo_trasero %></p>
-            <p><strong>Bomba Delantero: </strong><%= @pump.bomba_delantero %></p>
-            <p><strong>Bomba Trasero: </strong><%= @pump.bomba_trasero %></p>
-            <p><strong>Caudal Minimo (2900rpm): </strong><%= @pump.caudal_minimo_2900 %></p>
-            <p><strong>Caudal Minimo (1450rpm): </strong><%= @pump.caudal_minimo_1450 %></p>
+          <table class="table">
+            <tbody>
+              <tr>
+                <td><strong>RPM: </strong></td>
+                <td><%= @pump.rpm %></td>
+              </tr>
+
+              <tr>
+                <td><strong>Posibles HP: </strong></td>
+                <td><%= @pump.posibles_hp%></td>
+              </tr>
+
+              <tr>
+                <td><strong>Posibles Kw: </strong></td>
+                <td><%= @pump.posibles_kw%></td>
+              </tr>
+
+              <tr>
+                <td><strong>Posibles Motores (ID): </strong></td>
+                <td><%= @pump.posibles_motores%></td>
+              </tr>
+
+              <tr>
+                <td><strong>Rodete Máximo: </strong></td>
+                <td><%= @pump.rodete_max %></td>
+              </tr>
+
+              <tr>
+                <td><strong>Rodete Mínimo: </strong></td>
+                <td><%= @pump.rodete_min %></td>
+              </tr>
+
+              <tr>
+                <td><strong>Succión: </strong></td>
+                <td><%= @pump.succion %></td>
+              </tr>
+
+              <tr>
+                <td><strong>Descarga: </strong></td>
+                <td><%= @pump.descarga %></td>
+              </tr>
+
+              <tr>
+                <td><strong>Anillo Delantero: </strong></td>
+                <td><%= @pump.anillo_delantero %></td>
+              </tr>
+
+              <tr>
+                <td><strong>Anillo Trasero: </strong></td>
+                <td><%= @pump.anillo_trasero %></td>
+              </tr>
+
+              <tr>
+                <td><strong>Bomba Delantero: </strong></td>
+                <td><%= @pump.bomba_delantero %></td>
+              </tr>
+
+              <tr>
+                <td><strong>Bomba Trasero: </strong></td>
+                <td><%= @pump.bomba_trasero %></td>
+              </tr>
+
+              <tr>
+                <td><strong>Caudal Minimo (2900rpm): </strong></td>
+                <td><%= @pump.caudal_minimo_2900 %></td>
+              </tr>
+
+              <tr>
+                <td><strong>Caudal Minimo (1450rpm): </strong></td>
+                <td><%= @pump.caudal_minimo_1450 %></td>
+              </tr>
+
+            </tbody>
+          </table>
+
             
         </ul>
       </nav>
+      <br>
 
       <div>
         <% if current_user.admin %>
@@ -55,7 +118,7 @@
     <% datos_e = [] %>
     <div class="center jumbotron">
 
-      <h2> Pruebas de Bombeo </h2>
+      <h1> Pruebas de Bombeo </h1>
       <% if current_user.admin %>
         <%= link_to 'Ingresar nueva prueba de bombeo', new_pump_test_path(@pump), class: "btn btn-lg btn-primary", id:"link-b" %>
       <% else %>
@@ -99,6 +162,59 @@
       <br>
 
       
+    </div>
+
+    <div class="center jumbotron">
+      <h2>Informacion del programa</h2>
+
+      <% if @pump.curva_rodete_max.length > 0 and @pump.efficiency_info.length > 0 %>
+        <table class="table">
+          <thead>
+            <th><center>Curva</center></th>
+            <th><center>c</center></th>
+            <th><center>b</center></th>
+            <th><center>a</center></th>
+          </thead>
+          <tbody>
+            <tr>
+              <td><center><strong>Curva rodete maximo</strong></center></td>
+              <td><center><%= @pump.curva_rodete_max[0][0] %></center></td>
+              <td><center><%= @pump.curva_rodete_max[0][1] %></center></td>
+              <td><center><%= @pump.curva_rodete_max[0][2] %></center></td>
+            </tr>
+
+            <tr>
+              <td><center><strong>Curva rodete minimo</strong></center></td>
+              <td><center><%= @pump.curva_rodete_min[0][0] %></center></td>
+              <td><center><%= @pump.curva_rodete_max[0][1] %></center></td>
+              <td><center><%= @pump.curva_rodete_max[0][2] %></center></td>
+            </tr>
+
+            <% contador = 0 %>
+            <% @pump.efficiency_info.each do |curva| %>
+              <tr>
+                <td><center><strong>Curva eficiencia rodete <%= @pump.efficiency_info_diams[contador] %></strong></center></td>
+                <td><center><%= curva[0] %></center></td>
+                <td><center><%= curva[1] %></center></td>
+                <td><center><%= curva[2] %></center></td>
+              </tr>
+              <% contador += 1 %>
+            <% end %>
+
+          </tbody>
+        </table>
+
+        <br>
+        <br>
+        <br>
+        <h4><strong>Estas son las curvas hidraulicas que el programa guarda como curva a rodete maximo y minimo</strong></h4>
+        <br>
+        <h5> <strong>Puntos curva maxima:</strong> <%= Test.pasar_a_numero(@pump.points_max[0]) %></h5>
+        <h5> <strong>Puntos curva minima:</strong> <%= Test.pasar_a_numero(@pump.points_min[0]) %></h5>
+
+        <% else %>
+          <h3>No hay informacion que mostrar</h3>
+        <% end %>
     </div>
 
     <div class="center jumbotron">

@@ -39,18 +39,25 @@
         <%end%>
         <ul>
           <% if @pumps.any? %>
-            <% @pumps.each do |pump| %>
-              <p>
-                <%= pump.bomba %>/<%= pump.rpm %>
-                <%= link_to 'Ver', pump, class: "btn btn-lg", id:"link" %>
-                <% if current_user %>
-                  <% if current_user.admin %>
-                    
-                    <%= link_to 'Eliminar', pump, method: :delete, data: { confirm: '¿Está seguro?' }, class: "btn btn-lg", id:"link" %>
-                  <% end %>
+            <center><table class="table">
+              <thead>
+                <th>Bomba</th>
+              </thead>
+              <tbody>
+                <% @pumps.each do |pump| %>
+                  <tr>
+                    <td><h3><%= pump.bomba %>/<%= pump.rpm %></h3></td>
+                    <td><%= link_to 'Ver', pump, class: "btn btn-lg", id:"link" %></td>
+                    <% if current_user %>
+                      <% if current_user.admin %>
+                        
+                        <td><%= link_to 'Eliminar', pump, method: :delete, data: { confirm: '¿Está seguro?' }, class: "btn btn-lg", id:"link" %></td>
+                      <% end %>
+                    <% end %>
+                  </tr>
                 <% end %>
-              </p>
-            <% end %>
+              </tbody>
+            </table></center>
           <% else %>
             <p> No se encontraron bombas </p>
           <% end %>
