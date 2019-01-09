@@ -1,3 +1,4 @@
+require 'spreadsheet'
 
 class PumpsController < ApplicationController
   before_action :set_pump, only: [:show, :edit, :update, :destroy]
@@ -313,8 +314,15 @@ class PumpsController < ApplicationController
       end
     end
 
-  end
+    datos = [@pump.rodete_max, @caudal, @altura, (@eficiencia*100).round(2), @potencia_maxima.round(2),
+      @potencia_consumo.round(2), @diametro_final.round(2)]
 
+    respond_to do |format|
+      format.html
+      format.xls { send_data Pump.exportar_datos_excel(datos) }
+    end
+
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
