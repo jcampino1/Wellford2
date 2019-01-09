@@ -3,6 +3,16 @@ class Pump < ApplicationRecord
 
 	has_many :tests, dependent: :destroy
 
+  def self.exportar_datos_excel(datos)
+    CSV.generate({:col_sep => "\t"}) do |csv|
+      csv << ['Rodete Maximo', 'Caudal', 'Altura', 'Eficiencia', 'Pot maxima', 'Pot consumo', 'Diametro rodete']
+      csv << datos
+    end
+    #CSV.open("myfile.xls", "w", {:col_sep => "\t"})  do |archivo|
+    #  archivo << ["1", "2"]
+    #end
+  end
+
   def self.import(file)
     CSV.foreach(file.path, headers: true) do |row|
       Pump.create!(
