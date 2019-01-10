@@ -31,13 +31,13 @@
       <% end %>
     </div>
 
-    <div class="center jumbotron" style="height:1000px">
+    <div class="center jumbotron">
       <h1>Catálogo Bombas</h1>
       <nav>
         <%= search_form_for @q, html: { class: "form-inline" } do |f| %>
           <%= f.search_field :bomba_cont, placeholder: "Buscar bomba...", class: "form-control" %>
         <%end%>
-        <ul>
+        <div style="height:500px;overflow-y:scroll;;">
           <% if @pumps.any? %>
             <center><table class="table">
               <thead>
@@ -61,7 +61,7 @@
           <% else %>
             <p> No se encontraron bombas </p>
           <% end %>
-        </ul>
+      </div>
       </nav>
       <% if current_user %>
         <% if current_user.admin %>
