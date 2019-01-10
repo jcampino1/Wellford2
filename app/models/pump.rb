@@ -3,10 +3,26 @@ class Pump < ApplicationRecord
 
 	has_many :tests, dependent: :destroy
 
-  def self.exportar_datos_excel(datos)
+  def self.exportar_datos_excel(datos, curva_h, curva_e, curva_p)
     CSV.generate({:col_sep => "\t"}) do |csv|
-      csv << ['Rodete Maximo', 'Caudal', 'Altura', 'Eficiencia', 'Pot maxima', 'Pot consumo', 'Diametro rodete']
+      csv << ['Bomba', 'RPM','Rodete Maximo', 'Caudal', 'Altura', 'Eficiencia', 'Pot maxima',
+       'Pot consumo', 'Diametro rodete', 'Caudal maximo', 'Altura minima', 'Altura maxima']
       csv << datos
+      csv << ["Curva Hidraulica"]
+      csv << ["Caudal", "Altura"]
+      curva_h.each do |punto|
+        csv << punto
+      end
+      csv << ["Curva Eficiencia"]
+      csv<< ["Caudal", "Eficiencia"]
+      curva_e.each do |punto|
+        csv << punto
+      end
+      csv << ["Curva Potencia"]
+      csv << ["Caudal", "Potencia"]
+      curva_p.each do |punto|
+        csv << punto
+      end
     end
     #CSV.open("myfile.xls", "w", {:col_sep => "\t"})  do |archivo|
     #  archivo << ["1", "2"]

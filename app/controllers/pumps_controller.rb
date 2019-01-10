@@ -314,12 +314,13 @@ class PumpsController < ApplicationController
       end
     end
 
-    datos = [@pump.rodete_max, @caudal, @altura, (@eficiencia*100).round(2), @potencia_maxima.round(2),
-      @potencia_consumo.round(2), @diametro_final.round(2)]
+    datos = [@pump.bomba, @pump.rpm, @pump.rodete_max, @caudal, @altura, (@eficiencia*100).round(2), @potencia_maxima.round(2),
+      @potencia_consumo.round(2), @diametro_final.round(2), @curva[-1][0].round(2), @curva[-1][1].round(2),
+       @curva[0][1].round(2)]
 
     respond_to do |format|
       format.html
-      format.xls { send_data Pump.exportar_datos_excel(datos) }
+      format.xls { send_data Pump.exportar_datos_excel(datos, @curva, @nueva_curva_e, @curva_potencia) }
     end
 
   end
