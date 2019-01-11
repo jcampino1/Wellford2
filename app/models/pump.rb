@@ -49,7 +49,8 @@ class Pump < ApplicationRecord
       end
 
 
-      lista.push([a, b, c, d, e, f])
+      lista.push([a.to_s.gsub('.', ','), b.to_s.gsub('.', ','), c.to_s.gsub('.', ','), 
+        d.to_s.gsub('.', ','), e.to_s.gsub('.', ','), f.to_s.gsub('.', ',')])
       contador += 1
       #lista.push([curva_h[0][0], curva_h[0][1], curva_e[0][0], curva_e[0][1], curva_p[0][0], curva_p[0][1]])
     end
@@ -332,6 +333,86 @@ class Pump < ApplicationRecord
       end
     end
     return -1, -1
+  end
+
+  def self.definitiva_masiva()
+    Pump.all.each do |pump|
+      if pump.valid_tests.length > 1
+        Pump.configuracion_definitiva(pump.id)
+      end
+    end
+  end
+
+  def self.configuracion_definitiva(id)
+    pump = Pump.find(id)
+    atributos_tests = []
+    lista_diametros = []
+    lista_maximos = []
+
+    pump.valid_tests.each do |test_id|
+      test = Test.find(test_id.to_i)
+      coef_eficiencia = Test.regression(Test.pasar_a_numero(test.current_e), 4)
+      atributos_tests.push([test.diametro_rodete, test.coefficients_h, coef_eficiencia, test.current_h])
+      lista_diametros.push(test.diametro_rodete)
+    end
+    pump.curva_rodete_max.clear
+    pump.curva_rodete_min.clear
+    # Proximamente sacar estos puntos max y min
+    pump.points_max.clear
+    pump.points_min.clear
+
+    if lista_diametros.exclude?(pump.rodete_max)
+      indice = lista_diametros.index(lista_diametros.max)
+      nueva_curva_rodete_max = Pump.crear_curva(atributos_tests[indice][3],
+        atributos_tests[indice][0], pump.rodete_max)
+      pump.curva_rodete_max.push(Test.regression(nueva_curva_rodete_max, 2))
+      pump.points_max.push(@nueva_curva_rodete_max)
+
+    else
+      indicex = lista_diametros.index(pump.rodete_max)
+      pump.curva_rodete_max.push(atributos_tests[indicex][1])
+      nueva_curva_rodete_max = Test.pasar_a_numero(atributos_tests[indicex][3])
+      pump.points_max.push(atributos_tests[indicex][3])
+    end
+
+    if lista_diametros.exclude?(pump.rodete_min)
+      indice = lista_diametros.index(lista_diametros.min)
+      nueva_curva_rodete_min = Pump.crear_curva(atributos_tests[indice][3],
+        atributos_tests[indice][0], pump.rodete_min)
+      pump.curva_rodete_min.push(Test.regression(nueva_curva_rodete_min, 2))
+      pump.points_min.push(nueva_curva_rodete_min)
+    else
+      indice = lista_diametros.index(pump.rodete_min)
+      pump.curva_rodete_min.push(atributos_tests[indice][1])
+      nueva_curva_rodete_min = Test.pasar_a_numero(atributos_tests[indice][3])
+      pump.points_min.push(atributos_tests[indice][3])
+    end
+
+    lista_maximos.push(nueva_curva_rodete_max[-1])
+    lista_maximos.push(nueva_curva_rodete_min[-1])
+
+    pump.x_maximos.clear
+    pump.x_maximos.push(lista_maximos)
+
+    # Ahora la info de la eficiencia
+
+    indice1 = lista_diametros.index(lista_diametros.max)
+    indice2 = lista_diametros.index(lista_diametros.min)
+    
+    # Aca entonces calculamos la regresion y la metemos, no la guardada en 
+    # cada prueba de bombeo
+
+    pump.efficiency_info.clear
+    pump.efficiency_info_diams.clear
+    pump.efficiency_info.push(atributos_tests[indice1][2])
+    pump.efficiency_info_diams.push(atributos_tests[indice1][0])
+    pump.efficiency_info.push(atributos_tests[indice2][2])
+    pump.efficiency_info_diams.push(atributos_tests[indice2][0])
+
+    # Guardar los cambios
+    pump.save
+
+    #return cosas
   end
 
 end
