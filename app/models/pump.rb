@@ -96,8 +96,10 @@ class Pump < ApplicationRecord
     """
     Entrega la eficiencia aproximada de una bomba en un punto dado (Q, H)
     """
-    eficiencia1 = coeficientes_eficiencia[1][0].to_f + coeficientes_eficiencia[1][1].to_f*caudal + coeficientes_eficiencia[1][2].to_f*caudal*caudal
-    eficiencia2 = coeficientes_eficiencia[0][0].to_f + coeficientes_eficiencia[0][1].to_f*caudal + coeficientes_eficiencia[0][2].to_f*caudal*caudal
+    eficiencia1 = coeficientes_eficiencia[1][0].to_f + coeficientes_eficiencia[1][1].to_f*caudal + coeficientes_eficiencia[1][2].to_f*caudal*caudal + coeficientes_eficiencia[1][3].to_f*(caudal**3) + coeficientes_eficiencia[1][4].to_f*(caudal**4)
+
+    eficiencia2 = coeficientes_eficiencia[0][0].to_f + coeficientes_eficiencia[0][1].to_f*caudal + coeficientes_eficiencia[0][2].to_f*caudal*caudal + coeficientes_eficiencia[0][3].to_f*(caudal**3) + coeficientes_eficiencia[0][4].to_f*(caudal**4)
+    
     diam1 = diametros[1].to_f
     diam2 = diametros[0].to_f
     pendiente = (eficiencia2 - eficiencia1)/(diam2 - diam1)
@@ -238,7 +240,7 @@ class Pump < ApplicationRecord
 
   def self.generar_curva_e(caudal_max, curva_abajo, curva_arriba, diam_abajo, diam_arriba, diam_final)
     """
-    Genera una curva hidraulica a partir de otra mediante semejanza hidraulica.
+    Genera una curva de eficiencia a partir de otras 2 mediante interpolacion lineal.
     """
     curva = []
     lista_caud = []
@@ -250,8 +252,8 @@ class Pump < ApplicationRecord
     end
     #curva.push([0, 0])
     lista_caud.each do |caudal|
-      e1 = curva_abajo[0] + curva_abajo[1]*caudal + curva_abajo[2]*caudal*caudal
-      e2 = curva_arriba[0] + curva_arriba[1]*caudal + curva_arriba[2]*caudal*caudal
+      e1 = curva_abajo[0] + curva_abajo[1]*caudal + curva_abajo[2]*caudal*caudal + curva_abajo[3]*(caudal**3) + curva_abajo[4]*(caudal**4)
+      e2 = curva_arriba[0] + curva_arriba[1]*caudal + curva_arriba[2]*caudal*caudal + curva_arriba[3]*(caudal**3) + curva_arriba[4]*(caudal**4)
       pendiente = (e2 - e1)/(diam_arriba - diam_abajo)
       efi = e1 + pendiente*(diam_final - diam_abajo)
       curva.push([caudal, efi])
