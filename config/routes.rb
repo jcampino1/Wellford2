@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  get 'acciones', to: 'pumps#acciones', as: :acciones
+  get 'definitiva_masiva', to: 'pumps#definitiva_masiva', as: :definitiva_masiva
+
   resources :pumps do
     collection { post :import }
     #collection { post :buscar }

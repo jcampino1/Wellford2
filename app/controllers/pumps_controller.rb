@@ -316,6 +316,14 @@ class PumpsController < ApplicationController
 
   end
 
+  def acciones
+  end
+
+  def definitiva_masiva
+    Pump.definitiva_masiva()
+    redirect_to root_url, alert: "Configuracion definitiva realizada para todas bombas"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_pump

@@ -27,6 +27,7 @@
           <% if user_signed_in? %>
             <% if current_user.admin %>
               <%= link_to 'Importar', user_path(current_user), class: 'navbar-link btn btn-lg' %>
+              <%= link_to 'Acciones', acciones_path, class: 'navbar-link btn btn-lg' %>
             <% end %>
             <%= link_to "Cerrar Sesión", destroy_user_session_path, method: :delete, class: 'navbar-link btn btn-lg' %>
           <% else %>
@@ -37,7 +38,7 @@
     </header>
     <div class="container">
       <p class="notice"><%= notice %></p>
-      <p class="alert"><%= alert %></p>
+      <p class="text-primary"><%= alert %></p>
       <%= yield %>
     </div>
   </body>
