@@ -78,18 +78,6 @@ class PumpsController < ApplicationController
 
 
 
-  def buscar
-    @caudal = params[:caudal].to_f
-    @altura = params[:altura].to_f
-    @pumps = Pump.all
-    @pumps_final = []
-    @pumps.each do |pump|
-      if Pump.valida(pump, @caudal, @altura)
-        @pumps_final.push(pump)
-      end
-    end
-  end
-
   def definitiva
     @pump = Pump.find(params[:pump_id])
     @tests_definitivos = []
@@ -222,6 +210,7 @@ class PumpsController < ApplicationController
 
   end
 
+
   def detalle
     @pump = Pump.find(params[:pump_id])
     @caudal = params[:caudal].to_f
@@ -254,36 +243,31 @@ class PumpsController < ApplicationController
     @curvas_definitivas.push([@curva, "generado " + @diametro_final.round(2).to_s])
 
     # Determinacion curva eficiencia
-    coef_1 = Test.regression(@curvas_eficiencias[1][0], 2)
-    coef_2 = Test.regression(@curvas_eficiencias[0][0], 2)
+    coef_1 = Test.regression(@curvas_eficiencias[1][0], 4)
+    coef_2 = Test.regression(@curvas_eficiencias[0][0], 4)
     @nueva_curva_e = Pump.generar_curva_e(@caudal_max, coef_1, coef_2, 
       @curvas_eficiencias[1][1], @curvas_eficiencias[0][1], @diametro_final)
 
     # En caso de querer volver a mostrar todas las curvas de eficiencia, 
     # comentar linea de abajo
-    @curvas_eficiencias.clear
+
+    #@curvas_eficiencias.clear
     @curvas_eficiencias.push([@nueva_curva_e, "generado " + @diametro_final.round(2).to_s])
     
     # Determinacion curva potencia
     @coeff_nueva_h = Test.regression(@curva, 2)
     @curva_potencia = Pump.generar_curva_p(@nueva_curva_e, @coeff_nueva_h)
-    @c1 = @nueva_curva_e[4][0]
-    @e1 = @nueva_curva_e[4][1]
-    @h1 = @coeff_nueva_h[0] + @coeff_nueva_h[1]*@c1 + @coeff_nueva_h[2]*@c1*@c1
-    @pot1 = (@c1*@h1)/(@e1*101.9464)
     
-    #Coeficientes de dicha curva y potencia requerida como punto para mostrar en grafico
-    curva_p = Test.regression(@curva_potencia, 2)
-    @potencia_requerida = [[@caudal, curva_p[0] + curva_p[1]*@caudal + curva_p[2]*@caudal*@caudal]]
+    
+    # Potencia requerida como punto para mostrar en grafico
+    denom = @eficiencia*101.9464
+    @potencia_requerida = [[@caudal, (@caudal*@altura)/denom]]
     
     #Potencia consumo y maxima
     @potencia_consumo = @potencia_requerida[0][1]
     @potencia_maxima = Pump.potencia_maxima(@curva_potencia)
 
-    #@weg = false
-    #@wellford = false
-    #@cg = false
-    #@siemens = false
+    
     if @lista_marcas.include?("WEG")
       @weg = "1"
       @motor_weg, @hp_weg = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.15)
@@ -314,10 +298,12 @@ class PumpsController < ApplicationController
       end
     end
 
+    # datos para excel
     datos = [@pump.bomba, @pump.rpm, @pump.rodete_max, @caudal, @altura, (@eficiencia*100).round(2), @potencia_maxima.round(2),
       @potencia_consumo.round(2), @diametro_final.round(2), @curva[-1][0].round(2), @curva[-1][1].round(2),
        @curva[0][1].round(2)]
 
+    # Para descargar excel
     respond_to do |format|
       format.html
       format.xls { send_data Pump.exportar_datos_excel(datos, @curva, @nueva_curva_e, @curva_potencia) }
