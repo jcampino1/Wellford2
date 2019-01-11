@@ -7,7 +7,7 @@
 <% datos = [] %>
 <% @tests_definitivos.each do |lista| %>
 	<% if lista[0] != @pump.rodete_max and lista[0] != @pump.rodete_min %>
-		<% datos.push([Test.pasar_a_numero(lista[4]), lista[0]]) %>
+		<% datos.push([Test.pasar_a_numero(lista[3]), lista[0]]) %>
 	<% end %>
 <% end %>
 

@@ -412,7 +412,7 @@ class Pump < ApplicationRecord
     # Guardar los cambios
     pump.save
 
-    #return cosas
+    return atributos_tests, nueva_curva_rodete_max, nueva_curva_rodete_min
   end
 
 end
