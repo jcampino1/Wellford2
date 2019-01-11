@@ -243,7 +243,7 @@ class Pump < ApplicationRecord
     Genera una curva de eficiencia a partir de otras 2 mediante interpolacion lineal.
     """
     curva = []
-    lista_caud = []
+    lista_caud = [0]
     unit = caudal_max/10
     n = 1
     while n < 11
