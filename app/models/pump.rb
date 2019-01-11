@@ -4,29 +4,57 @@ class Pump < ApplicationRecord
 	has_many :tests, dependent: :destroy
 
   def self.exportar_datos_excel(datos, curva_h, curva_e, curva_p)
+    lista_unida = self.unir_listas_excel(curva_h, curva_e, curva_p)
     CSV.generate({:col_sep => "\t"}) do |csv|
       csv << ['Bomba', 'RPM','Rodete Maximo', 'Caudal', 'Altura', 'Eficiencia', 'Pot maxima',
        'Pot consumo', 'Diametro rodete', 'Caudal maximo', 'Altura minima', 'Altura maxima']
+      
+
       csv << datos
-      csv << ["Curva Hidraulica"]
-      csv << ["Caudal", "Altura"]
-      curva_h.each do |punto|
-        csv << punto
-      end
-      csv << ["Curva Eficiencia"]
-      csv<< ["Caudal", "Eficiencia"]
-      curva_e.each do |punto|
-        csv << punto
-      end
-      csv << ["Curva Potencia"]
-      csv << ["Caudal", "Potencia"]
-      curva_p.each do |punto|
+      csv << ["Caudal", "Altura", "Caudal", "Eficiencia", "Caudal", "Potencia"]
+      
+      lista_unida.each do |punto|
         csv << punto
       end
     end
     #CSV.open("myfile.xls", "w", {:col_sep => "\t"})  do |archivo|
     #  archivo << ["1", "2"]
     #end
+  end
+
+  def self.unir_listas_excel(curva_h, curva_e, curva_p)
+    lista = []
+    contador = 0
+    while curva_h.length > contador or curva_e.length > contador or curva_p.length > contador
+      if contador >= curva_h.length
+        a = 0
+        b = 0
+      else 
+        a = curva_h[contador][0]
+        b = curva_h[contador][1]
+      end
+      if contador >= curva_e.length
+        c = 0
+        d = 0
+      else 
+        c = curva_e[contador][0]
+        d = curva_e[contador][1]
+      end
+      if contador >= curva_p.length
+        e = 0
+        f = 0
+      else 
+        e = curva_p[contador][0]
+        f = curva_p[contador][1]
+      end
+
+
+      lista.push([a, b, c, d, e, f])
+      contador += 1
+      #lista.push([curva_h[0][0], curva_h[0][1], curva_e[0][0], curva_e[0][1], curva_p[0][0], curva_p[0][1]])
+    end
+    return lista
+
   end
 
   def self.import(file)
