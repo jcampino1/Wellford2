@@ -243,7 +243,7 @@ class Pump < ApplicationRecord
     Genera una curva de eficiencia a partir de otras 2 mediante interpolacion lineal.
     """
     curva = []
-    lista_caud = [0]
+    lista_caud = []
     unit = caudal_max/10
     n = 1
     while n < 11
@@ -258,7 +258,7 @@ class Pump < ApplicationRecord
       efi = e1 + pendiente*(diam_final - diam_abajo)
       curva.push([caudal, efi])
     end
-    return curva
+    return [[0, 0]] + curva
   end
 
   def self.generar_curva_p(curva_e, coeff_h)
@@ -267,7 +267,7 @@ class Pump < ApplicationRecord
     y altura obtenidos anteriormente
     """
     curva = []
-    curva_e.each do |punto|
+    curva_e[1..-1].each do |punto|
       altura = coeff_h[0] + coeff_h[1]*punto[0] + coeff_h[2]*punto[0]*punto[0]
       denom = (punto[1]/100)*101.9464
       curva.push([punto[0], (punto[0]*altura)/denom])
