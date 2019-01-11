@@ -369,10 +369,10 @@ class Pump < ApplicationRecord
       pump.points_max.push(@nueva_curva_rodete_max)
 
     else
-      indicex = lista_diametros.index(pump.rodete_max)
+      indicex = lista_diametros.index(pump.rodete_max.to_s)
       pump.curva_rodete_max.push(atributos_tests[indicex][1])
       nueva_curva_rodete_max = Test.pasar_a_numero(atributos_tests[indicex][3])
-      pump.points_max.push(atributos_tests[indice][3])
+      pump.points_max.push(atributos_tests[indicex][3])
     end
 
     if lista_diametros.exclude?(pump.rodete_min)
