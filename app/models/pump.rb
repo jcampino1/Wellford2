@@ -366,10 +366,10 @@ class Pump < ApplicationRecord
       nueva_curva_rodete_max = Pump.crear_curva(atributos_tests[indice][3],
         atributos_tests[indice][0], pump.rodete_max)
       pump.curva_rodete_max.push(Test.regression(nueva_curva_rodete_max, 2))
-      pump.points_max.push(@nueva_curva_rodete_max)
+      pump.points_max.push(nueva_curva_rodete_max)
 
     else
-      indicex = lista_diametros.index(pump.rodete_max.to_s)
+      indicex = lista_diametros.index(pump.rodete_max)
       pump.curva_rodete_max.push(atributos_tests[indicex][1])
       nueva_curva_rodete_max = Test.pasar_a_numero(atributos_tests[indicex][3])
       pump.points_max.push(atributos_tests[indicex][3])
