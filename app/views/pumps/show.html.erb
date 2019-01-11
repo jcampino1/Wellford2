@@ -190,15 +190,24 @@
               <td><center><%= @pump.curva_rodete_max[0][2] %></center></td>
             </tr>
 
-            <% contador = 0 %>
-            <% @pump.efficiency_info.each do |curva| %>
-              <tr>
-                <td><center><strong>Curva eficiencia rodete <%= @pump.efficiency_info_diams[contador] %></strong></center></td>
-                <td><center><%= curva[0] %></center></td>
-                <td><center><%= curva[1] %></center></td>
-                <td><center><%= curva[2] %></center></td>
-              </tr>
-              <% contador += 1 %>
+          </tbody>
+        </table>
+
+        <table>
+          <tbody>
+            <% if @pump.efficiency_info[0].length > 3 %>
+              <% contador = 0 %>
+              <% @pump.efficiency_info.each do |curva| %>
+                <tr>
+                  <td><center><strong>Curva eficiencia rodete <%= @pump.efficiency_info_diams[contador] %></strong></center></td>
+                  <td><center><%= curva[0] %></center></td>
+                  <td><center><%= curva[1] %></center></td>
+                  <td><center><%= curva[2] %></center></td>
+                  <td><center><%= curva[3] %></center></td>
+                  <td><center><%= curva[4] %></center></td>
+                </tr>
+                <% contador += 1 %>
+              <% end %>
             <% end %>
 
           </tbody>

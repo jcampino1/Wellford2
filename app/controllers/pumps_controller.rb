@@ -87,8 +87,9 @@ class PumpsController < ApplicationController
     @pump.valid_tests.each do |d|
       test = @pump.tests.find(d.to_f)
       # Aqui en volada no vale la pena meter la curva e y p
+      coeficientes_eficiencia = Test.regression(Test.pasar_a_numero(test.current_e), 4)
       @tests_definitivos.push([test.diametro_rodete,
-       test.coefficients_h, test.coefficients_e, test.xmaximos, test.current_h])
+       test.coefficients_h, coeficientes_eficiencia, test.xmaximos, test.current_h])
     end
     @lista_diametros = []
     @lista_maximos = []
@@ -139,6 +140,10 @@ class PumpsController < ApplicationController
     # Ahora la informacion de la eficiencia
     indice1 = @lista_diametros.index(@lista_diametros.max)
     indice2 = @lista_diametros.index(@lista_diametros.min)
+    
+    # Aca entonces calculamos la regresion y la metemos, no la guardada en 
+    # cada prueba de bombeo
+
     @pump.efficiency_info.clear
     @pump.efficiency_info_diams.clear
     @pump.efficiency_info.push(@tests_definitivos[indice1][2])
