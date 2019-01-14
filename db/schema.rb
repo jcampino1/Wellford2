@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180808002752) do
+ActiveRecord::Schema.define(version: 20190114131522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 20180808002752) do
     t.datetime "updated_at", null: false
     t.integer "caudal_minimo_1450"
     t.string "efficiency_info", default: [], array: true
+    t.float "caudal_minimo_eficiencia"
   end
 
   create_table "requests", force: :cascade do |t|

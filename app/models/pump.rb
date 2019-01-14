@@ -124,6 +124,7 @@ class Pump < ApplicationRecord
   def self.calcular_eficiencia(caudal, coeficientes_eficiencia, diametros, diametro_final)
     """
     Entrega la eficiencia aproximada de una bomba en un punto dado (Q, H)
+    Hace el calculo mediante interpolacion lineal
     """
     eficiencia1 = coeficientes_eficiencia[1][0].to_f + coeficientes_eficiencia[1][1].to_f*caudal + coeficientes_eficiencia[1][2].to_f*caudal*caudal + coeficientes_eficiencia[1][3].to_f*(caudal**3) + coeficientes_eficiencia[1][4].to_f*(caudal**4)
 
@@ -135,7 +136,43 @@ class Pump < ApplicationRecord
     return eficiencia1 + pendiente*(diametro_final - diam1)
   end
 
-  #def self.calcular_eficiencia2(caudal, )
+
+  def self.calcular_curva_eficiencia_nueva(caudal, caudal_minimo, caudal_maximo, pendiente, coeficientes_eficiencia, diametros, diametro_final)
+    "Mediante formula definida por Felipe. Calculamos la nueva curva"
+    caudales = self.generar_puntos(caudal_minimo, caudal_maximo)
+    puntos_eficiencia = []
+    caudales.each do |caudal|
+      eficiencia1 = coeficientes_eficiencia[1][0].to_f + coeficientes_eficiencia[1][1].to_f*caudal + coeficientes_eficiencia[1][2].to_f*(caudal**2) + coeficientes_eficiencia[1][3].to_f*(caudal**3) + coeficientes_eficiencia[1][4].to_f*(caudal**4)
+      caudal2, eficiencia2 = self.interceptar(coeficientes_eficiencia[0], pendiente, cauda, eficiencia1)
+      distancia = ((eficiencia2 - eficiencia1)**2 + (caudal2 - caudal)**2)**0.5
+      efi_por_diametro = distancia/(diametros[0].to_f - diametros[1].to_f)
+      nueva_distancia = efi_por_diametro*(diametro_final - diametros[1].to_f)
+      punto_final = self.calcular_punto_efi(caudal, eficiencia1, pendiente, distancia)
+      puntos_eficiencia.push(punto_final)
+    end
+    return puntos_eficiencia
+  end
+
+  def self.generar_puntos(caudal_minimo, caudal_maximo)
+    diferencia = (caudal_maximo - caudal_minimo)/10
+    caudales = []
+    contador = 0
+    while contador < 11
+      caudales.push(caudal_minimo + contador*diferencia)
+      contador += 1
+    end
+    return caudales
+  end
+
+  def self.interceptar(coeficientes_curva, pendiente, caudal, eficiencia1)
+    "Debe interceptar curva de grado 4 con recta definida por punto y 
+    pendiente. Devuelve por separado el caudal y la eficiencia"
+  end
+
+  def self.calcular_punto_efi(caudal, eficiencia, pendiente, distancia)
+    "Debe devolver el punto obtenido al prolongar la recta definida por la pendiente
+    y el punto en la distancia senalada"
+  end
 
   def self.diametro_final1(curva_h, rodete_max, caudal, altura)
     """
