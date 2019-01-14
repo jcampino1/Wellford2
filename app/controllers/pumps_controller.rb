@@ -228,9 +228,9 @@ class PumpsController < ApplicationController
     end
 
     # datos para excel
-    datos = [@pump.bomba, @pump.rpm, @pump.rodete_max, @caudal, @altura, (@eficiencia*100).round(2), @potencia_maxima.round(2),
-      @potencia_consumo.round(2), @diametro_final.round(2), @curva[-1][0].round(2), @curva[-1][1].round(2),
-       @curva[0][1].round(2)]
+    datos = [@pump.bomba, @pump.rpm.to_s.gsub('.', ','), @pump.rodete_max.to_s.gsub('.', ','), @caudal.to_s.gsub('.', ','), @altura.to_s.gsub('.', ','), (@eficiencia*100).round(2).to_s.gsub('.', ','), @potencia_maxima.round(2).to_s.gsub('.', ','),
+      @potencia_consumo.round(2).to_s.gsub('.', ','), @diametro_final.round(2).to_s.gsub('.', ','), @curva[-1][0].round(2).to_s.gsub('.', ','), @curva[-1][1].round(2).to_s.gsub('.', ','),
+       @curva[0][1].round(2).to_s.gsub('.', ',')]
 
     # Para descargar excel
     respond_to do |format|
