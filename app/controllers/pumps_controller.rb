@@ -236,6 +236,7 @@ class PumpsController < ApplicationController
     respond_to do |format|
       format.html
       format.xls { send_data Pump.exportar_datos_excel(datos, @curva, @nueva_curva_e, @curva_potencia) }
+      format.csv { send_data Pump.exportar_datos_excel(datos, @curva, @nueva_curva_e, @curva_potencia)}
     end
 
   end

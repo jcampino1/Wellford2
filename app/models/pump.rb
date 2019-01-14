@@ -1,3 +1,5 @@
+#require 'polynomials'
+#include Polynomials
 
 class Pump < ApplicationRecord
 
@@ -20,6 +22,9 @@ class Pump < ApplicationRecord
     #CSV.open("myfile.xls", "w", {:col_sep => "\t"})  do |archivo|
     #  archivo << ["1", "2"]
     #end
+  end
+
+  def self.exportar_xlsx()
   end
 
   def self.unir_listas_excel(curva_h, curva_e, curva_p)

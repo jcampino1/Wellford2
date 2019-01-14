@@ -114,6 +114,9 @@
 
 <div>
   <%= link_to "Descargar Excel", pump_detalle_path(pump_id: @pump.id, caudal: @caudal, altura: @altura, eficiencia: @eficiencia, diametro_final: @diametro_final, curva_a_usar: @curva_a_usar, diametro_a_usar: @diametro_a_usar, lista_marcas: @lista_marcas, lista_polos: @lista_polos, format: "xls"), class: "btn btn-lg", id:"link" %>
+  <br>
+
+  <%= link_to "Descargar CSV", pump_detalle_path(pump_id: @pump.id, caudal: @caudal, altura: @altura, eficiencia: @eficiencia, diametro_final: @diametro_final, curva_a_usar: @curva_a_usar, diametro_a_usar: @diametro_a_usar, lista_marcas: @lista_marcas, lista_polos: @lista_polos, format: "csv"), class: "btn btn-lg", id:"link" %>
 </div>
 
 <% datos = [[@caudal, @altura]] %>
