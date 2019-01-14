@@ -11,6 +11,12 @@
 			<% eficiencia = Pump.calcular_eficiencia(@caudal, 
 			pump.efficiency_info, pump.efficiency_info_diams, diametro_final) %>
 
+
+			<% if eficiencia > 0.3 %>
+				<% lista_eficiencias.push(eficiencia) %>
+				<% lista_resultados.push([pump.bomba + "/" + pump.rpm.to_s, eficiencia, diametro_final, curva_a_usar, diametro_a_usar, pump.id]) %>
+			<% end %>
+
 	<% end %>
 
 	<% while lista_eficiencias.length > 0 %>
