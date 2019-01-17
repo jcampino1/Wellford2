@@ -9,12 +9,11 @@ class Pump < ApplicationRecord
     lista_unida = self.unir_listas_excel(curva_h, curva_e, curva_p)
     CSV.generate({:col_sep => "\t"}) do |csv|
       csv << ['Bomba', 'RPM','Rodete Maximo', 'Caudal', 'Altura', 'Eficiencia', 'Pot maxima',
-       'Pot consumo', 'Diametro rodete', 'Caudal maximo', 'Altura minima', 'Altura maxima']
+       'Pot consumo', 'Diametro rodete', 'Caudal maximo', 'Altura minima', 'Altura maxima', 'Bomba']
       
 
       csv << datos
-      csv << ["Caudal", "Altura", "Caudal", "Eficiencia", "Caudal", "Potencia"]
-      
+
       lista_unida.each do |punto|
         csv << punto
       end
@@ -142,18 +141,36 @@ class Pump < ApplicationRecord
   end
 
 
-  def self.calcular_curva_eficiencia_nueva(caudal, caudal_minimo, caudal_maximo, pendiente, coeficientes_eficiencia, diametros, diametro_final)
+  def self.calcular_curva_eficiencia_nueva(caudal_minimo, caudal_maximo, coeficientes_eficiencia, diametros, diametro_final)
     "Mediante formula definida por Felipe. Calculamos la nueva curva"
     caudales = self.generar_puntos(caudal_minimo, caudal_maximo)
     puntos_eficiencia = []
     caudales.each do |caudal|
       eficiencia1 = coeficientes_eficiencia[1][0].to_f + coeficientes_eficiencia[1][1].to_f*caudal + coeficientes_eficiencia[1][2].to_f*(caudal**2) + coeficientes_eficiencia[1][3].to_f*(caudal**3) + coeficientes_eficiencia[1][4].to_f*(caudal**4)
-      caudal2, eficiencia2 = self.interceptar(coeficientes_eficiencia[0], pendiente, cauda, eficiencia1)
-      distancia = ((eficiencia2 - eficiencia1)**2 + (caudal2 - caudal)**2)**0.5
-      efi_por_diametro = distancia/(diametros[0].to_f - diametros[1].to_f)
-      nueva_distancia = efi_por_diametro*(diametro_final - diametros[1].to_f)
-      punto_final = self.calcular_punto_efi(caudal, eficiencia1, pendiente, distancia)
-      puntos_eficiencia.push(punto_final)
+      eficiencia1_arriba = coeficientes_eficiencia[0][0].to_f + coeficientes_eficiencia[0][1].to_f*caudal + coeficientes_eficiencia[0][2].to_f*(caudal**2) + coeficientes_eficiencia[0][3].to_f*(caudal**3) + coeficientes_eficiencia[0][4].to_f*(caudal**4)
+
+      caudal2, eficiencia2 = self.encontrar_punto_efi(coeficientes_eficiencia[0], diametros, caudal)
+      delta_caudales = caudal2 - caudal
+      delta_efi = eficiencia2 - eficiencia1
+      distancia = ((delta_efi)**2 + (delta_caudales)**2)**0.5
+      #distancia = eficiencia1_arriba - eficiencia1
+
+      #intermedio
+      #puntos_eficiencia.push([caudal2, eficiencia2*100])
+
+      delta_diametros1 = diametros[0].to_f - diametros[1].to_f
+      delta_diametros2 = diametro_final - diametros[1].to_f
+      razon = delta_diametros2/delta_diametros1
+
+      if razon > 1
+        nueva_distancia = distancia*(razon**0.5)
+      else
+        nueva_distancia = distancia*(razon**2)
+      end
+      
+      caudal_final = caudal + delta_caudales*nueva_distancia/distancia
+      efi_final = eficiencia1 + delta_efi*nueva_distancia/distancia
+      puntos_eficiencia.push([caudal_final, efi_final*100])
     end
     return puntos_eficiencia
   end
@@ -162,16 +179,20 @@ class Pump < ApplicationRecord
     diferencia = (caudal_maximo - caudal_minimo)/10
     caudales = []
     contador = 0
-    while contador < 11
+    while contador < 10
       caudales.push(caudal_minimo + contador*diferencia)
       contador += 1
     end
     return caudales
   end
 
-  def self.interceptar(coeficientes_curva, pendiente, caudal, eficiencia1)
-    "Debe interceptar curva de grado 4 con recta definida por punto y 
-    pendiente. Devuelve por separado el caudal y la eficiencia"
+  def self.encontrar_punto_efi(coeficientes_curva, diametros, caudal)
+    "Calcula el nuevo caudal mediante semejanza hidraulica con respecto a los
+    diametros de rodete, luego encuentra el punto en la curva de arriba"
+    caudal2 = caudal*diametros[0].to_f/diametros[1].to_f
+    cc = coeficientes_curva
+    efi2 = cc[0].to_f + cc[1].to_f*caudal2 + cc[2].to_f*caudal2**2 + cc[3].to_f*caudal2**3 + cc[4].to_f*caudal2**4
+    return caudal2, efi2
   end
 
   def self.calcular_punto_efi(caudal, eficiencia, pendiente, distancia)
