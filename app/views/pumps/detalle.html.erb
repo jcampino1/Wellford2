@@ -14,6 +14,7 @@
 
 <div class="center jumbotron">
   <p> Eficiencia: <%= (@eficiencia*100).round(2) %>% </p>
+  <p> Eficiencia nueva: <%= (@eficiencia_nueva).round(2) %>% </p>
   <p> Diametro por semejanza hidraulica: <%= @diametro_final.round(2) %> </p>
 </div>
 
@@ -73,6 +74,10 @@
 <div class="center jumbotron">
   <p> Potencia consumo: <%= @potencia_consumo.round(2) %> Kw / <%= (@potencia_consumo*1.341).round(2) %> Hp</p>
   <p> Potencia máxima: <%= @potencia_maxima.round(2) %> Kw / <%= (@potencia_maxima*1.341).round(2) %> Hp</p>
+  <br>
+
+  <p> Potencia consumo nueva: <%= @potencia_consumo_nueva.round(2) %> Kw / <%= (@potencia_consumo_nueva*1.341).round(2) %> Hp</p>
+  <p> Potencia máxima nueva: <%= @potencia_maxima_nueva.round(2) %> Kw / <%= (@potencia_maxima_nueva*1.341).round(2) %> Hp</p>
 </div>
 
 <div class="center jumbotron">
@@ -110,6 +115,41 @@
   <% end %>
 </div>
 
+<div class="center jumbotron">
+<h2> Motores elegidos según la marca con el nuevo metodo </h2>  
+  <% if @lista_marcas.include?("WEG") %>
+    <% if @motor_weg != -1 %>
+      <p> WEG: <%= @motor_weg_nuevo %> Kw, <%= @hp_weg_nuevo %> Hp</p>
+    <% else %>
+      <p> WEG: No hay motores que cumplan las condiciones</p>
+    <% end %>
+  <% end %>
+
+  <% if @lista_marcas.include?("Wellford") %>
+    <% if @motor_wellford != -1 %>
+      <p> Wellford: <%= @motor_wellford_nuevo %> Kw, <%= @hp_wellford_nuevo %> Hp</p>
+    <% else %>
+      <p> Wellford: No hay motores que cumplan las condiciones</p>
+    <% end %>
+  <% end %>
+
+  <% if @lista_marcas.include?("CG") %>
+    <% if @motor_cg != -1 %>
+      <p> CG: <%= @motor_cg_nuevo %> Kw, <%= @hp_cg_nuevo %> Hp </p>
+    <% else %>
+      <p> CG: No hay motores que cumplan las condiciones</p>
+    <%end%>
+  <% end %>
+
+  <% if @lista_marcas.include?("Siemens") %>
+    <% if @motor_siemens != -1 %>
+      <p> Siemens: <%= @motor_siemens_nuevo %> Kw, <%= @hp_siemens_nuevo %> Hp</p>
+    <%else%>
+      <p> Siemens: No hay motores que cumplan las condiciones </p>
+    <% end %>
+  <% end %>
+</div>
+
 
 
 <div>
@@ -121,6 +161,7 @@
 
 <% datos = [[@caudal, @altura]] %>
 <% datos_e = [[@caudal, @eficiencia*100]] %>
+<% datos_e_nuevo = [[@caudal, @eficiencia_nueva]] %>
 
 <script type="text/javascript">
 
@@ -241,6 +282,13 @@
  }
  new_series_e.push(dicc2)
 
+ var dicc3 = {
+  regression: true,
+  name: 'Punto solicitado con nueva eficiencia',
+  data: <%= raw datos_e_nuevo %>
+ }
+ new_series_e.push(dicc3)
+
  Highcharts.chart('container2', {
     chart: {
       type: 'scatter',
@@ -321,14 +369,36 @@
   data: <%= raw @curva_potencia %>
  }
 
+ var dicc1_p_nueva = {
+  regression: true,
+  regressionSettings: {
+    type: 'polynomial',
+    order: 3,
+    //color: 'rgba(223, 183, 83, .9)',
+    dashStyle: 'solid',
+    hideinlegend: false
+  },
+  name: 'Metodo nuevo rodete ' + <%= @diametro_final.round(2).to_s %>,
+  //color: 'rgba(223, 83, 83, .5)',
+  data: <%= raw @curva_potencia_nueva %>
+ }
+
  dicc2_p = {
   regression: true, 
   name: "Punto solicitado",
   data: <%= @potencia_requerida %>
  }
 
+ dicc2_p_nueva = {
+  regression: true, 
+  name: "Punto solicitado con nuevo metodo",
+  data: <%= @potencia_requerida_nueva %>
+ }
+
  new_series_p.push(dicc1_p)
  new_series_p.push(dicc2_p)
+ new_series_p.push(dicc1_p_nueva)
+ new_series_p.push(dicc2_p_nueva)
 
  Highcharts.chart('container3', {
     chart: {

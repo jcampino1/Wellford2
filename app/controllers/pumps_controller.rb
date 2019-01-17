@@ -145,6 +145,7 @@ class PumpsController < ApplicationController
     @caudal = params[:caudal].to_f
     @altura = params[:altura].to_f
     @eficiencia = params[:eficiencia].to_f
+    @eficiencia_nueva = params[:eficiencia_nueva].to_f
     @diametro_final = params[:diametro_final].to_f
     @curva_a_usar = Pump.pasar_a_curvah(params[:curva_a_usar])
     @diametro_a_usar = params[:diametro_a_usar]
@@ -185,41 +186,53 @@ class PumpsController < ApplicationController
 
     # Agregamos nueva curva
     q_max = @curvas_eficiencias[1][0][-1][0]
-    @curva_eficiencia_metodo_nuevo = Pump.calcular_curva_eficiencia_nueva(0, q_max, @pump.efficiency_info, @pump.efficiency_info_diams, @diametro_final)
-    @curvas_eficiencias.push([@curva_eficiencia_metodo_nuevo, "generado hola"])
+    @curva_eficiencia_metodo_nuevo = Pump.calcular_curva_eficiencia_nueva(0, @caudal_max, @pump.efficiency_info, @pump.efficiency_info_diams, @diametro_final)
+    @curvas_eficiencias.push([@curva_eficiencia_metodo_nuevo, "generado nuevo"])
     
     # Determinacion curva potencia
     @coeff_nueva_h = Test.regression(@curva, 2)
     @curva_potencia = Pump.generar_curva_p(@nueva_curva_e, @coeff_nueva_h)
     
+    @curva_potencia_nueva = Pump.generar_curva_p(@curva_eficiencia_metodo_nuevo, @coeff_nueva_h)
+    
     
     # Potencia requerida como punto para mostrar en grafico
     denom = @eficiencia*101.9464
     @potencia_requerida = [[@caudal, (@caudal*@altura)/denom]]
+
+    denom2 = @eficiencia_nueva*101.9464/100
+    @potencia_requerida_nueva = [[@caudal, (@caudal*@altura)/denom2]]
     
     #Potencia consumo y maxima
     @potencia_consumo = @potencia_requerida[0][1]
     @potencia_maxima = Pump.potencia_maxima(@curva_potencia)
 
+    @potencia_consumo_nueva = @potencia_requerida_nueva[0][1]
+    @potencia_maxima_nueva = Pump.potencia_maxima(@curva_potencia_nueva)
+
     
     if @lista_marcas.include?("WEG")
       @weg = "1"
       @motor_weg, @hp_weg = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.15)
+      @motor_weg_nuevo, @hp_weg_nuevo = Pump.buscar_motor(@pump, @potencia_consumo_nueva, @potencia_maxima_nueva, 1.15)
     end
 
     if @lista_marcas.include?("Wellford")
       @wellford = "1"
       @motor_wellford, @hp_wellford = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.1)
+      @motor_wellford_nuevo, @hp_wellford_nuevo = Pump.buscar_motor(@pump, @potencia_consumo_nueva, @potencia_maxima_nueva, 1.1)
     end
 
     if @lista_marcas.include?("CG")
       @cg = "1"
       @motor_cg, @hp_cg = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.1)
+      @motor_cg_nuevo, @hp_cg_nuevo = Pump.buscar_motor(@pump, @potencia_consumo_nueva, @potencia_maxima_nueva, 1.1)
     end
 
     if @lista_marcas.include?("Siemens")
       @siemens = "1"
       @motor_siemens, @hp_siemens = Pump.buscar_motor(@pump, @potencia_consumo, @potencia_maxima, 1.1)
+      @motor_siemens_nuevo, @hp_siemens_nuevo = Pump.buscar_motor(@pump, @potencia_consumo_nueva, @potencia_maxima_nueva, 1.1)
     end
 
     # Para devolver los polos seleccionados

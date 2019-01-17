@@ -1,5 +1,3 @@
-#require 'polynomials'
-#include Polynomials
 
 class Pump < ApplicationRecord
 
@@ -162,14 +160,16 @@ class Pump < ApplicationRecord
       delta_diametros2 = diametro_final - diametros[1].to_f
       razon = delta_diametros2/delta_diametros1
 
-      if razon > 1
+      if razon > 0
         nueva_distancia = distancia*(razon**0.5)
+        caudal_final = caudal + delta_caudales*(nueva_distancia/distancia)
+        efi_final = eficiencia1 + delta_efi*(nueva_distancia/distancia)
       else
-        nueva_distancia = distancia*(razon**2)
+        nueva_distancia = distancia*((-razon)**0.5)
+        caudal_final = caudal + delta_caudales*(-nueva_distancia/distancia)
+        efi_final = eficiencia1 + delta_efi*(-nueva_distancia/distancia)
       end
       
-      caudal_final = caudal + delta_caudales*nueva_distancia/distancia
-      efi_final = eficiencia1 + delta_efi*nueva_distancia/distancia
       puntos_eficiencia.push([caudal_final, efi_final*100])
     end
     return puntos_eficiencia
@@ -177,9 +177,9 @@ class Pump < ApplicationRecord
 
   def self.generar_puntos(caudal_minimo, caudal_maximo)
     diferencia = (caudal_maximo - caudal_minimo)/10
-    caudales = []
-    contador = 0
-    while contador < 10
+    caudales = [0]
+    contador = 1
+    while contador < 11
       caudales.push(caudal_minimo + contador*diferencia)
       contador += 1
     end
@@ -195,9 +195,10 @@ class Pump < ApplicationRecord
     return caudal2, efi2
   end
 
-  def self.calcular_punto_efi(caudal, eficiencia, pendiente, distancia)
-    "Debe devolver el punto obtenido al prolongar la recta definida por la pendiente
-    y el punto en la distancia senalada"
+  def self.encontrar_punto(curva, caudal)
+    coef = Test.regression(curva, 4)
+    eficiencia = coef[0] + coef[1]*caudal + coef[2]*caudal**2 + coef[3]*caudal**3 + coef[4]*caudal**4
+    return eficiencia
   end
 
   def self.diametro_final1(curva_h, rodete_max, caudal, altura)
