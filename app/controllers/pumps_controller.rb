@@ -182,6 +182,11 @@ class PumpsController < ApplicationController
 
     #@curvas_eficiencias.clear
     @curvas_eficiencias.push([@nueva_curva_e, "generado " + @diametro_final.round(2).to_s])
+
+    # Agregamos nueva curva
+    q_max = @curvas_eficiencias[1][0][-1][0]
+    @curva_eficiencia_metodo_nuevo = Pump.calcular_curva_eficiencia_nueva(0, q_max, @pump.efficiency_info, @pump.efficiency_info_diams, @diametro_final)
+    @curvas_eficiencias.push([@curva_eficiencia_metodo_nuevo, "generado hola"])
     
     # Determinacion curva potencia
     @coeff_nueva_h = Test.regression(@curva, 2)
@@ -228,9 +233,9 @@ class PumpsController < ApplicationController
     end
 
     # datos para excel
-    datos = [@pump.bomba, @pump.rpm.to_s.gsub('.', ','), @pump.rodete_max.to_s.gsub('.', ','), @caudal.to_s.gsub('.', ','), @altura.to_s.gsub('.', ','), (@eficiencia*100).round(2).to_s.gsub('.', ','), @potencia_maxima.round(2).to_s.gsub('.', ','),
+    datos = [0, @pump.rpm.to_s.gsub('.', ','), @pump.rodete_max.to_s.gsub('.', ','), @caudal.to_s.gsub('.', ','), @altura.to_s.gsub('.', ','), (@eficiencia*100).round(2).to_s.gsub('.', ','), @potencia_maxima.round(2).to_s.gsub('.', ','),
       @potencia_consumo.round(2).to_s.gsub('.', ','), @diametro_final.round(2).to_s.gsub('.', ','), @curva[-1][0].round(2).to_s.gsub('.', ','), @curva[-1][1].round(2).to_s.gsub('.', ','),
-       @curva[0][1].round(2).to_s.gsub('.', ',')]
+       @curva[0][1].round(2).to_s.gsub('.', ','), @pump.bomba]
 
     # Para descargar excel
     respond_to do |format|
