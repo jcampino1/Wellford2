@@ -167,26 +167,28 @@
 
  var new_series = []
  var new_data = <%= raw @curvas_definitivas %>
+ var colores = ['#058DC7', '#50B432', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4', '#ED561B', '#058DC7', '#50B432', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4', '#ED561B']
 
  for (lista in new_data){
   var dicc = {
     regression: true,
     regressionSettings: {
       type: 'polynomial',
-      //color: 'rgba(223, 183, 83, .9)',
+      color: colores[lista],
       dashStyle: 'solid',
       hideinlegend: false
     },
     name: 'Rodete ' + new_data[lista][1],
-    //color: 'rgba(223, 83, 83, .5)',
+    color: colores[lista],
     data: new_data[lista][0]
   }
   new_series.push(dicc)
  }
  
  var dicc2 = {
-  regression: true,
+  //regression: true,
  	name: 'Punto solicitado',
+  color: '#FF0000',
  	data: <%= raw datos %>
  }
  new_series.push(dicc2)
@@ -264,12 +266,12 @@
     regressionSettings: {
       type: 'polynomial',
       order: 4,
-      //color: 'rgba(223, 183, 83, .9)',
+      color: colores[lista],
       dashStyle: 'solid',
       hideinlegend: false
     },
     name: 'Rodete ' + new_data_e[lista][1],
-    //color: 'rgba(223, 83, 83, .5)',
+    color: colores[lista],
     data: new_data_e[lista][0]
   }
   new_series_e.push(dicc)
@@ -278,6 +280,7 @@
  var dicc2 = {
   regression: true,
   name: 'Punto solicitado',
+  color: '#FF0000',
   data: <%= raw datos_e %>
  }
  new_series_e.push(dicc2)
@@ -285,6 +288,7 @@
  var dicc3 = {
   regression: true,
   name: 'Punto solicitado con nueva eficiencia',
+  color: '#FF0000',
   data: <%= raw datos_e_nuevo %>
  }
  new_series_e.push(dicc3)
@@ -360,12 +364,12 @@
   regressionSettings: {
     type: 'polynomial',
     order: 3,
-    //color: 'rgba(223, 183, 83, .9)',
+    color: colores[2],
     dashStyle: 'solid',
     hideinlegend: false
   },
   name: 'Nuevo rodete ' + <%= @diametro_final.round(2).to_s %>,
-  //color: 'rgba(223, 83, 83, .5)',
+  color: colores[2],
   data: <%= raw @curva_potencia %>
  }
 
@@ -374,24 +378,26 @@
   regressionSettings: {
     type: 'polynomial',
     order: 3,
-    //color: 'rgba(223, 183, 83, .9)',
+    color: colores[3],
     dashStyle: 'solid',
     hideinlegend: false
   },
   name: 'Metodo nuevo rodete ' + <%= @diametro_final.round(2).to_s %>,
-  //color: 'rgba(223, 83, 83, .5)',
+  color: colores[3],
   data: <%= raw @curva_potencia_nueva %>
  }
 
  dicc2_p = {
   regression: true, 
   name: "Punto solicitado",
+  color: '#FF0000',
   data: <%= @potencia_requerida %>
  }
 
  dicc2_p_nueva = {
   regression: true, 
   name: "Punto solicitado con nuevo metodo",
+  color: '#FF0000',
   data: <%= @potencia_requerida_nueva %>
  }
 
