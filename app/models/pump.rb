@@ -141,8 +141,24 @@ class Pump < ApplicationRecord
 
   def self.calcular_curva_eficiencia_nueva(caudal_minimo, caudal_maximo, coeficientes_eficiencia, diametros, diametro_final)
     "Mediante formula definida por Felipe. Calculamos la nueva curva"
-    caudales = self.generar_puntos(caudal_minimo, caudal_maximo)
+    #caudales = self.generar_puntos(caudal_minimo, caudal_maximo)
     puntos_eficiencia = []
+
+    coef = (diametros[0].to_f/diametros[1].to_f)
+    delta_diametros1 = diametros[0].to_f - diametros[1].to_f
+    delta_diametros2 = diametro_final - diametros[1].to_f
+    razon = delta_diametros2/delta_diametros1
+
+    if diametro_final > diametros[1].to_f
+      maximo = self.encontrar_maximo_1(caudal_maximo, razon, coef)
+    else
+      delta_diametros2_nueva = diametros[0].to_f - diametro_final
+      raiz2 = (delta_diametros1/delta_diametros2_nueva)**0.5
+      maximo = self.encontrar_maximo_2(caudal_maximo, raiz2, coef)
+    end
+
+    caudales = self.generar_puntos(caudal_minimo, maximo)
+
     caudales.each do |caudal|
       eficiencia1 = coeficientes_eficiencia[1][0].to_f + coeficientes_eficiencia[1][1].to_f*caudal + coeficientes_eficiencia[1][2].to_f*(caudal**2) + coeficientes_eficiencia[1][3].to_f*(caudal**3) + coeficientes_eficiencia[1][4].to_f*(caudal**4)
       eficiencia1_arriba = coeficientes_eficiencia[0][0].to_f + coeficientes_eficiencia[0][1].to_f*caudal + coeficientes_eficiencia[0][2].to_f*(caudal**2) + coeficientes_eficiencia[0][3].to_f*(caudal**3) + coeficientes_eficiencia[0][4].to_f*(caudal**4)
@@ -151,23 +167,17 @@ class Pump < ApplicationRecord
       delta_caudales = caudal2 - caudal
       delta_efi = eficiencia2 - eficiencia1
       distancia = ((delta_efi)**2 + (delta_caudales)**2)**0.5
-      #distancia = eficiencia1_arriba - eficiencia1
-
-      #intermedio
-      #puntos_eficiencia.push([caudal2, eficiencia2*100])
-
-      delta_diametros1 = diametros[0].to_f - diametros[1].to_f
-      delta_diametros2 = diametro_final - diametros[1].to_f
-      razon = delta_diametros2/delta_diametros1
 
       if razon > 0
         nueva_distancia = distancia*(razon**0.5)
         caudal_final = caudal + delta_caudales*(nueva_distancia/distancia)
         efi_final = eficiencia1 + delta_efi*(nueva_distancia/distancia)
       else
-        nueva_distancia = distancia*((-razon)**0.5)
-        caudal_final = caudal + delta_caudales*(-nueva_distancia/distancia)
-        efi_final = eficiencia1 + delta_efi*(-nueva_distancia/distancia)
+        #nueva_distancia = distancia*((-razon)**0.5)
+        #caudal_final = caudal + delta_caudales*(-nueva_distancia/distancia)
+        #efi_final = eficiencia1 + delta_efi*(-nueva_distancia/distancia)
+        caudal_final = caudal2 - (delta_caudales/raiz2)
+        efi_final = eficiencia2 - (delta_efi/raiz2)
       end
       
       puntos_eficiencia.push([caudal_final, efi_final*100])
@@ -175,7 +185,17 @@ class Pump < ApplicationRecord
     return puntos_eficiencia
   end
 
-  def self.generar_puntos(caudal_minimo, caudal_maximo)
+  def self.encontrar_maximo_1(caudal_max, razon, coef)
+    denom = (razon**0.5)*(coef - 1) + 1
+    return caudal_max/denom
+  end
+
+  def self.encontrar_maximo_2(caudal_max, raiz, coef)
+    denom = 1 + coef*(raiz - 1)
+    return caudal_max*raiz/denom
+  end
+
+  def self.generar_puntos(caudal_minimo, caudal_maximo)    
     diferencia = (caudal_maximo - caudal_minimo)/10
     caudales = [0]
     contador = 1
