@@ -137,6 +137,7 @@ class Pump < ApplicationRecord
     pendiente = (eficiencia2 - eficiencia1)/(diam2 - diam1)
     return eficiencia1 + pendiente*(diametro_final - diam1)
   end
+  
 
 
   def self.calcular_curva_eficiencia_nueva(caudal_minimo, caudal_maximo, coeficientes_eficiencia, diametros, diametro_final)
