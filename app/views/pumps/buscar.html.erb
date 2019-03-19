@@ -14,10 +14,10 @@
 			<% eficiencia_nueva = Pump.encontrar_punto(curva_nueva, @caudal) %>
 
 
-			<% if eficiencia_nueva > 0.3 %>
-				<% lista_eficiencias.push(eficiencia_nueva) %>
-				<% lista_resultados.push([pump.bomba + "/" + pump.rpm.to_s, eficiencia_nueva, diametro_final, curva_a_usar, diametro_a_usar, pump.id]) %>
-			<% end %>
+			
+			<% lista_eficiencias.push(eficiencia_nueva) %>
+			<% lista_resultados.push([pump.bomba + "/" + pump.rpm.to_s, eficiencia_nueva, diametro_final, curva_a_usar, diametro_a_usar, pump.id]) %>
+			
 
 	<% end %>
 
