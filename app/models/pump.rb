@@ -100,9 +100,9 @@ class Pump < ApplicationRecord
       return false
     end
 
-    if self.limite_de_la_derecha(pump.x_maximos[0], caudal, altura)
-      return false
-    end
+    #if self.limite_de_la_derecha(pump.x_maximos[0], caudal, altura)
+    #  return false
+    #end
 
     # Si pasa todos los filtros retornamos true
     return true
