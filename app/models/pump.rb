@@ -100,9 +100,9 @@ class Pump < ApplicationRecord
       return false
     end
 
-    #if self.limite_de_la_derecha(pump.x_maximos[0], caudal, altura)
-    #  return false
-    #end
+    if self.limite_de_la_derecha(pump.x_maximos[0], caudal, altura)
+      return false
+    end
 
     # Si pasa todos los filtros retornamos true
     return true
@@ -473,8 +473,17 @@ class Pump < ApplicationRecord
       pump.points_min.push(atributos_tests[indice][3])
     end
 
-    lista_maximos.push(nueva_curva_rodete_max[-1])
-    lista_maximos.push(nueva_curva_rodete_min[-1])
+    if nueva_curva_rodete_max[-1][0] > nueva_curva_rodete_max[0][0]
+      lista_maximos.push(nueva_curva_rodete_max[-1])
+    else
+      lista_maximos.push(nueva_curva_rodete_max[0])
+    end
+
+    if nueva_curva_rodete_min[-1][0] > nueva_curva_rodete_min[0][0]
+      lista_maximos.push(nueva_curva_rodete_min[-1])
+    else
+      lista_maximos.push(nueva_curva_rodete_min[0][0])
+    end
 
     pump.x_maximos.clear
     pump.x_maximos.push(lista_maximos)
