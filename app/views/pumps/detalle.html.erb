@@ -13,8 +13,7 @@
 
 
 <div class="center jumbotron">
-  <p> Eficiencia: <%= (@eficiencia*100).round(2) %>% </p>
-  <p> Eficiencia nueva: <%= (@eficiencia_nueva).round(2) %>% </p>
+  <p> Eficiencia aproximada: <%= (@eficiencia_nueva).round(2) %>% </p>
   <p> Diametro por semejanza hidraulica: <%= @diametro_final.round(2) %> </p>
 </div>
 
@@ -22,7 +21,7 @@
 <h2> Motores elegidos según la marca </h2>  
   <% if @lista_marcas.include?("WEG") %>
     <% if @motor_weg != -1 %>
-      <p> WEG: <%= @motor_weg %> Kw, <%= @hp_weg %> Hp</p>
+      <p> WEG: <%= @motor_weg_nuevo %> Kw, <%= @hp_weg_nuevo %> Hp</p>
     <% else %>
       <p> WEG: No hay motores que cumplan las condiciones</p>
     <% end %>
@@ -30,7 +29,7 @@
 
   <% if @lista_marcas.include?("Wellford") %>
     <% if @motor_wellford != -1 %>
-      <p> Wellford: <%= @motor_wellford %> Kw, <%= @hp_wellford %> Hp</p>
+      <p> Wellford: <%= @motor_wellford_nuevo %> Kw, <%= @hp_wellford_nuevo %> Hp</p>
     <% else %>
       <p> Wellford: No hay motores que cumplan las condiciones</p>
     <% end %>
@@ -38,7 +37,7 @@
 
   <% if @lista_marcas.include?("CG") %>
     <% if @motor_cg != -1 %>
-      <p> CG: <%= @motor_cg %> Kw, <%= @hp_cg %> Hp </p>
+      <p> CG: <%= @motor_cg_nuevo %> Kw, <%= @hp_cg_nuevo %> Hp </p>
     <% else %>
       <p> CG: No hay motores que cumplan las condiciones</p>
     <%end%>
@@ -46,7 +45,7 @@
 
   <% if @lista_marcas.include?("Siemens") %>
     <% if @motor_siemens != -1 %>
-      <p> Siemens: <%= @motor_siemens %> Kw, <%= @hp_siemens %> Hp</p>
+      <p> Siemens: <%= @motor_siemens_nuevo %> Kw, <%= @hp_siemens_nuevo %> Hp</p>
     <%else%>
       <p> Siemens: No hay motores que cumplan las condiciones </p>
     <% end %>
@@ -56,67 +55,29 @@
 <div>
   <%= link_to "Volver a la búsqueda", buscar_path(caudal: @caudal, altura: @altura, weg: @weg, wellford: @wellford, cg: @cg, siemens: @siemens, dos_polos: @dos_polos, cuatro_polos: @cuatro_polos), class: "btn btn-lg btn-primary", id:"link-b" %>
 </div>
+<br>
 
 <div class="center jumbotron">
   <div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
 </div>
 
 <div class="center jumbotron">
-  <p> Eficiencia: <%= (@eficiencia*100).round(2) %>% </p>
+  <p> Eficiencia: <%= (@eficiencia_nueva).round(2) %>% </p>
   <div id="container2" style="width: 1000px; height: 500px; margin: 0 auto"></div>
 </div>
 
 <div class="center jumbotron">
-  <p>Potencia: <%= @potencia_requerida[0][1].round(2) %> Kw</p>
+  <p>Potencia: <%= @potencia_requerida_nueva[0][1].round(2) %> Kw</p>
   <div id="container3" style="width: 1000px; height: 500px; margin: 0 auto"></div>
 </div>
 
 <div class="center jumbotron">
-  <p> Potencia consumo: <%= @potencia_consumo.round(2) %> Kw / <%= (@potencia_consumo*1.341).round(2) %> Hp</p>
-  <p> Potencia máxima: <%= @potencia_maxima.round(2) %> Kw / <%= (@potencia_maxima*1.341).round(2) %> Hp</p>
-  <br>
-
-  <p> Potencia consumo nueva: <%= @potencia_consumo_nueva.round(2) %> Kw / <%= (@potencia_consumo_nueva*1.341).round(2) %> Hp</p>
-  <p> Potencia máxima nueva: <%= @potencia_maxima_nueva.round(2) %> Kw / <%= (@potencia_maxima_nueva*1.341).round(2) %> Hp</p>
+  <p> Potencia consumo: <%= @potencia_consumo_nueva.round(2) %> Kw / <%= (@potencia_consumo_nueva*1.341).round(2) %> Hp</p>
+  <p> Potencia máxima: <%= @potencia_maxima_nueva.round(2) %> Kw / <%= (@potencia_maxima_nueva*1.341).round(2) %> Hp</p>
 </div>
 
 <div class="center jumbotron">
 <h2> Motores elegidos según la marca </h2>  
-  <% if @lista_marcas.include?("WEG") %>
-    <% if @motor_weg != -1 %>
-      <p> WEG: <%= @motor_weg %> Kw, <%= @hp_weg %> Hp</p>
-    <% else %>
-      <p> WEG: No hay motores que cumplan las condiciones</p>
-    <% end %>
-  <% end %>
-
-  <% if @lista_marcas.include?("Wellford") %>
-    <% if @motor_wellford != -1 %>
-      <p> Wellford: <%= @motor_wellford %> Kw, <%= @hp_wellford %> Hp</p>
-    <% else %>
-      <p> Wellford: No hay motores que cumplan las condiciones</p>
-    <% end %>
-  <% end %>
-
-  <% if @lista_marcas.include?("CG") %>
-    <% if @motor_cg != -1 %>
-      <p> CG: <%= @motor_cg %> Kw, <%= @hp_cg %> Hp </p>
-    <% else %>
-      <p> CG: No hay motores que cumplan las condiciones</p>
-    <%end%>
-  <% end %>
-
-  <% if @lista_marcas.include?("Siemens") %>
-    <% if @motor_siemens != -1 %>
-      <p> Siemens: <%= @motor_siemens %> Kw, <%= @hp_siemens %> Hp</p>
-    <%else%>
-      <p> Siemens: No hay motores que cumplan las condiciones </p>
-    <% end %>
-  <% end %>
-</div>
-
-<div class="center jumbotron">
-<h2> Motores elegidos según la marca con el nuevo metodo </h2>  
   <% if @lista_marcas.include?("WEG") %>
     <% if @motor_weg != -1 %>
       <p> WEG: <%= @motor_weg_nuevo %> Kw, <%= @hp_weg_nuevo %> Hp</p>
@@ -156,18 +117,17 @@
   <!%= link_to "Descargar Excel", pump_detalle_path(pump_id: @pump.id, caudal: @caudal, altura: @altura, eficiencia: @eficiencia, diametro_final: @diametro_final, curva_a_usar: @curva_a_usar, diametro_a_usar: @diametro_a_usar, lista_marcas: @lista_marcas, lista_polos: @lista_polos, format: "xls"), class: "btn btn-lg", id:"link" %>
   <br>
 
-  <%= link_to "Descargar CSV", pump_detalle_path(pump_id: @pump.id, caudal: @caudal, altura: @altura, eficiencia: @eficiencia, diametro_final: @diametro_final, curva_a_usar: @curva_a_usar, diametro_a_usar: @diametro_a_usar, lista_marcas: @lista_marcas, lista_polos: @lista_polos, format: "csv"), class: "btn btn-lg", id:"link" %>
+  <%= link_to "Descargar CSV", pump_detalle_path(pump_id: @pump.id, caudal: @caudal, altura: @altura, eficiencia_nueva: @eficiencia_nueva.round(2), diametro_final: @diametro_final, curva_a_usar: @curva_a_usar, diametro_a_usar: @diametro_a_usar, lista_marcas: @lista_marcas, lista_polos: @lista_polos, format: "csv"), class: "btn btn-lg", id:"link" %>
 </div>
 
 <% datos = [[@caudal, @altura]] %>
-<% datos_e = [[@caudal, @eficiencia*100]] %>
 <% datos_e_nuevo = [[@caudal, @eficiencia_nueva]] %>
 
 <script type="text/javascript">
 
  var new_series = []
  var new_data = <%= raw @curvas_definitivas %>
- var colores = ['#058DC7', '#50B432', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4', '#ED561B', '#058DC7', '#50B432', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4', '#ED561B']
+ var colores = ['#FF9655', '#DDDF00', '#24CBE5', '#64E572', '#FFF263', '#6AF9C4', '#ED561B', '#058DC7', '#50B432', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4', '#ED561B']
 
  for (lista in new_data){
   var dicc = {
@@ -276,18 +236,10 @@
   }
   new_series_e.push(dicc)
  }
- 
- var dicc2 = {
-  //regression: true,
-  name: 'Punto solicitado',
-  color: '#FF0000',
-  data: <%= raw datos_e %>
- }
- new_series_e.push(dicc2)
 
  var dicc3 = {
   //regression: true,
-  name: 'Punto solicitado con nueva eficiencia',
+  name: 'Punto solicitado',
   color: '#FF0000',
   data: <%= raw datos_e_nuevo %>
  }
@@ -359,7 +311,7 @@
 
  var new_series_p = []
 
- var dicc1_p = {
+ var dicc1_p_nueva = {
   regression: true,
   regressionSettings: {
     type: 'polynomial',
@@ -368,31 +320,11 @@
     dashStyle: 'solid',
     hideinlegend: false
   },
-  name: 'Nuevo rodete ' + <%= @diametro_final.round(2).to_s %>,
-  color: colores[2],
-  data: <%= raw @curva_potencia %>
- }
-
- var dicc1_p_nueva = {
-  regression: true,
-  regressionSettings: {
-    type: 'polynomial',
-    order: 3,
-    color: colores[3],
-    dashStyle: 'solid',
-    hideinlegend: false
-  },
   name: 'Metodo nuevo rodete ' + <%= @diametro_final.round(2).to_s %>,
-  color: colores[3],
+  color: colores[2],
   data: <%= raw @curva_potencia_nueva %>
  }
 
- dicc2_p = {
-  //regression: true, 
-  name: "Punto solicitado",
-  color: '#FF0000',
-  data: <%= @potencia_requerida %>
- }
 
  dicc2_p_nueva = {
   //regression: true, 
@@ -401,8 +333,6 @@
   data: <%= @potencia_requerida_nueva %>
  }
 
- new_series_p.push(dicc1_p)
- new_series_p.push(dicc2_p)
  new_series_p.push(dicc1_p_nueva)
  new_series_p.push(dicc2_p_nueva)
 
