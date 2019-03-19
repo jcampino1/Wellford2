@@ -8,17 +8,15 @@
 	<% @pumps_final.each do |pump| %>
 			<% diametro_final, curva_a_usar, diametro_a_usar = Pump.diametro_final(pump, @caudal, @altura) %>			
 
-			<% eficiencia = Pump.calcular_eficiencia(@caudal, 
-			pump.efficiency_info, pump.efficiency_info_diams, diametro_final) %>
 
 			<% qmax = pump.efficiency_info[1][0][-1][0].to_f %>
 			<% curva_nueva = Pump.calcular_curva_eficiencia_nueva(0, qmax, pump.efficiency_info, pump.efficiency_info_diams, diametro_final) %>
 			<% eficiencia_nueva = Pump.encontrar_punto(curva_nueva, @caudal) %>
 
 
-			<% if eficiencia > 0.3 or eficiencia_nueva > 0.3 %>
-				<% lista_eficiencias.push(eficiencia) %>
-				<% lista_resultados.push([pump.bomba + "/" + pump.rpm.to_s, eficiencia, diametro_final, curva_a_usar, diametro_a_usar, pump.id, eficiencia_nueva]) %>
+			<% if eficiencia_nueva > 0.3 %>
+				<% lista_eficiencias.push(eficiencia_nueva) %>
+				<% lista_resultados.push([pump.bomba + "/" + pump.rpm.to_s, eficiencia_nueva, diametro_final, curva_a_usar, diametro_a_usar, pump.id]) %>
 			<% end %>
 
 	<% end %>
@@ -34,9 +32,8 @@
 		<div class="center jumbotron">
 			<h2><%= bomba[0] %></h2>
 			<p>Recorte rodete: <strong><%= bomba[2].round(2) %></strong></p>
-			<p>Eficiencia aproximada: <strong><%= (bomba[1]*100).round(2) %>%</strong></p>
-			<p>Eficiencia nueva: <strong><%= (bomba[6]).round(2) %>%</strong></p>
-			<%= link_to "Ver detalle", pump_detalle_path(pump_id: bomba[5], caudal: @caudal, altura: @altura, eficiencia: bomba[1], eficiencia_nueva: bomba[6], diametro_final: bomba[2], curva_a_usar: bomba[3], diametro_a_usar: bomba[4], lista_marcas: @lista_marcas, lista_polos: @lista_polos), class: "btn btn-lg", id:"link" %>
+			<p>Eficiencia aproximada: <strong><%= (bomba[1]).round(2) %>%</strong></p>
+			<%= link_to "Ver detalle", pump_detalle_path(pump_id: bomba[5], caudal: @caudal, altura: @altura, eficiencia_nueva: bomba[1], diametro_final: bomba[2], curva_a_usar: bomba[3], diametro_a_usar: bomba[4], lista_marcas: @lista_marcas, lista_polos: @lista_polos), class: "btn btn-lg", id:"link" %>
 		</div>
 	<% end %>
 
