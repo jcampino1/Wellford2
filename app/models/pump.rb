@@ -482,7 +482,7 @@ class Pump < ApplicationRecord
     if nueva_curva_rodete_min[-1][0] > nueva_curva_rodete_min[0][0]
       lista_maximos.push(nueva_curva_rodete_min[-1])
     else
-      lista_maximos.push(nueva_curva_rodete_min[0][0])
+      lista_maximos.push(nueva_curva_rodete_min[0])
     end
 
     pump.x_maximos.clear
