@@ -6,6 +6,11 @@
 
 <h2> <%= @pump.bomba %>/<%= @pump.rpm %> </h2>
 
+<div>
+  <%= link_to "Volver a la búsqueda", buscar_path(caudal: @caudal, altura: @altura, weg: @weg, wellford: @wellford, cg: @cg, siemens: @siemens, dos_polos: @dos_polos, cuatro_polos: @cuatro_polos), class: "btn btn-lg btn-primary", id:"link-b" %>
+</div>
+<br>
+
 <div class="center jumbotron">
   <h3> Solicitud </h3>
   <p> Caudal: <%= @caudal %>, Altura: <%= @altura %> </p>
@@ -52,11 +57,6 @@
   <% end %>
 </div>
 
-<div>
-  <%= link_to "Volver a la búsqueda", buscar_path(caudal: @caudal, altura: @altura, weg: @weg, wellford: @wellford, cg: @cg, siemens: @siemens, dos_polos: @dos_polos, cuatro_polos: @cuatro_polos), class: "btn btn-lg btn-primary", id:"link-b" %>
-</div>
-<br>
-
 <div class="center jumbotron">
   <div id="container" style="width: 1000px; height: 500px; margin: 0 auto"></div>
 </div>
@@ -79,7 +79,7 @@
 <div class="center jumbotron">
 <h2> Motores elegidos según la marca </h2>  
   <% if @lista_marcas.include?("WEG") %>
-    <% if @motor_weg != -1 %>
+    <% if @motor_weg_nuevo != -1 %>
       <p> WEG: <%= @motor_weg_nuevo %> Kw, <%= @hp_weg_nuevo %> Hp</p>
     <% else %>
       <p> WEG: No hay motores que cumplan las condiciones</p>
@@ -87,7 +87,7 @@
   <% end %>
 
   <% if @lista_marcas.include?("Wellford") %>
-    <% if @motor_wellford != -1 %>
+    <% if @motor_wellford_nuevo != -1 %>
       <p> Wellford: <%= @motor_wellford_nuevo %> Kw, <%= @hp_wellford_nuevo %> Hp</p>
     <% else %>
       <p> Wellford: No hay motores que cumplan las condiciones</p>
@@ -95,7 +95,7 @@
   <% end %>
 
   <% if @lista_marcas.include?("CG") %>
-    <% if @motor_cg != -1 %>
+    <% if @motor_cg_nuevo != -1 %>
       <p> CG: <%= @motor_cg_nuevo %> Kw, <%= @hp_cg_nuevo %> Hp </p>
     <% else %>
       <p> CG: No hay motores que cumplan las condiciones</p>
@@ -103,7 +103,7 @@
   <% end %>
 
   <% if @lista_marcas.include?("Siemens") %>
-    <% if @motor_siemens != -1 %>
+    <% if @motor_siemens_nuevo != -1 %>
       <p> Siemens: <%= @motor_siemens_nuevo %> Kw, <%= @hp_siemens_nuevo %> Hp</p>
     <%else%>
       <p> Siemens: No hay motores que cumplan las condiciones </p>
